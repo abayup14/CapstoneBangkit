@@ -6,9 +6,10 @@
         const MODEL_URL = './new_model/mdl_std/model.json';
         const model = await tf.loadLayersModel(MODEL_URL);
         console.log(model.summary());
-        const input = tf.tensor2d([1.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,0.08,0.04,0.16822429906542055], [1, 14]);
+        const input = tf.tensor2d([0.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,0.5,0.3,0.05607476635514018], [1, 14]);
         const result = model.predict(input);
-        alert(result)
+        console.log(result.print());
+        alert(result);
 	}
 	run();
 </script>
