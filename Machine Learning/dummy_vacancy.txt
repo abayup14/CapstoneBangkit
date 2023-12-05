@@ -1,0 +1,37 @@
+{
+  "name": "Full-Stack Developer",
+  "company_id": 1,
+  "description": "",
+  "open_date": "2023-12-12",
+  "close_date": "2023-12-18",
+  "required_skill":[
+    {	
+	"id": 1,
+	"skill_name": "Java"
+    },
+    {
+      	"id": 2,
+	"skill_name": "HTML"
+    },
+    {
+	"id": 3,
+	"skill_name": "CSS"
+    },
+    {
+	"id": 4,
+	"skill_name": "JavaScript"
+    },
+    {
+	"id": 7,
+	"skill_name": "Laravel"
+    }
+  ],
+  "participant":[
+    {
+	"id": 1
+    },
+    {
+	"id": 2
+    }
+  ]
+}
