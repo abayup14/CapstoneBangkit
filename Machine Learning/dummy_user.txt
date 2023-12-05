@@ -1,0 +1,62 @@
+{
+  "name": "Vincentius",
+  "age": 20,
+  "highest_education": "S1",
+  "education": [
+    {
+	"id": 1,
+	"name": "UBAYA",
+	"description": "",
+	"start_date": "2022-2-2",
+	"end_date": "2023-2-2"
+    }
+  ],
+  "experience":[
+    {	
+	"id": 1,
+	"name": "Assistant Lecturer",
+	"description": "",
+	"start_date": "2022-2-2",
+	"end_date": "2023-2-2"
+    }
+  ],
+  "pro_experience":[
+    {	
+	"id": 1,
+	"name": "CEO Bangkit",
+	"description": "",
+	"start_date": "2023-2-2",
+	"end_date": null
+    }
+  ],
+  "skills": [
+    {	
+	"id": 1,
+	"skill_name": "Java"
+    },
+    {
+      	"id": 2,
+	"skill_name": "HTML"
+    },
+    {
+	"id": 3,
+	"skill_name": "CSS"
+    },
+    {
+	"id": 4,
+	"skill_name": "JavaScript"
+    },
+    {
+	"id": 5,
+	"skill_name": "NodeJS"
+    },
+    {
+	"id": 6,
+	"skill_name": "PHP"
+    },
+    {
+	"id": 7,
+	"skill_name": "MySQL"
+    }
+  ]
+}

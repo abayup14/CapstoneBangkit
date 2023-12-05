@@ -1,0 +1,20 @@
+{
+  "name": "Bangkit",
+  "since": 2020,
+  "Description": "",
+  "people_worked_here": [
+    {	
+	"id": 2,
+    },
+    {	
+	"id": 3,
+    },
+    {	
+	"id": 4,
+    },
+    {	
+	"id": 5,
+    }
+
+  ]
+}
