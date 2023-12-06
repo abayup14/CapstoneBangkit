@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F3F3F3"
-    tools:context=".DetailActivity">
+    tools:context=".ui.detail.DetailActivity">
 
     <ImageButton
         android:id="@+id/btn_back"
@@ -15,7 +15,8 @@
         android:layout_marginTop="14dp"
         android:src="@drawable/baseline_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textView"
@@ -44,14 +45,15 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_jobs"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginTop="24dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="@+id/view2"
         app:layout_constraintStart_toStartOf="@+id/view2"
-        app:layout_constraintTop_toTopOf="@+id/view2" />
+        app:layout_constraintTop_toTopOf="@+id/view2"
+        tools:ignore="ContentDescription" />
 
 
     <TextView
@@ -76,9 +78,9 @@
         android:textAlignment="center"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="@+id/iv_jobs"
+        app:layout_constraintStart_toStartOf="@+id/iv_jobs"
+        app:layout_constraintTop_toBottomOf="@+id/iv_jobs" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -88,7 +90,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/tv_perusahaan"
         app:layout_constraintEnd_toEndOf="@+id/tv_pekerjaan"
         app:layout_constraintStart_toStartOf="@+id/tv_pekerjaan"
-        app:layout_constraintTop_toTopOf="@+id/tv_perusahaan" />
+        app:layout_constraintTop_toTopOf="@+id/tv_perusahaan"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tv_alamat"
@@ -127,11 +130,11 @@
 
 
     <TextView
-        android:layout_marginTop="20dp"
         android:id="@+id/tv_kualifikasi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
         android:text="Kualifikasi"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -151,11 +154,12 @@
 
 
     <Button
-        android:layout_marginBottom="30dp"
-        android:text="Apply"
-        android:backgroundTint="#014C85"
+        android:id="@+id/btn_apply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="#014C85"
+        android:text="Apply"
         app:layout_constraintBottom_toBottomOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="@+id/view2"
         app:layout_constraintStart_toStartOf="@+id/view2" />
