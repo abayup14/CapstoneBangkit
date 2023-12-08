@@ -3,12 +3,11 @@ from ariadne import convert_kwargs_to_snake_case
 from api import db
 from api.models import Post
 
-
 @convert_kwargs_to_snake_case
 def create_post_resolver(obj, info, title, description):
     try:
         today = datetime.today().date()
-        post = Post(
+        post = Post(  
             title=title,
             description=description,
             created_at=today.strftime("%Y-%m-%d")
@@ -27,11 +26,10 @@ def create_post_resolver(obj, info, title, description):
         }
     return payload
 
-
 @convert_kwargs_to_snake_case
 def update_post_resolver(obj, info, id, title, description):
     try:
-        post = Post.query.get(id)
+        post = Post.query.get(id)  
         if post:
             post.title = title
             post.description = description
@@ -48,11 +46,10 @@ def update_post_resolver(obj, info, id, title, description):
         }
     return payload
 
-
 @convert_kwargs_to_snake_case
 def delete_post_resolver(obj, info, id):
     try:
-        post = Post.query.get(id)
+        post = Post.query.get(id)  
         db.session.delete(post)
         db.session.commit()
         payload = {
