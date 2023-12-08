@@ -6,4 +6,11 @@
     <string name="title_jobs">Jobs</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_profile">Profile</string>
+    <string name="welcome_message">Welcome to hAIre!</string>
+    <string name="tagline">A place to find a job</string>
+    <string name="get_started">Get Started</string>
+    <string name="login_success">Login success!</string>
+    <string name="yes">Next</string>
+    <string name="register_success">Register Success!</string>
+    <string name="login">Login</string>
 </resources>
