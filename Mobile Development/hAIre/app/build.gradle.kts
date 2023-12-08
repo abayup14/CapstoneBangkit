@@ -55,6 +55,9 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     implementation("com.google.firebase:firebase-database:20.3.0")
 
+    // firebase
+    implementation("com.google.firebase:firebase-database:20.3.0")
+
     // testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

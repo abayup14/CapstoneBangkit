@@ -5,7 +5,7 @@ from ariadne import convert_kwargs_to_snake_case
 @convert_kwargs_to_snake_case
 def list_posts_resolver(obj, info):
     try:
-        posts = [post.to_dict() for post in Post.query.all()]
+        posts = [post.to_dict() for post in Post.query.filter(Post.description.like("%%")).all()]
         print(posts)
         payload = {
             "success": True,
