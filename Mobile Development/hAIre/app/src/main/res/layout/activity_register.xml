@@ -170,7 +170,7 @@
             app:layout_constraintTop_toBottomOf="@id/re_password_layout" />
 
         <RadioGroup
-            android:id="@+id/radioGroup"
+            android:id="@+id/homelessRg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -180,14 +180,14 @@
             app:layout_constraintTop_toBottomOf="@+id/textView9">
 
             <RadioButton
-                android:id="@+id/not_homeless"
+                android:id="@+id/yes_homeless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="Yes" />
 
             <RadioButton
-                android:id="@+id/homeless"
+                android:id="@+id/no_homeless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No" />
@@ -198,15 +198,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="are you a person with disabilities?"
+            android:text="Are you a person with disabilities?"
             android:textColor="#181818"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@+id/radioGroup"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+            app:layout_constraintStart_toStartOf="@+id/homelessRg"
+            app:layout_constraintTop_toBottomOf="@+id/homelessRg"
             app:layout_goneMarginTop="8dp" />
 
         <RadioGroup
-            android:id="@+id/radioGroup2"
+            android:id="@+id/disabledRg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -216,14 +216,14 @@
             app:layout_constraintTop_toBottomOf="@+id/textView10">
 
             <RadioButton
-                android:id="@+id/not_disabled"
+                android:id="@+id/yes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="Yes" />
 
             <RadioButton
-                android:id="@+id/disabled"
+                android:id="@+id/no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No" />
@@ -236,9 +236,9 @@
             android:layout_marginTop="24dp"
             android:text="Register"
             android:textAllCaps="false"
-            app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
-            app:layout_constraintStart_toStartOf="@+id/radioGroup2"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+            app:layout_constraintEnd_toEndOf="@+id/disabledRg"
+            app:layout_constraintStart_toStartOf="@+id/disabledRg"
+            app:layout_constraintTop_toBottomOf="@+id/disabledRg" />
 
         <TextView
             android:id="@+id/textView11"
