@@ -49,14 +49,20 @@ dependencies {
 
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     implementation("com.google.firebase:firebase-database:20.3.0")
 
     // firebase
-    implementation("com.google.firebase:firebase-database:20.3.0")
+
+    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation("com.basgeekball:awesome-validation:4.3")
 
     // testing
     testImplementation("junit:junit:4.13.2")

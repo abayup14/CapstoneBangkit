@@ -2,21 +2,31 @@ package com.haire.ui.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
+import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.haire.R
+import com.haire.ViewModelFactory
+import com.haire.data.User
 import com.haire.databinding.ActivityRegisterBinding
 import com.haire.ui.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var dbUser: DatabaseReference
+    private val viewModel by viewModels<RegisterViewModel> { ViewModelFactory(this) }
+    private var homeless = false
+    private var disabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +34,40 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        dbUser = FirebaseDatabase.getInstance()
-            .getReferenceFromUrl("https://haire-test-de01d-default-rtdb.firebaseio.com/")
+        binding.homelessRg.setOnCheckedChangeListener { _, checkedId ->
+            val selectedRadioButton: RadioButton = findViewById(checkedId)
+            when (selectedRadioButton.text.toString()) {
+                "Yes" -> homeless = false
+                "No" -> homeless = true
+            }
+        }
+
+        binding.disabledRg.setOnCheckedChangeListener { _, checkedId ->
+            val selectedRadioButton: RadioButton = findViewById(checkedId)
+            when (selectedRadioButton.text.toString()) {
+                "Yes" -> disabled = true
+                "No" -> disabled = false
+            }
+        }
+
+        viewModel.isEmailExist.observe(this) { emailExist ->
+            if (emailExist) {
+                showText("Email already exists")
+            } else {
+                showAlert()
+            }
+        }
+
+        val validation = AwesomeValidation(ValidationStyle.BASIC)
+        validation.apply {
+            addValidation(binding.edtEmail,
+                Patterns.EMAIL_ADDRESS,
+                getString(R.string.invalid_email))
+            addValidation(binding.edtPassword, ".{6,}", getString(R.string.invalid_password))
+            addValidation(binding.edtRePassword,
+                binding.edtPassword,
+                getString(R.string.password_not_match))
+        }
 
         binding.btnRegister.setOnClickListener {
             val name = binding.edtName.text.toString()
@@ -35,51 +77,14 @@ class RegisterActivity : AppCompatActivity() {
             val phone = binding.edtPhone.text.toString()
             val homelessIsChecked = binding.homelessRg.checkedRadioButtonId
             val disabledIsChecked = binding.disabledRg.checkedRadioButtonId
-            var homeless = false
-            var disabled = false
 
-            binding.homelessRg.setOnCheckedChangeListener { _, checkedId ->
-                val selectedRadioButton: RadioButton = findViewById(checkedId)
-                when (selectedRadioButton.text.toString()) {
-                    "yes" -> homeless = false
-                    "no" -> homeless = true
-                }
-            }
+            val user = User(name, phone, email, homeless, disabled)
 
-            binding.disabledRg.setOnCheckedChangeListener { _, checkedId ->
-                val selectedRadioButton: RadioButton = findViewById(checkedId)
-                when (selectedRadioButton.text.toString()) {
-                    "yes" -> disabled = true
-                    "no" -> disabled = false
-                }
-            }
-
-            if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || phone.isEmpty() || homelessIsChecked == -1 || disabledIsChecked == -1) {
-                Toast.makeText(
-                    this@RegisterActivity,
-                    "There's still empty field",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (pass != rePass) {
-                Toast.makeText(this@RegisterActivity, "Password didn't match", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                dbUser = FirebaseDatabase.getInstance().getReference("users")
-                dbUser.child(email).child("name").setValue(name)
-                dbUser.child(email).child("email").setValue(email)
-                dbUser.child(email).child("phone").setValue(phone)
-                dbUser.child(email).child("password").setValue(pass)
-                dbUser.child(email).child("isHomeless").setValue(homeless)
-                dbUser.child(email).child("isDisabled").setValue(disabled)
-
-                AlertDialog.Builder(this).apply {
-                    setMessage(getString(R.string.register_success))
-                    setTitle("Register")
-                    setPositiveButton(getString(R.string.login)) { _, _ ->
-                        startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-                        finish()
-                    }
-                    show()
+            if (validation.validate()) {
+                if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || phone.isEmpty() || homelessIsChecked == -1 || disabledIsChecked == -1) {
+                    showText(getString(R.string.empty_field))
+                } else {
+                    viewModel.registerAccount(user, pass)
                 }
             }
         }
@@ -87,6 +92,21 @@ class RegisterActivity : AppCompatActivity() {
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
             finish()
+        }
+    }
+    private fun showText(message: String) {
+        Toast.makeText(this@RegisterActivity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showAlert() {
+        AlertDialog.Builder(this).apply {
+            setMessage(getString(R.string.register_success))
+            setTitle("Register")
+            setPositiveButton(getString(R.string.login)) { _, _ ->
+                startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                finish()
+            }
+            show()
         }
     }
 }
