@@ -36,33 +36,6 @@ class JobsFragment : Fragment() {
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.text = resources.getString(TAB_TITLES[position])
             }.attach()
-            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    val selectedPosition = viewPager.currentItem
-                    sectionsPagerAdapter.let {
-                        when (selectedPosition) {
-                            0 -> {
-                                val openJobsFragment =
-                                    it.getFragment(selectedPosition) as OpenJobsFragment
-                                openJobsFragment.getAdapter()?.filter?.filter(newText)
-                            }
-
-                            1 -> {
-                                val statusFragment =
-                                    it.getFragment(selectedPosition) as StatusFragment
-                                statusFragment.getAdapter()?.filter?.filter(newText)
-                            }
-
-                            else -> {}
-                        }
-                    }
-                    return true
-                }
-            })
         }
     }
 

@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.R
+import com.haire.ViewModelFactory
 import com.haire.data.InitialDummyValue
 import com.haire.data.Jobs
 import com.haire.databinding.FragmentOpenJobsBinding
@@ -18,19 +21,20 @@ class OpenJobsFragment : Fragment() {
     private var _binding: FragmentOpenJobsBinding? = null
     private val binding get() = _binding!!
     private var adapter: JobAdapter? = null
-    private lateinit var searchView: SearchView
+    private val viewModel by viewModels<OpenJobsViewModel> { ViewModelFactory(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOpenJobsBinding.inflate(inflater, container, false)
-        searchView = requireActivity().findViewById(R.id.search)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setData(InitialDummyValue.dummyJobs)
+        viewModel.jobs.observe(viewLifecycleOwner) {
+            setData(it)
+        }
     }
 
     private fun setData(listJobs: List<Jobs>) {
@@ -47,21 +51,21 @@ class OpenJobsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        searchView.setQuery("", false)
-        searchView.clearFocus()
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+        binding.search.apply {
+            setQuery("", false)
+            clearFocus()
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter?.filter?.filter(newText)
-                return true
-            }
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapter?.filter?.filter(newText)
+                    return true
+                }
+            })
+        }
     }
-
-    fun getAdapter(): JobAdapter? = adapter
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
