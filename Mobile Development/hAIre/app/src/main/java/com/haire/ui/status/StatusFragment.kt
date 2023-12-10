@@ -7,30 +7,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.R
 import com.haire.data.InitialDummyValue
 import com.haire.data.Status
 import com.haire.databinding.FragmentStatusBinding
 import com.haire.ui.detail.DetailActivity
+import com.haire.ui.openjobs.OpenJobsViewModel
 
 class StatusFragment : Fragment() {
     private var _binding: FragmentStatusBinding? = null
     private val binding get() = _binding!!
+
     private var adapter: StatusAdapter? = null
-    private lateinit var searchView: SearchView
+    private val viewModel by viewModels<StatusViewModel> { ViewModelProvider.NewInstanceFactory() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStatusBinding.inflate(inflater, container, false)
-        searchView = requireActivity().findViewById(R.id.search)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setData(InitialDummyValue.dummyStatus)
+        viewModel.status.observe(viewLifecycleOwner) {
+            setData(it)
+        }
     }
 
     private fun setData(listStatus: List<Status>) {
@@ -47,21 +52,22 @@ class StatusFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        searchView.setQuery("", false)
-        searchView.clearFocus()
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+        binding.search.apply {
+            setQuery("", false)
+            clearFocus()
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter?.filter?.filter(newText)
-                return true
-            }
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapter?.filter?.filter(newText)
+                    return true
+                }
+            })
+        }
     }
 
-    fun getAdapter(): StatusAdapter? = adapter
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
