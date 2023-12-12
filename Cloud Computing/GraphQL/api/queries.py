@@ -17,6 +17,7 @@ def list_users_resolver(obj, info):
         }
     return payload
 
+'''
 @convert_kwargs_to_snake_case
 def list_companies_resolver(obj, info):
     try:
@@ -76,9 +77,7 @@ def list_user_has_skills_resolver(obj, info):
             "errors": [str(e)]
         }
     return payload
-
-
-
+'''
 
 # @convert_kwargs_to_snake_case
 # def list_posts_resolver(obj, info):

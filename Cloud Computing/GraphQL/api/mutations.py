@@ -4,8 +4,10 @@ from ariadne import convert_kwargs_to_snake_case
 from api import db
 from api.models import User, Company, Lowongan, Skills, UserHasSkills, SkillsDibutuhkan, Apply, Notifikasi
 
+
 @convert_kwargs_to_snake_case
-def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_lahir, nik, pengalaman, pengalaman_pro, edukasi, url_photo, deskripsi, stream):
+def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_lahir, nik, pengalaman, pengalaman_pro,
+                         edukasi, url_photo, deskripsi, stream):
     try:
         new_user = User(
             nama=nama,
@@ -36,6 +38,7 @@ def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_la
         }
     return payload
 
+
 @convert_kwargs_to_snake_case
 def create_company_resolver(obj, info, input):
     try:
@@ -53,6 +56,7 @@ def create_company_resolver(obj, info, input):
             "errors": ["Incorrect data provided."]
         }
     return payload
+
 
 @convert_kwargs_to_snake_case
 def create_lowongan_resolver(obj, info, input):
@@ -72,6 +76,7 @@ def create_lowongan_resolver(obj, info, input):
         }
     return payload
 
+
 @convert_kwargs_to_snake_case
 def create_skills_resolver(obj, info, input):
     try:
@@ -89,6 +94,7 @@ def create_skills_resolver(obj, info, input):
             "errors": ["Incorrect data provided."]
         }
     return payload
+
 
 @convert_kwargs_to_snake_case
 def create_user_has_skills_resolver(obj, info, input):

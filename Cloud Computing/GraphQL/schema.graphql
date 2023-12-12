@@ -99,7 +99,7 @@ type UserSkills {
 }
 
 """
-type UserInput {
+input UserInput {
   nama: String
   email: String
   password: String

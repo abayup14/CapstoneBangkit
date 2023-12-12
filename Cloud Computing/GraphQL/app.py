@@ -2,9 +2,7 @@ from api import app, db
 from ariadne import load_schema_from_path, make_executable_schema, graphql_sync, snake_case_fallback_resolvers, ObjectType
 from flask import request, jsonify
 from ariadne.constants import PLAYGROUND_HTML
-# from api.queries import list_posts_resolver, get_post_resolver
 from api.queries import list_users_resolver
-# from api.mutations import create_post_resolver, update_post_resolver, delete_post_resolver
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, create_user_has_skills_resolver
 
 query = ObjectType("Query")
