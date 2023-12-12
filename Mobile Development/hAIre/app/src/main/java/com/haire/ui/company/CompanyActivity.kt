@@ -13,6 +13,7 @@ import com.haire.data.Jobs
 import com.haire.databinding.ActivityCompanyBinding
 import com.haire.ui.detail.DetailActivity
 import com.haire.ui.company.addjob.AddJobActivity
+import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.openjobs.JobAdapter
 import com.haire.ui.openjobs.OpenJobsViewModel
 import com.haire.ui.welcome.WelcomeActivity
@@ -32,9 +33,11 @@ class CompanyActivity : AppCompatActivity() {
         viewModel.getSession().observe(this) {
             viewModel.getJob(it.email)
         }
+
         viewModel.vacancy.observe(this) {
             setData(it)
         }
+
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
             startActivity(Intent(this@CompanyActivity, WelcomeActivity::class.java))

@@ -1,6 +1,7 @@
 package com.haire
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
@@ -8,6 +9,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import com.haire.data.Company
 import com.haire.data.EdukasiEnum
 import com.haire.data.Jobs
@@ -15,6 +17,7 @@ import com.haire.data.User
 import com.haire.data.UserModel
 import com.haire.data.UserPreference
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 class JobRepository(private val pref: UserPreference) {
     private val dbUser: DatabaseReference = FirebaseDatabase.getInstance().getReference("users")
@@ -38,7 +41,7 @@ class JobRepository(private val pref: UserPreference) {
     val companyData: LiveData<Company> = _companyData
 
     fun deleteAccount(email: String) {
-        val currentUser = FirebaseDatabase.getInstance().getReference("users/$email")
+        val currentUser = dbUser.child(email)
         currentUser.removeValue()
     }
 
@@ -117,10 +120,10 @@ class JobRepository(private val pref: UserPreference) {
     }
 
     fun addJob(jobs: Jobs) {
-
+        // Nunggu CC
     }
 
-    fun getJobVacancy(email: String) {
+    fun getJobVacancy(email: String) { // Error
         dbJobs.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val jobsList = mutableListOf<Jobs>()
@@ -157,10 +160,10 @@ class JobRepository(private val pref: UserPreference) {
         dbUser.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val emailSnapshot = snapshot.child(email)
-                val alamat = emailSnapshot.child("alamat").getValue(String::class.java) ?: ""
+                val alamat = emailSnapshot.child("address").getValue(String::class.java) ?: ""
                 val photoUrl = emailSnapshot.child("photoUrl").getValue(String::class.java) ?: ""
                 val deskripsiCompany =
-                    emailSnapshot.child("deskripsiCompany").getValue(String::class.java) ?: ""
+                    emailSnapshot.child("company_desc").getValue(String::class.java) ?: ""
 
                 val company = Company(
                     name,
@@ -211,6 +214,65 @@ class JobRepository(private val pref: UserPreference) {
 
             override fun onCancelled(error: DatabaseError) {}
         })
+    }
+
+    fun saveProfile(
+        imageUri: Uri,
+        onSuccess: (String) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val storageReference = FirebaseStorage.getInstance().reference
+        val imageFileName = "images/${UUID.randomUUID()}.jpg"
+        val imageRef = storageReference.child(imageFileName)
+        val uploadTask = imageRef.putFile(imageUri)
+
+        uploadTask.addOnSuccessListener {
+            // Image upload success
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                // URL of the uploaded image
+                onSuccess(uri.toString())
+            }
+        }.addOnFailureListener { exception ->
+            // Image upload failure
+            onFailure(exception)
+        }
+    }
+    fun updateDatabase(
+        email: String,
+        description: String,
+        age: Int,
+        imageUrl: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val imagesReference = dbUser.child(email).child("photo_url")
+        imagesReference.setValue(imageUrl)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+        dbUser.child(email).child("deskripsi").setValue(description)
+        dbUser.child(email).child("umur").setValue(age)
+    }
+
+    fun updateDatabaseCompany(
+        email: String,
+        description: String,
+        imageUrl: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val imagesReference = dbUser.child(email).child("photoUrl")
+        imagesReference.setValue(imageUrl)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+        dbUser.child(email).child("company_desc").setValue(description)
     }
 
     fun getUser(): Flow<UserModel> = pref.getUser()

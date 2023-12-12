@@ -55,14 +55,18 @@ dependencies {
 
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+
     implementation("com.google.firebase:firebase-database:20.3.0")
 
-    // firebase
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     implementation("androidx.datastore:datastore-core:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation("com.basgeekball:awesome-validation:4.3")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
     // testing
     testImplementation("junit:junit:4.13.2")

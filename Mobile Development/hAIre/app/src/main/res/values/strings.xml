@@ -23,4 +23,8 @@
     <string name="invalid_email">The email is not valid!</string>
     <string name="invalid_password">Password must at least 6 or more</string>
     <string name="delete_confirmation">Are you sure you want to delete your account?</string>
+    <string name="description">About</string>
+    <string name="open_file">Open File</string>
+    <string name="save">Save</string>
+    <string name="message_null_picture">Please pick a picture first.</string>
 </resources>

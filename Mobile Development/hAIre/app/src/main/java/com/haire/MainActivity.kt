@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.haire.databinding.ActivityMainBinding
 import com.haire.ui.company.CompanyActivity
+import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.getSession().observe(this) {
             if (it.isLogin) {
                 if (it.isCompany) {
-                    startActivity(Intent(this, CompanyActivity::class.java))
+                    startActivity(Intent(this, CompleteCompanyActivity::class.java))
                     finish()
                 }
             } else {

@@ -15,6 +15,7 @@ import com.haire.ViewModelFactory
 import com.haire.data.UserModel
 import com.haire.databinding.ActivityLoginBinding
 import com.haire.ui.company.CompanyActivity
+import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -53,13 +54,13 @@ class LoginActivity : AppCompatActivity() {
                     viewModel.loginAcc(this, email, password)
                     viewModel.isCompany.observe(this) {
                         if (it) {
-                            viewModel.saveUser(UserModel(email, true, it))
-                            showDialog(it, CompanyActivity::class.java)
+                            viewModel.saveUser(UserModel(email, true, isCompany = true))
+                            showDialog(it, CompleteCompanyActivity::class.java)
                         }
                     }
                     viewModel.success.observe(this) {
                         if (it) {
-                            viewModel.saveUser(UserModel(email, true, it))
+                            viewModel.saveUser(UserModel(email, true, isCompany = false))
                             showDialog(it, MainActivity::class.java)
                         }
                     }
