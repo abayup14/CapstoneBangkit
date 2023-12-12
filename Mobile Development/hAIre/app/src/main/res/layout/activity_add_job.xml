@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.company.addjob.AddJobActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Add Job"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="16dp"
+        android:id="@+id/email_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:alpha="100">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_job"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Job"
+            android:inputType="text"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/email_layout"
+        app:layout_constraintStart_toStartOf="@+id/email_layout"
+        app:layout_constraintTop_toBottomOf="@+id/email_layout"
+        tools:alpha="100">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_deskripsi"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:ems="10"
+            android:textAlignment="textStart"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/jml_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/email_layout"
+        app:layout_constraintStart_toStartOf="@+id/email_layout"
+        app:layout_constraintTop_toBottomOf="@+id/name_layout"
+        tools:alpha="100">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_butuh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Applicant needed"
+            android:inputType="number"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/skillsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skills Needed"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/jml_layout"
+        app:layout_constraintTop_toBottomOf="@+id/jml_layout" />
+
+    <ImageButton
+        android:id="@+id/btn_add_skill"
+        android:layout_marginStart="8dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="@+id/skillsTitle"
+        app:layout_constraintStart_toEndOf="@+id/skillsTitle"
+        app:layout_constraintTop_toTopOf="@+id/skillsTitle" />
+
+    <LinearLayout
+        android:id="@+id/skills"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/skillsTitle">
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            tools:text="Java" />
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:text="Android" />
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:text="Kotlin" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Open Date"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/skills"
+        app:layout_constraintTop_toBottomOf="@+id/skills" />
+
+    <ImageButton
+        android:id="@+id/btn_start_date"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@android:drawable/ic_menu_my_calendar"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/tv_start_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_start_date"
+        app:layout_constraintStart_toEndOf="@+id/btn_start_date"
+        app:layout_constraintTop_toTopOf="@+id/btn_start_date"
+        tools:text="15/4/2023" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:text="Closed Date"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView13"
+        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+    <ImageButton
+        android:id="@+id/btn_close_date"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@android:drawable/ic_menu_my_calendar"
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/tv_close_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_close_date"
+        app:layout_constraintStart_toEndOf="@+id/btn_close_date"
+        app:layout_constraintTop_toTopOf="@+id/btn_close_date"
+        tools:text="15/12/2023" />
+
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Job"
+        android:layout_marginTop="16dp"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@+id/jml_layout"
+        app:layout_constraintStart_toStartOf="@+id/jml_layout"
+        app:layout_constraintTop_toBottomOf="@+id/btn_close_date" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

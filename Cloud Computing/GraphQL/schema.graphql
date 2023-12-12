@@ -1,0 +1,137 @@
+type Query {
+  listUsers: UserResult!
+  listCompanies: [Company]
+  listLowongans: [Lowongan]
+  listSkills: [Skills]
+  listUserHasSkills: [UserSkills]
+}
+
+type Mutation {
+  createUser(user: UserInput): UserResponse!
+  createCompany(company: CompanyInput): CompanyResponse
+  createLowongan(lowongan: LowonganInput): LowonganResponse
+  createSkills(skills: SkillsInput): SkillsResponse
+  createUserHasSkills(userHasSkills: UserSkillsInput): UserSkillsResponse
+}
+type UserResult{
+    success: Boolean!
+    errors: [String]
+    users:[User]
+}
+type User {
+  iduser: Int
+  nama: String
+  email: String
+  password: String
+  nomor_telepon: String
+  usercol: String
+  tgl_lahir: String
+  nik: String
+  pengalaman: Int
+  pengalaman_pro: Int
+  edukasi: String
+  url_photo: String
+  deskripsi: String
+  stream: String
+}
+
+type Company {
+  id: Int
+  nama: String
+  alamat: String
+  email: String
+  password: String
+  url_photo: String
+  deskripsi: String
+}
+
+type Lowongan {
+  id: Int
+  nama: String
+  deskripsi: String
+  jmlh_butuh: Int
+  company_id: Int
+  url_photo: String
+  company: Company
+}
+
+type Skills {
+  id: Int
+  nama: String
+}
+
+type UserSkills {
+  user: User
+  skills: Skills
+}
+
+input UserInput {
+  nama: String
+  email: String
+  password: String
+  nomor_telepon: String
+  tgl_lahir: String
+  nik: String
+  pengalaman: Int
+  pengalaman_pro: Int
+  edukasi: String
+  url_photo: String
+  deskripsi: String
+  stream: String
+}
+
+input CompanyInput {
+  nama: String
+  alamat: String
+  email: String
+  password: String
+  url_photo: String
+  deskripsi: String
+}
+
+input LowonganInput {
+  nama: String
+  deskripsi: String
+  jmlh_butuh: Int
+  company_id: Int
+  url_photo: String
+}
+
+input SkillsInput {
+  nama: String
+}
+
+input UserSkillsInput {
+  user_iduser: Int
+  skills_id: Int
+}
+
+type UserResponse {
+  # success: Boolean
+  user: User
+  errors: [String]
+}
+
+type CompanyResponse {
+  # success: Boolean
+  company: Company
+  # errors: [String]
+}
+
+type LowonganResponse {
+  # success: Boolean
+  lowongan: Lowongan
+  # errors: [String]
+}
+
+type SkillsResponse {
+  # success: Boolean
+  skills: Skills
+  # errors: [String]
+}
+
+type UserSkillsResponse {
+  # success: Boolean
+  user_has_skills: UserSkills
+  # errors: [String]
+}
