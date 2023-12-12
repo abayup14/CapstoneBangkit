@@ -1,8 +1,3 @@
-from datetime import datetime
-from ariadne import convert_kwargs_to_snake_case
-from api import db
-from api.models import Post
-
 # mutations.py
 from datetime import datetime
 from ariadne import convert_kwargs_to_snake_case

@@ -1,5 +1,5 @@
 type Query {
-  listUsers: [User]
+  listUsers: UserResult!
   listCompanies: [Company]
   listLowongans: [Lowongan]
   listSkills: [Skills]
@@ -7,13 +7,17 @@ type Query {
 }
 
 type Mutation {
-  createUser(user: UserInput): UserResponse
+  createUser(user: UserInput): UserResponse!
   createCompany(company: CompanyInput): CompanyResponse
   createLowongan(lowongan: LowonganInput): LowonganResponse
   createSkills(skills: SkillsInput): SkillsResponse
   createUserHasSkills(userHasSkills: UserSkillsInput): UserSkillsResponse
 }
-
+type UserResult{
+    success: Boolean!
+    errors: [String]
+    users:[User]
+}
 type User {
   iduser: Int
   nama: String
@@ -103,31 +107,31 @@ input UserSkillsInput {
 }
 
 type UserResponse {
-  success: Boolean
+  # success: Boolean
   user: User
   errors: [String]
 }
 
 type CompanyResponse {
-  success: Boolean
+  # success: Boolean
   company: Company
-  errors: [String]
+  # errors: [String]
 }
 
 type LowonganResponse {
-  success: Boolean
+  # success: Boolean
   lowongan: Lowongan
-  errors: [String]
+  # errors: [String]
 }
 
 type SkillsResponse {
-  success: Boolean
+  # success: Boolean
   skills: Skills
-  errors: [String]
+  # errors: [String]
 }
 
 type UserSkillsResponse {
-  success: Boolean
+  # success: Boolean
   user_has_skills: UserSkills
-  errors: [String]
+  # errors: [String]
 }

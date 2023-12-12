@@ -12,26 +12,69 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # }
 # '''
 graphql_query='''
-  query {
-    listPosts {
-      success
-      errors
-      posts {
-        id
-        title
-        description
-        created_at
+  mutation {
+    createUser(UserInput('test','test','test','test','2022-2-2', 'test',1,1,'Undergraduate', 'test', 'test', 'Spesialisasi')){
+      user {
+        nama
+        email
+        password
+        nomor_telepon
+        tgl_lahir
+        nik
+        pengalaman
+        pengalaman_pro
+        edukasi
+        url_photo
+        deskripsi
+        stream
       }
-    }
+    } 
   }
 '''
+# graphql_query='''
+#   query {
+#     listUsers {
+#       success
+#       errors
+#       users{
+#         iduser
+#         nama
+#         email
+#         password
+#         nomor_telepon
+#         usercol
+#         tgl_lahir
+#         nik
+#         pengalaman
+#         pengalaman_pro
+#         edukasi
+#         url_photo
+#         deskripsi
+#         stream
+#       }
+#     }
+#   }
+# '''
+#   query {
+#     listPosts {
+#       success
+#       errors
+#       posts {
+#         id
+#         title
+#         description
+#         created_at
+#       }
+#     }
+#   }
+# '''
 # Headers (optional, include if needed)
 headers = {
     'Content-Type': 'application/json'
 }
 
 # Make the GraphQL request
-response = requests.post(graphql_endpoint, json={'query': graphql_query}, headers=headers)
+response = requests.get(graphql_endpoint, json={'query': graphql_query}, headers=headers)
 
 # Check for successful response (status code 200)
 if response.status_code == 200:
