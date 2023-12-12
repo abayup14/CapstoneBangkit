@@ -32,6 +32,7 @@ def graphql_server():
     )
     status_code = 200 if success else 400
     return jsonify(result), status_code
+    #return PLAYGROUND_HTML, 200
 # def graphql_playground():
 #     # return PLAYGROUND_HTML, 200
     

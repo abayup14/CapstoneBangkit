@@ -13,7 +13,9 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # '''
 graphql_query='''
   mutation {
-    createUser(UserInput('test','test','test','test','2022-2-2', 'test',1,1,'Undergraduate', 'test', 'test', 'Spesialisasi')){
+    createUser(nama:"test",email:"test",password:"test",nomor_telepon:"test",
+    tgl_lahir:"2022-2-2",nik:"test",pengalaman:"1",pengalaman_pro:"1",edukasi:"Undergraduate",
+    url_photo:"test",deskripsi:"test",stream:"Spesialisasi") {
       user {
         nama
         email
@@ -28,6 +30,7 @@ graphql_query='''
         deskripsi
         stream
       }
+      errors
     } 
   }
 '''
@@ -74,7 +77,7 @@ headers = {
 }
 
 # Make the GraphQL request
-response = requests.get(graphql_endpoint, json={'query': graphql_query}, headers=headers)
+response = requests.post(graphql_endpoint, json={'query': graphql_query}, headers=headers)
 
 # Check for successful response (status code 200)
 if response.status_code == 200:

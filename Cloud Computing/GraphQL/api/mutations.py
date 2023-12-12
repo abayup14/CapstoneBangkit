@@ -5,15 +5,29 @@ from api import db
 from api.models import User, Company, Lowongan, Skills, UserHasSkills, SkillsDibutuhkan, Apply, Notifikasi
 
 @convert_kwargs_to_snake_case
-def create_user_resolver(obj, info, input):
+def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_lahir, nik, pengalaman, pengalaman_pro, edukasi, url_photo, deskripsi, stream):
     try:
-        user_data = input.get('user')
-        user = User(**user_data)
-        db.session.add(user)
+        new_user = User(
+            nama=nama,
+            email=email,
+            password=password,
+            nomor_telepon=nomor_telepon,
+            tgl_lahir=tgl_lahir,
+            nik=nik,
+            pengalaman=pengalaman,
+            pengalaman_pro=pengalaman_pro,
+            edukasi=edukasi,
+            url_photo=url_photo,
+            deskripsi=deskripsi,
+            stream=stream
+        )
+        #user_data = input.get('user')
+        #user = User(**user_data)
+        db.session.add(new_user)
         db.session.commit()
         payload = {
             "success": True,
-            "user": user.to_dict()
+            "user": new_user.to_dict()
         }
     except ValueError:
         payload = {
