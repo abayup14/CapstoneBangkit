@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Jobs(
-    val image: Int,
-    val alamat: String,
+    val company: Company,
     val pekerjaan: String,
-    val provinsi: String
+    val deskripsi: String = "",
+    val jmlButuh: Int = 0
 ) : Parcelable

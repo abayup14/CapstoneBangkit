@@ -18,6 +18,7 @@ import com.haire.ui.status.StatusFragment
 class JobsFragment : Fragment() {
     private var _binding: FragmentJobsBinding? = null
     private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

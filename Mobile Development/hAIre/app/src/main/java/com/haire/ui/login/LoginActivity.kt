@@ -14,6 +14,8 @@ import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.data.UserModel
 import com.haire.databinding.ActivityLoginBinding
+import com.haire.ui.company.CompanyActivity
+import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -50,9 +52,17 @@ class LoginActivity : AppCompatActivity() {
                     showText(getString(R.string.email_password_empty))
                 } else {
                     viewModel.loginAcc(this, email, password)
+                    viewModel.isCompany.observe(this) {
+                        if (it) {
+                            viewModel.saveUser(UserModel(email, true, isCompany = true))
+                            showDialog(it, CompleteCompanyActivity::class.java)
+                        }
+                    }
                     viewModel.success.observe(this) {
-                        viewModel.saveUser(UserModel(email, true))
-                        showDialog(it, email)
+                        if (it) {
+                            viewModel.saveUser(UserModel(email, true, isCompany = false))
+                            showDialog(it, MainActivity::class.java)
+                        }
                     }
                 }
             }
@@ -67,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showDialog(isSuccess: Boolean, email: String) {
+    private fun showDialog(isSuccess: Boolean, page: Class<*>) {
         if (isSuccess) {
             AlertDialog.Builder(this).apply {
                 setMessage(getString(R.string.login_success))
@@ -76,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(
                         Intent(
                             this@LoginActivity,
-                            MainActivity::class.java
+                            page
                         )
                     )
                     finish()

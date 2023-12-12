@@ -22,10 +22,10 @@ class DetailActivity : AppCompatActivity() {
         val data = intent.getParcelableExtra<Jobs>(EXTRA_JOBS)
         binding.apply {
             Glide.with(this@DetailActivity)
-                .load(data?.image)
+                .load(data?.company?.photoUrl)
                 .into(ivJobs)
             tvPekerjaan.text = data?.pekerjaan.toString()
-            tvAlamat.text = data?.provinsi.toString()
+            tvAlamat.text = data?.company?.address.toString()
             btnApply.setOnClickListener {
                 Toast.makeText(
                     this@DetailActivity,

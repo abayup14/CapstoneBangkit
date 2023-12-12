@@ -17,7 +17,8 @@ class UserPreference(private val dataStore: DataStore<Preferences>) {
         return dataStore.data.map { preferences ->
             UserModel(
                 preferences[EMAIL_KEY] ?: "",
-                preferences[STATE_KEY] ?: false
+                preferences[STATE_KEY] ?: false,
+                preferences[COMPANY_KEY] ?: false
             )
         }
     }
@@ -25,7 +26,8 @@ class UserPreference(private val dataStore: DataStore<Preferences>) {
     suspend fun saveUser(user: UserModel) {
         dataStore.edit { preferences ->
             preferences[EMAIL_KEY] = user.email
-            preferences[STATE_KEY] = true
+            preferences[STATE_KEY] = user.isLogin
+            preferences[COMPANY_KEY] = user.isCompany
         }
     }
 
@@ -33,6 +35,7 @@ class UserPreference(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { preferences ->
             preferences[STATE_KEY] = false
             preferences[EMAIL_KEY] = ""
+            preferences[COMPANY_KEY] = false
         }
     }
 
@@ -42,6 +45,7 @@ class UserPreference(private val dataStore: DataStore<Preferences>) {
 
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val STATE_KEY = booleanPreferencesKey("state")
+        private val COMPANY_KEY = booleanPreferencesKey("company")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {

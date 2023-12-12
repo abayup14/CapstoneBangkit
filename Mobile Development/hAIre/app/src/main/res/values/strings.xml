@@ -2,6 +2,8 @@
     <string name="app_name">hAIre</string>
     <string name="tab_text_1">Open Jobs</string>
     <string name="tab_text_2">Status</string>
+    <string name="tab_register_1">Job Seeker</string>
+    <string name="tab_register_2">Company</string>
     <string name="title_home">Home</string>
     <string name="title_jobs">Jobs</string>
     <string name="title_notifications">Notifications</string>
@@ -20,4 +22,9 @@
     <string name="email_password_empty">Email or password still empty</string>
     <string name="invalid_email">The email is not valid!</string>
     <string name="invalid_password">Password must at least 6 or more</string>
+    <string name="delete_confirmation">Are you sure you want to delete your account?</string>
+    <string name="description">About</string>
+    <string name="open_file">Open File</string>
+    <string name="save">Save</string>
+    <string name="message_null_picture">Please pick a picture first.</string>
 </resources>

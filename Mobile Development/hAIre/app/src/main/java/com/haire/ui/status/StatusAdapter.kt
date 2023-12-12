@@ -24,10 +24,10 @@ class StatusAdapter(
         fun bind(jobs: Jobs, status: Status) {
             binding.apply {
                 Glide.with(root.context)
-                    .load(jobs.image)
+                    .load(jobs.company.photoUrl)
                     .into(ivJobs)
                 tvTitle.text = jobs.pekerjaan
-                tvAddres.text = jobs.alamat
+                tvAddres.text = jobs.company.address
                 tvStatus.text = status.status
                 when (status.status) {
                     "Accepted" -> tvStatus.setBackgroundResource(R.drawable.status_accept)

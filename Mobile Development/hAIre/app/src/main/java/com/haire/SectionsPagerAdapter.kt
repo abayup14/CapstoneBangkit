@@ -19,13 +19,4 @@ class SectionsPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(ac
         }
         return fragment as Fragment
     }
-
-    fun getFragment(position: Int): Fragment? {
-        return when (position) {
-            0 -> OpenJobsFragment()
-            1 -> StatusFragment()
-            else -> null
-        }
-    }
-
 }
