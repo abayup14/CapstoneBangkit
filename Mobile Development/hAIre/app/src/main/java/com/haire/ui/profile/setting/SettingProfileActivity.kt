@@ -9,6 +9,7 @@ import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivitySettingProfileBinding
 import com.haire.ui.profile.ProfileViewModel
+import com.haire.ui.profile.editprofile.EditProfileActivity
 import com.haire.ui.welcome.WelcomeActivity
 
 class SettingProfileActivity : AppCompatActivity() {
@@ -27,11 +28,6 @@ class SettingProfileActivity : AppCompatActivity() {
         }
         binding.btnDelete.setOnClickListener {
             showDialog()
-            viewModel.getUser().observe(this) {
-                viewModel.deleteAccount(it.email)
-            }
-            viewModel.logout()
-            startActivity(Intent(this@SettingProfileActivity, WelcomeActivity::class.java))
         }
         binding.btnBack.setOnClickListener {
             finish()
@@ -39,9 +35,10 @@ class SettingProfileActivity : AppCompatActivity() {
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
             startActivity(Intent(this@SettingProfileActivity, WelcomeActivity::class.java))
+            finish()
         }
         binding.btnEdit.setOnClickListener {
-//            startActivity(Intent(this@SettingProfileActivity, UploadActivity::class.java))
+            startActivity(Intent(this@SettingProfileActivity, EditProfileActivity::class.java))
         }
     }
 
@@ -53,6 +50,10 @@ class SettingProfileActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             setPositiveButton("Yes") { _, _ ->
+                viewModel.getUser().observe(this@SettingProfileActivity) {
+                    viewModel.deleteAccount(it.email)
+                }
+                viewModel.logout()
                 startActivity(
                     Intent(
                         this@SettingProfileActivity,
