@@ -12,14 +12,21 @@ class User(db.Model):
     email = db.Column(db.String(100))
     password = db.Column(db.String(128))
     nomor_telepon = db.Column(db.String(12))
-    usercol = db.Column(db.String(100))
     tgl_lahir = db.Column(db.DateTime)
     nik = db.Column(db.String(16))
     pengalaman = db.Column(db.Integer)
     pengalaman_pro = db.Column(db.Integer)
     edukasi = db.Column(db.Enum('Master', 'Undergraduate', 'PhD', 'Other', 'NoHigherEd'))
+    tdk_pnyrmh = db.Column(db.Boolean)
     url_photo = db.Column(db.String(1000))
     deskripsi = db.Column(db.String(1000))
+    stream = db.Column(db.Enum('Pelatihan', 'Spesialisasi'))
+
+    edukasis = relationship('Edukasi', backref='user', lazy=True)
+    pengalamans = relationship('Pengalaman', backref='user', lazy=True)
+    user_has_skills = relationship('UserHasSkills', backref='user', lazy=True)
+    applies = relationship('Apply', backref='user', lazy=True)
+    notifikasis = relationship('Notifikasi', backref='user', lazy=True)
 
     def to_dict(self):
         return {
@@ -28,14 +35,15 @@ class User(db.Model):
             "email": self.email,
             "password": self.password,
             "nomor_telepon": self.nomor_telepon,
-            "usercol": self.usercol,
-            "tgl_lahir": str(self.tgl_lahir.strftime("%d-%m-%Y")),
+            "tgl_lahir": str(self.tgl_lahir),
             "nik": self.nik,
             "pengalaman": self.pengalaman,
             "pengalaman_pro": self.pengalaman_pro,
             "edukasi": self.edukasi,
+            "tdk_pnyrmh": self.tdk_pnyrmh,
             "url_photo": self.url_photo,
-            "deskripsi": self.deskripsi
+            "deskripsi": self.deskripsi,
+            "stream": self.stream
         }
 
 class Company(db.Model):
@@ -104,6 +112,7 @@ class Apply(db.Model):
     lowongan_id = db.Column(db.Integer, db.ForeignKey('lowongan.id'), primary_key=True)
     probabilitas = db.Column(db.Float)
     jaccard = db.Column(db.Float)
+    skor_akhir = db.Column(db.Float)
     user = db.relationship('User', backref=db.backref('apply', lazy=True))
     lowongan = db.relationship('Lowongan', backref=db.backref('apply', lazy=True))
 
@@ -113,3 +122,21 @@ class Notifikasi(db.Model):
     pesan = db.Column(db.String(100))
     user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'))
     user = db.relationship('User', backref=db.backref('notifikasi', lazy=True))
+
+class Edukasi(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama_institusi = db.Column(db.String(100))
+    jenjang = db.Column(db.Enum('Master', 'Undergraduate', 'PhD', 'Other', 'NoHigherEd'))
+    tgl_awal = db.Column(db.Date)
+    tgl_akhir = db.Column(db.Date)
+    deskripsi = db.Column(db.String(1000))
+    user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'))
+
+class Pengalaman(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama_pekerjaan = db.Column(db.String(100))
+    tgl_mulai = db.Column(db.Date)
+    tgl_selesai = db.Column(db.Date)
+    tmpt_pekerja = db.Column(db.String(100))
+    pkrjn_profesional = db.Column(db.Boolean)
+    user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'))
