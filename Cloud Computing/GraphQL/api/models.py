@@ -1,10 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+from app import db
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/dbname'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:mysql@localhost/hAIre'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db = SQLAlchemy(app)
 
 class User(db.Model):
     iduser = db.Column(db.Integer, primary_key=True)
@@ -22,11 +23,11 @@ class User(db.Model):
     deskripsi = db.Column(db.String(1000))
     stream = db.Column(db.Enum('Pelatihan', 'Spesialisasi'))
 
-    edukasis = relationship('Edukasi', backref='user', lazy=True)
-    pengalamans = relationship('Pengalaman', backref='user', lazy=True)
-    user_has_skills = relationship('UserHasSkills', backref='user', lazy=True)
-    applies = relationship('Apply', backref='user', lazy=True)
-    notifikasis = relationship('Notifikasi', backref='user', lazy=True)
+    edukasis = db.relationship('Edukasi', backref='user', lazy=True)
+    pengalamans = db.relationship('Pengalaman', backref='user', lazy=True)
+    user_has_skills = db.relationship('UserHasSkills', backref='user', lazy=True)
+    applies = db.relationship('Apply', backref='user', lazy=True)
+    notifikasis = db.relationship('Notifikasi', backref='user', lazy=True)
 
     def to_dict(self):
         return {
@@ -98,8 +99,8 @@ class Skills(db.Model):
 class UserHasSkills(db.Model):
     user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), primary_key=True)
     skills_id = db.Column(db.Integer, db.ForeignKey('skills.id'), primary_key=True)
-    user = db.relationship('User', backref=db.backref('user_has_skills', lazy=True))
-    skills = db.relationship('Skills', backref=db.backref('user_has_skills', lazy=True))
+    # user = db.relationship('User', backref=db.backref('user_has_skills', lazy=True))
+    # skills = db.relationship('Skills', backref=db.backref('user_has_skills', lazy=True))
 
 class SkillsDibutuhkan(db.Model):
     skills_id = db.Column(db.Integer, db.ForeignKey('skills.id'), primary_key=True)
@@ -113,15 +114,15 @@ class Apply(db.Model):
     probabilitas = db.Column(db.Float)
     jaccard = db.Column(db.Float)
     skor_akhir = db.Column(db.Float)
-    user = db.relationship('User', backref=db.backref('apply', lazy=True))
-    lowongan = db.relationship('Lowongan', backref=db.backref('apply', lazy=True))
+    # user = db.relationship('User', backref=db.backref('apply', lazy=True))
+    # lowongan = db.relationship('Lowongan', backref=db.backref('apply', lazy=True))
 
 class Notifikasi(db.Model):
     idnotifikasi = db.Column(db.Integer, primary_key=True)
     waktu = db.Column(db.DateTime)
     pesan = db.Column(db.String(100))
     user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'))
-    user = db.relationship('User', backref=db.backref('notifikasi', lazy=True))
+    # user = db.relationship('User', backref=db.backref('notifikasi', lazy=True))
 
 class Edukasi(db.Model):
     id = db.Column(db.Integer, primary_key=True)

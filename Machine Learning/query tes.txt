@@ -1,0 +1,12 @@
+query {
+  listPosts {
+    success
+    errors
+    posts {
+      id
+      title
+      description
+      created_at
+    }
+  }
+}

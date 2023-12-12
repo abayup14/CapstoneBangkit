@@ -1,4 +1,3 @@
-
 import requests
 import json
 
@@ -12,19 +11,65 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # }
 # '''
 graphql_query='''
-  query {
-    listPosts {
-      success
-      errors
-      posts {
-        id
-        title
-        description
-        created_at
+  mutation {
+    createUser(nama:"test",email:"test",password:"test",nomor_telepon:"test",
+    tgl_lahir:"2022-2-2",nik:"test",pengalaman:"1",pengalaman_pro:"1",edukasi:"Undergraduate",
+    url_photo:"test",deskripsi:"test",stream:"Spesialisasi") {
+      user {
+        nama
+        email
+        password
+        nomor_telepon
+        tgl_lahir
+        nik
+        pengalaman
+        pengalaman_pro
+        edukasi
+        url_photo
+        deskripsi
+        stream
       }
-    }
+      errors
+    } 
   }
 '''
+# graphql_query='''
+#   query {
+#     listUsers {
+#       success
+#       errors
+#       users{
+#         iduser
+#         nama
+#         email
+#         password
+#         nomor_telepon
+#         usercol
+#         tgl_lahir
+#         nik
+#         pengalaman
+#         pengalaman_pro
+#         edukasi
+#         url_photo
+#         deskripsi
+#         stream
+#       }
+#     }
+#   }
+# '''
+#   query {
+#     listPosts {
+#       success
+#       errors
+#       posts {
+#         id
+#         title
+#         description
+#         created_at
+#       }
+#     }
+#   }
+# '''
 # Headers (optional, include if needed)
 headers = {
     'Content-Type': 'application/json'

@@ -1,5 +1,10 @@
+type Schema {
+  query: Query
+  mutation: Mutation
+}
+
 type Query {
-  listUsers: [User]
+  listUsers: UserResult!
   listCompanies: [Company]
   listLowongans: [Lowongan]
   listSkills: [Skills]
@@ -7,20 +12,23 @@ type Query {
 }
 
 type Mutation {
-  createUser(user: UserInput): UserResponse
-  createCompany(company: CompanyInput): CompanyResponse
-  createLowongan(lowongan: LowonganInput): LowonganResponse
-  createSkills(skills: SkillsInput): SkillsResponse
-  createUserHasSkills(userHasSkills: UserSkillsInput): UserSkillsResponse
+  createUser(nama: String, email: String, password: String, nomor_telepon: String, tgl_lahir: String, nik: String, pengalaman: String, pengalaman_pro: String, edukasi: String, url_photo: String, deskripsi: String, stream: String): UserResponse!
+  createCompany(nama: String, alamat: String, email: String, password: String, url_photo: String, deskripsi: String): CompanyResponse
+  createLowongan(nama: String, deskripsi: String, jmlh_butuh: Int, company_id: Int, url_photo: String): LowonganResponse
+  createSkills(nama: String): SkillsResponse
+  createUserHasSkills(user_iduser: Int, skills_id: Int): UserSkillsResponse
 }
-
+type UserResult{
+    success: Boolean!
+    errors: [String]
+    users:[User]
+}
 type User {
   iduser: Int
   nama: String
   email: String
   password: String
   nomor_telepon: String
-  usercol: String
   tgl_lahir: String
   nik: String
   pengalaman: Int
@@ -61,7 +69,7 @@ type UserSkills {
   skills: Skills
 }
 
-input UserInput {
+type UserInput {
   nama: String
   email: String
   password: String
@@ -103,31 +111,31 @@ input UserSkillsInput {
 }
 
 type UserResponse {
-  success: Boolean
+  # success: Boolean
   user: User
   errors: [String]
 }
 
 type CompanyResponse {
-  success: Boolean
+  # success: Boolean
   company: Company
-  errors: [String]
+  # errors: [String]
 }
 
 type LowonganResponse {
-  success: Boolean
+  # success: Boolean
   lowongan: Lowongan
-  errors: [String]
+  # errors: [String]
 }
 
 type SkillsResponse {
-  success: Boolean
+  # success: Boolean
   skills: Skills
-  errors: [String]
+  # errors: [String]
 }
 
 type UserSkillsResponse {
-  success: Boolean
+  # success: Boolean
   user_has_skills: UserSkills
-  errors: [String]
+  # errors: [String]
 }
