@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.haire.JobRepository
 import com.haire.R
+import com.haire.data.Company
 import com.haire.data.User
 import com.haire.ui.login.LoginActivity
 
@@ -21,4 +22,6 @@ class RegisterViewModel(private val repository: JobRepository) : ViewModel() {
     val isEmailExist: LiveData<Boolean> = repository.success
 
     fun registerAccount(user: User, password: String) = repository.registerAccount(user, password)
+
+    fun registerCompany(company: Company, password: String) = repository.registerCompany(company, password)
 }

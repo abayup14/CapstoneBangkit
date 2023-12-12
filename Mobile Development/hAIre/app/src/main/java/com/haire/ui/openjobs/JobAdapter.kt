@@ -23,10 +23,10 @@ class JobAdapter(
         fun bind(jobs: Jobs) {
             binding.apply {
                 Glide.with(root.context)
-                    .load(jobs.image)
+                    .load(jobs.company.photoUrl)
                     .into(ivJobs)
                 tvTitle.text = jobs.pekerjaan
-                tvAddres.text = jobs.alamat
+                tvAddres.text = jobs.company.address
             }
             itemView.setOnClickListener {
                 onItemClick(jobs)
