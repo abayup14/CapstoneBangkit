@@ -10,10 +10,11 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     query: {listPosts {success\nerrors\nposts\n{id\ntitle\ndescription\ncreated_at}}}
 # }
 # '''
+
 graphql_query='''
   mutation {
     createUser(nama:"test",email:"test",password:"test",nomor_telepon:"test",
-    tgl_lahir:"2022-2-2",nik:"test",pengalaman:"1",pengalaman_pro:"1",edukasi:"Undergraduate",
+    tgl_lahir:"2022-2-2",nik:"test",pengalaman:1,pengalaman_pro:1,edukasi:"Undergraduate",
     url_photo:"test",deskripsi:"test",stream:"Spesialisasi") {
       user {
         nama
@@ -70,6 +71,7 @@ graphql_query='''
 #     }
 #   }
 # '''
+
 # Headers (optional, include if needed)
 headers = {
     'Content-Type': 'application/json'

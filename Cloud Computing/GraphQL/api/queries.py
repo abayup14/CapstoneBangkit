@@ -126,6 +126,7 @@ def list_user_has_skills_resolver(obj, info):
 #             "errors": [f"Post item matching {id} not found"]
 #         }
 #     return payload
+
 @convert_kwargs_to_snake_case
 def list_companies_resolver(obj, info):
     try:
