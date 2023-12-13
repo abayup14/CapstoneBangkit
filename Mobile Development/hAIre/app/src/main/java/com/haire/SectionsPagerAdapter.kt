@@ -1,12 +1,10 @@
 package com.haire
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.haire.ui.openjobs.OpenJobsFragment
-import com.haire.ui.status.StatusFragment
 
-class SectionsPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+class SectionsPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
         return 2
     }
@@ -19,4 +17,5 @@ class SectionsPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(ac
         }
         return fragment as Fragment
     }
+
 }
