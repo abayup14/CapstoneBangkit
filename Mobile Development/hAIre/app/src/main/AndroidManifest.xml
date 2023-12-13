@@ -13,6 +13,7 @@
         android:theme="@style/Theme.HAIre"
         tools:targetApi="31">
         <activity
+<<<<<<< HEAD
             android:name=".ui.profile.company.CompanyProfileActivity"
             android:exported="false" />
         <activity
@@ -47,6 +48,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.detail.DetailActivity"
+=======
+            android:name=".DetailActivity"
+>>>>>>> parent of 507150b (Merge branch 'main' of https://github.com/abayup14/hAIre)
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -57,9 +61,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.welcome.WelcomeActivity"
-            android:exported="false" />
     </application>
 
 </manifest>

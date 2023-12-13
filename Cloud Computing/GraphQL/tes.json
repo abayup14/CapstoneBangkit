@@ -1,3 +1,0 @@
-{
-    "query": "{listPosts {success\nerrors\nposts\n{id\ntitle\ndescription\ncreated_at}}}"
-}
