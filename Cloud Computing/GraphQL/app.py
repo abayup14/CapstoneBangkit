@@ -1,22 +1,18 @@
 from api import app, db
 from ariadne import load_schema_from_path, make_executable_schema, graphql_sync, snake_case_fallback_resolvers, ObjectType
 from flask import request, jsonify
-from ariadne.constants import PLAYGROUND_HTML
-from api.queries import list_users_resolver, list_companies_resolver, list_lowongans_resolver, list_skills_resolver, list_user_has_skills_resolver
+#from ariadne.constants import PLAYGROUND_HTML
+from api.queries import list_users_resolver, list_companies_resolver, list_lowongans_resolver, list_skills_resolver, list_user_has_skills_resolver, cek_login
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, create_user_has_skills_resolver
 
 
 query = ObjectType("Query")
 mutation = ObjectType("Mutation")
 
-# query.set_field("listPosts", list_posts_resolver)
-# query.set_field("getPost", get_post_resolver)
-# mutation.set_field("createPost", create_post_resolver)
-# mutation.set_field("updatePost", update_post_resolver)
-# mutation.set_field("deletePost", delete_post_resolver)
 
 # Untuk query
 query.set_field("listUsers", list_users_resolver)
+query.set_field("cekLogin", cek_login)
 
 #Untuk mutation
 mutation.set_field("createUser", create_user_resolver)
@@ -36,7 +32,7 @@ def graphql_server():
     )
     status_code = 200 if success else 400
     return jsonify(result), status_code
-    # return PLAYGROUND_HTML, 200
+    #return PLAYGROUND_HTML, 200
 # def graphql_playground():
 #     # return PLAYGROUND_HTML, 200
     

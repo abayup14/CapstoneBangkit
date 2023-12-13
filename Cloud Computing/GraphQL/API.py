@@ -29,10 +29,10 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # '''
 graphql_query='''
   query {
-    listUsers {
+    cekLogin(email:"test1", password:"test") {
       success
       errors
-      users{
+      user {
         iduser
         nama
         email

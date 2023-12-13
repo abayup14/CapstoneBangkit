@@ -8,7 +8,7 @@ CORS(app)
 
 # jangan lupa diganti format mysqlnya
 # Format: "mysql+pymysql://username:password@host:port/database_name"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:mysql@localhost:3306/haire"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/haire"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 db = SQLAlchemy(app)

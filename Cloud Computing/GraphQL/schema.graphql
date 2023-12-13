@@ -9,6 +9,7 @@ type Query {
   listLowongans: [Lowongan]
   listSkills: [Skills]
   listUserHasSkills: [UserSkills]
+  cekLogin(email: String, password: String): UserResponse
 }
 
 type Mutation {
@@ -97,49 +98,6 @@ type UserSkills {
   user: User
   skills: Skills
 }
-
-"""
-input UserInput {
-  nama: String
-  email: String
-  password: String
-  nomor_telepon: String
-  tgl_lahir: String
-  nik: String
-  pengalaman: Int
-  pengalaman_pro: Int
-  edukasi: String
-  url_photo: String
-  deskripsi: String
-  stream: String
-}
-
-input CompanyInput {
-  nama: String
-  alamat: String
-  email: String
-  password: String
-  url_photo: String
-  deskripsi: String
-}
-
-input LowonganInput {
-  nama: String
-  deskripsi: String
-  jmlh_butuh: Int
-  company_id: Int
-  url_photo: String
-}
-
-input SkillsInput {
-  nama: String
-}
-
-input UserSkillsInput {
-  user_iduser: Int
-  skills_id: Int
-}
-"""
 
 type UserResponse {
   success: Boolean
