@@ -1,6 +1,6 @@
 '''from flask_sqlalchemy import SQLAlchemy
 from flask import Flask'''
-from app import db
+from api.main import db
 
 # app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:mysql@localhost/hAIre'
