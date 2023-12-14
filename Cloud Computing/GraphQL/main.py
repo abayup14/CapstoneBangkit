@@ -17,7 +17,7 @@ query.set_field("cekLogin", cek_login)
 #Untuk mutation
 mutation.set_field("createUser", create_user_resolver)
 
-type_defs = load_schema_from_path("schema.graphql")
+type_defs = load_schema_from_path("api/schema.graphql")
 schema = make_executable_schema(type_defs, query, mutation, snake_case_fallback_resolvers)
 
 
@@ -49,3 +49,6 @@ def graphql_server_post():
     )
     status_code = 200 if success else 400
     return jsonify(result), status_code
+    
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=5000)
