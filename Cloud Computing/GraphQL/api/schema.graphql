@@ -46,6 +46,10 @@ type Mutation {
   createSkills(nama: String): SkillsResponse
 
   createUserHasSkills(user_iduser: Int, skills_id: Int): UserSkillsResponse
+
+  createPengalaman(nama_pekerjaan: String, tgl_mulai: String, tgl_selesai: String, tmpt_bekerja: String, pkrjn_profesional: Boolean, user_iduser: Int): PengalamanResponse
+
+  createEdukasi(nama_institusi: String, jenjang: String, tgl_awal: String, tgl_akhir: String, deskripsi: String, user_iduser: Int): EdukasiResponse
 }
 
 type UserResult{
@@ -100,6 +104,26 @@ type UserSkills {
   skills: Skills
 }
 
+type Pengalaman {
+  id: Int,
+  nama_pekerjaan: String, 
+  tgl_mulai: String, 
+  tgl_selesai: String, 
+  tmpt_bekerja: String, 
+  pkrjn_profesional: Boolean, 
+  user_iduser: Int
+}
+
+type Edukasi {
+  id: Int, 
+  nama_institusi: String, 
+  jenjang: String, 
+  tgl_awal: String, 
+  tgl_akhir: String, 
+  deskripsi: String, 
+  user_iduser: Int
+}
+
 type UserResponse {
   success: Boolean
   errors: [String]
@@ -128,4 +152,16 @@ type UserSkillsResponse {
   success: Boolean
   errors: [String]
   user_has_skills: UserSkills
+}
+
+type PengalamanResponse {
+  success: Boolean
+  errors: [String]
+  pengalaman: Pengalaman
+}
+
+type EdukasiResponse {
+  success: Boolean
+  errors: [String]
+  edukasi: Edukasi
 }

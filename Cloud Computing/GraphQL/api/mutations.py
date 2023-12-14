@@ -2,7 +2,7 @@
 from datetime import datetime
 from ariadne import convert_kwargs_to_snake_case
 from api.main import db
-from api.models import User, Company, Lowongan, Skills, UserHasSkills, SkillsDibutuhkan, Apply, Notifikasi
+from api.models import User, Company, Lowongan, Skills, UserHasSkills, SkillsDibutuhkan, Apply, Notifikasi, Pengalaman, Edukasi
 
 
 @convert_kwargs_to_snake_case
@@ -130,3 +130,38 @@ def create_user_has_skills_resolver(obj, info, iduser, idskills):
             "errors": ["Incorrect data provided."]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def create_pengalaman_resolver(obj, info, nama_pekerjaan, tgl_mulai, tgl_selesai, tmpt_bekerja, pkrjn_profesional, user_iduser):
+    try:
+        new_pengalaman = Pengalaman(nama_pekerjaan=nama_pekerjaan, tgl_mulai=tgl_mulai, tgl_selesai=tgl_selesai, tmpt_pekerja=tmpt_bekerja, pkrjn_profesional=pkrjn_profesional, user_iduser=user_iduser)
+        db.session.add(new_pengalaman)
+        db.session.commit()
+        payload = {
+            "success": True,
+            "pengalaman": new_pengalaman.to_dict()
+        }
+    except ValueError:
+        payload = {
+            "success": False,
+            "errors": ["Incorrect data provided."]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def create_edukasi_resolver(obj, info, nama_institusi, jenjang, tgl_awal, tgl_akhir, deskripsi, user_iduser):
+    try:
+        new_edukasi = Edukasi(nama_institusi=nama_institusi, jenjang=jenjang, tgl_awal=tgl_awal, tgl_akhir=tgl_akhir, deskripsi=deskripsi, user_iduser=user_iduser)
+        db.session.add(new_edukasi)
+        db.session.commit()
+        payload = {
+            "success": True,
+            "edukasi": new_edukasi.to_dict()
+        }
+    except ValueError:
+        payload = {
+            "success": False,
+            "errors": ["Incorrect data provided."]
+        }
+    return payload
+

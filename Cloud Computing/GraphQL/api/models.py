@@ -141,6 +141,16 @@ class Edukasi(db.Model):
     tgl_akhir = db.Column(db.Date)
     deskripsi = db.Column(db.String(1000))
     user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'))
+    def to_dict(self):
+        return {
+            "id" : self.id,
+            "nama_institusi": self.nama_institusi,
+            "jenjang" : self.jenjang,
+            "tgl_awal": self.tgl_awal,
+            "tgl_akhir": self.tgl_akhir,
+            "deskripsi": self.deskripsi,
+            "user_iduser": self.user_iduser,
+        }
 
 
 class Pengalaman(db.Model):
@@ -151,3 +161,13 @@ class Pengalaman(db.Model):
     tmpt_pekerja = db.Column(db.String(100))
     pkrjn_profesional = db.Column(db.Boolean)
     user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'))
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nama_pekerjaan": self.nama_pekerjaan,
+            "tgl_mulai": self.tgl_mulai,
+            "tgl_selesai": self.tgl_selesai,
+            "tmpt_pekerja": self.tmpt_pekerja,
+            "pkrjn_profesional": self.pkrjn_profesional,
+            "user_iduser": self.user_iduser
+        }

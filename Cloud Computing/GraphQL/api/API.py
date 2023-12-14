@@ -3,7 +3,7 @@ import json
 
 # GraphQL endpoint
 graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual GraphQL endpoint
-
+# INSERT USER
 # graphql_query='''
 #   mutation {
 #     createUser(nama:"test",email:"test",password:"test",nomor_telepon:"test",
@@ -27,6 +27,7 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     } 
 #   }
 # '''
+# QUERY USER
 # graphql_query='''
 #   query {
 #     listUsers {
@@ -50,6 +51,7 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     }
 #   }
 # '''
+# INSERT COMPANY
 # graphql_query = '''
 #   mutation {
 #     createCompany(nama:"test",alamat:"test",email:"test",password:"test",url_photo:"test",deskripsi:"test") {
@@ -66,21 +68,71 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     }
 #   }
 # '''
+# QUERY COMPANY LOGIN
+# graphql_query = '''
+#   query {
+#     cekLoginCompany(email:"test",password:"test") {
+#       success
+#       errors
+#       company {
+#         nama
+#         alamat
+#         email
+#         password
+#         url_photo
+#         deskripsi
+#       }
+#     }
+#   }
+# '''
+# INSERT SKILL
+# graphql_query = '''
+#   mutation {
+#      createSkills(nama:"Java") {
+#        success
+#        errors
+#        skills {
+#          id
+#          nama
+#         }
+#      } 
+#    }
+# '''
+# INSERT PENGALAMAN
+# graphql_query = '''
+#   mutation {
+#      createPengalaman(nama_pekerjaan: "Full Stack Dev", tgl_mulai: "2022-2-2", tgl_selesai: "2022-2-2", tmpt_bekerja: "BCA", pkrjn_profesional: true, user_iduser: 1) {
+#        success
+#        errors
+#        pengalaman {
+#         id
+#         nama_pekerjaan
+#         tgl_mulai
+#         tgl_selesai
+#         tmpt_bekerja
+#         pkrjn_profesional
+#         user_iduser
+#         }
+#      } 
+#    }
+# '''
+# INSERT EDUKASI
 graphql_query = '''
-  query {
-    cekLoginCompany(email:"test",password:"test") {
-      success
-      errors
-      company {
-        nama
-        alamat
-        email
-        password
-        url_photo
+  mutation {
+     createEdukasi(nama_institusi: "test", jenjang: "Master", tgl_awal: "2022-2-2", tgl_akhir: "2022-2-2", deskripsi: "test", user_iduser: 1) {
+       success
+       errors
+       edukasi {
+        id
+        nama_institusi
+        jenjang
+        tgl_awal
+        tgl_akhir
         deskripsi
-      }
-    }
-  }
+        user_iduser
+        }
+     } 
+   }
 '''
 
 # Headers (optional, include if needed)

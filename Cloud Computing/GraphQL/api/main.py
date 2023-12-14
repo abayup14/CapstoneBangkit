@@ -3,7 +3,7 @@ from ariadne import load_schema_from_path, make_executable_schema, graphql_sync,
 from flask import request, jsonify
 #from ariadne.constants import PLAYGROUND_HTML
 from api.queries import list_users_resolver, list_companies_resolver, list_lowongans_resolver, list_skills_resolver, list_user_has_skills_resolver, cek_login_user, cek_login_company
-from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, create_user_has_skills_resolver
+from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver
 
 
 query = ObjectType("Query")
@@ -18,6 +18,9 @@ query.set_field("cekLoginCompany", cek_login_company)
 #Untuk mutation
 mutation.set_field("createUser", create_user_resolver)
 mutation.set_field("createCompany", create_company_resolver)
+mutation.set_field("createSkills", create_skills_resolver)
+mutation.set_field("createPengalaman", create_pengalaman_resolver)
+mutation.set_field("createEdukasi", create_edukasi_resolver)
 
 type_defs = load_schema_from_path("schema.graphql")
 schema = make_executable_schema(type_defs, query, mutation, snake_case_fallback_resolvers)
