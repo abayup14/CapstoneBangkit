@@ -180,3 +180,20 @@ def create_edukasi_resolver(obj, info, nama_institusi, jenjang, tgl_awal, tgl_ak
         }
     return payload
 
+@convert_kwargs_to_snake_case
+def create_notifikasi_resolver(obj, info, waktu, pesan, user_iduser):
+    try:
+        new_notifikasi = Notifikasi(waktu=waktu,pesan=pesan,user_iduser=user_iduser)
+        db.session.add(new_notifikasi)
+        db.session.commit()
+        payload = {
+            "success": True,
+            "edukasi": new_notifikasi.to_dict()
+        }
+    except ValueError:
+        payload = {
+            "success": False,
+            "errors": ["Incorrect data provided."]
+        }
+    return payload
+

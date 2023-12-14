@@ -1,4 +1,4 @@
-from api.models import User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
+from api.models import Notifikasi, User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
 from ariadne import convert_kwargs_to_snake_case
 
 
@@ -300,6 +300,21 @@ def list_lowongans_user_apply_resolver(obj, info, user_iduser):
         payload = {
             "success": True,
             "lowongans": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_notifikasi_resolver(obj, info, user_iduser):
+    try:
+        notifikasis = [notifikasi.to_dict() for notifikasi in Notifikasi.query.filter(Notifikasi.user_iduser == user_iduser).all()]
+        payload = {
+            "success": True,
+            "notifikasi": notifikasis
         }
     except Exception as e:
         payload = {

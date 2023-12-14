@@ -16,7 +16,7 @@ type Query {
   listUserSkills(user_iduser: Int): SkillsResponses
   listLowonganCompany(company_id: Int): LowonganResponses
   listLowonganUserSearch(search: String): LowonganResponses
-  listLowonganUserApply(user_iduser: Int): LowonganResponses
+  listNotifikasiUser(user_iduser: Int): LowonganResponses
 }
 
 type Mutation {
@@ -96,7 +96,12 @@ type Lowongan {
   url_photo: String
   company: Company
 }
-
+type Notifikasi{
+  id: Int
+  waktu: String
+  pesan: String
+  user_id: Int
+}
 type Skills {
   id: Int
   nama: String
@@ -206,4 +211,10 @@ type LowonganResponses {
   success: Boolean
   errors: [String]
   lowongan: [Lowongan]
+}
+
+type NotifikasiResponses{
+  success: Boolean
+  errors: [String]
+  notifikasi: [Notifikasi]
 }
