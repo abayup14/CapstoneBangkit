@@ -2,8 +2,11 @@ from api import app, db
 from ariadne import load_schema_from_path, make_executable_schema, graphql_sync, snake_case_fallback_resolvers, ObjectType
 from flask import request, jsonify
 #from ariadne.constants import PLAYGROUND_HTML
-from api.queries import list_users_resolver, list_companies_resolver, list_lowongans_resolver, list_skills_resolver, list_user_has_skills_resolver, cek_login_user, cek_login_company, list_edukasi_user_resolver, list_pengalaman_user_resolver, list_user_has_skills_resolver
-from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver
+from api.queries import list_users_resolver, list_companies_resolver, list_lowongans_resolver, list_skills_resolver, \
+    list_user_has_skills_resolver, cek_login_user, cek_login_company, list_edukasi_user_resolver, list_pengalaman_user_resolver, \
+    list_user_has_skills_resolver,list_lowongans_company_resolver,list_lowongans_user_apply_resolver,list_lowongans_user_search_resolver
+from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, \
+    create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver, create_skills_required_resolver
 
 
 query = ObjectType("Query")
@@ -17,6 +20,10 @@ query.set_field("cekLoginCompany", cek_login_company)
 query.set_field("listEdukasiUser", list_edukasi_user_resolver)
 query.set_field("listPengalamanUser", list_pengalaman_user_resolver)
 query.set_field("listUserSkills", list_user_has_skills_resolver)
+query.set_field("listLowonganCompany", list_lowongans_company_resolver)
+query.set_field("listLowonganUserSearch", list_lowongans_user_search_resolver)
+query.set_field("listLowonganUserApply", list_lowongans_user_apply_resolver)
+
 
 #Untuk mutation
 mutation.set_field("createUser", create_user_resolver)
@@ -26,6 +33,7 @@ mutation.set_field("createPengalaman", create_pengalaman_resolver)
 mutation.set_field("createEdukasi", create_edukasi_resolver)
 mutation.set_field("createUserHasSkills", create_user_has_skills_resolver)
 mutation.set_field("createLowongan", create_lowongan_resolver)
+mutation.set_field("createSkillRequired", create_skills_required_resolver)
 
 
 type_defs = load_schema_from_path("schema.graphql")

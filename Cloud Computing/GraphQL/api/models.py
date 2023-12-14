@@ -77,7 +77,7 @@ class Lowongan(db.Model):
     jmlh_butuh = db.Column(db.Integer)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
     url_photo = db.Column(db.String(1000))
-    company = db.relationship('Company', backref=db.backref('lowongans', lazy=True))
+    # company = db.relationship('Company', backref=db.backref('lowongans', lazy=True))
 
     def to_dict(self):
         return {
@@ -118,6 +118,12 @@ class SkillsDibutuhkan(db.Model):
     lowongan_id = db.Column(db.Integer, db.ForeignKey('lowongan.id'), primary_key=True)
     # skills = db.relationship('Skills', backref=db.backref('skills_dibutuhkan', lazy=True))
     # lowongan = db.relationship('Lowongan', backref=db.backref('skills_dibutuhkan', lazy=True))
+    def to_dict(self):
+        return {
+            "skills_id": self.skills_id,
+            "lowongan_id": self.lowongan_id
+        }
+
 
 
 class Apply(db.Model):

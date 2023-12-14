@@ -209,7 +209,31 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     } 
 #   }
 # '''
+# graphql_query = '''
+#   mutation {
+#     createSkillRequired(skills_id: 1, lowongan_id: 1) {
+#     success
+#     errors
+#     skills_required {
+#       skills_id
+#       lowongan_id
+#     }
+#     } 
+#   }
+#  '''
 
+graphql_query = '''
+  mutation {
+    createSkillRequired(skills_id: 1, lowongan_id: 1) {
+    success
+    errors
+    skills_required {
+      skills_id
+      lowongan_id
+    }
+    } 
+  }
+ '''
 # Headers (optional, include if needed)
 headers = {
     'Content-Type': 'application/json'

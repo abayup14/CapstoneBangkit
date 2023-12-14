@@ -111,6 +111,23 @@ def create_skills_resolver(obj, info, nama):
         }
     return payload
 
+@convert_kwargs_to_snake_case
+def create_skills_required_resolver(obj, info, skills_id, lowongan_id):
+    try:
+        new_skills_req = SkillsDibutuhkan(skills_id=skills_id, lowongan_id=lowongan_id)
+        db.session.add(new_skills_req)
+        db.session.commit()
+        payload = {
+            "success": True,
+            "skills": new_skills_req.to_dict()
+        }
+    except ValueError:
+        payload = {
+            "success": False,
+            "errors": ["Incorrect data provided."]
+        }
+    return payload
+
 
 @convert_kwargs_to_snake_case
 def create_user_has_skills_resolver(obj, info, user_iduser, skills_id):

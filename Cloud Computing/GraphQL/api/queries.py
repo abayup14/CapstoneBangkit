@@ -1,5 +1,6 @@
-from api.models import User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills
+from api.models import User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
 from ariadne import convert_kwargs_to_snake_case
+
 
 @convert_kwargs_to_snake_case
 def cek_login_user(obj, info, email, password):
@@ -262,3 +263,47 @@ def list_user_has_skills_resolver(obj, info, user_iduser):
         }
     return payload
 
+@convert_kwargs_to_snake_case
+def list_lowongans_company_resolver(obj, info, company_id):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.filter(Lowongan.company_id == company_id).all()]
+        payload = {
+            "success": True,
+            "lowongans": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_lowongans_user_search_resolver(obj, info, search):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.filter(Lowongan.nama.like(f'%{search}%')).all()]
+        payload = {
+            "success": True,
+            "lowongans": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_lowongans_user_apply_resolver(obj, info, user_iduser):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.join(Apply).filter(Apply.user_iduser == user_iduser).all()]
+        payload = {
+            "success": True,
+            "lowongans": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
