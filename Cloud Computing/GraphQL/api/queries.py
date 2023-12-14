@@ -1,21 +1,5 @@
-from .models import User, Company, Lowongan, Skills, UserHasSkills
+from api.models import User, Company, Lowongan, Skills, UserHasSkills
 from ariadne import convert_kwargs_to_snake_case
-
-
-@convert_kwargs_to_snake_case
-def list_users_resolver(obj, info):
-    try:
-        users = [user.to_dict() for user in User.query.all()]
-        payload = {
-            "success": True,
-            "users": users
-        }
-    except Exception as e:
-        payload = {
-            "success": False,
-            "errors": [str(e)]
-        }
-    return payload
 
 @convert_kwargs_to_snake_case
 def cek_login(obj, info, email, password):
@@ -29,6 +13,21 @@ def cek_login(obj, info, email, password):
         payload = {
             "success": False,
             "errors": [f"User not found"]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_users_resolver(obj, info):
+    try:
+        users = [user.to_dict() for user in User.query.all()]
+        payload = {
+            "success": True,
+            "users": users
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
         }
     return payload
 
