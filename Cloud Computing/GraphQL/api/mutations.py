@@ -1,7 +1,7 @@
 # mutations.py
 from datetime import datetime
 from ariadne import convert_kwargs_to_snake_case
-from api import db
+from api.main import db
 from api.models import User, Company, Lowongan, Skills, UserHasSkills, SkillsDibutuhkan, Apply, Notifikasi
 
 
