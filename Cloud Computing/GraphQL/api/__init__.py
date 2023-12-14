@@ -10,6 +10,7 @@ from app import routes
 '''
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:mysql@localhost:3306/hAIre"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ECHO"] = True
 db = SQLAlchemy(app)
 app.app_context().push()
 

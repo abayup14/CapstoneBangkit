@@ -113,11 +113,9 @@ def create_skills_resolver(obj, info, nama):
 
 
 @convert_kwargs_to_snake_case
-def create_user_has_skills_resolver(obj, info, iduser, idskills):
+def create_user_has_skills_resolver(obj, info, user_iduser, skills_id):
     try:
-        new_uhs = UserHasSkills(iduser=iduser, idskills=idskills)
-        #user_has_skills_data = input.get('user_has_skills')
-        #user_has_skills = UserHasSkills(**user_has_skills_data)
+        new_uhs = UserHasSkills(user_iduser=user_iduser, skills_id=skills_id)
         db.session.add(new_uhs)
         db.session.commit()
         payload = {

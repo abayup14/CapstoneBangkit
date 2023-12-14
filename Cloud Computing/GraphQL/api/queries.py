@@ -1,4 +1,4 @@
-from api.models import User, Company, Lowongan, Skills, UserHasSkills
+from api.models import User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills
 from ariadne import convert_kwargs_to_snake_case
 
 @convert_kwargs_to_snake_case
@@ -200,13 +200,29 @@ def list_skills_resolver(obj, info):
         }
     return payload
 
+# @convert_kwargs_to_snake_case
+# def list_user_has_skills_resolver(obj, info):
+#     try:
+#         user_has_skills = [uhs.to_dict() for uhs in UserHasSkills.query.all()]
+#         payload = {
+#             "success": True,
+#             "user_has_skills": user_has_skills
+#         }
+#     except Exception as e:
+#         payload = {
+#             "success": False,
+#             "errors": [str(e)]
+#         }
+#     return payload
+
+
 @convert_kwargs_to_snake_case
-def list_user_has_skills_resolver(obj, info):
+def list_edukasi_user_resolver(obj, info, user_iduser):
     try:
-        user_has_skills = [uhs.to_dict() for uhs in UserHasSkills.query.all()]
+        edukasi = [edukasi.to_dict() for edukasi in Edukasi.query.filter_by(user_iduser=user_iduser)]
         payload = {
             "success": True,
-            "user_has_skills": user_has_skills
+            "edukasi": edukasi
         }
     except Exception as e:
         payload = {
@@ -214,3 +230,35 @@ def list_user_has_skills_resolver(obj, info):
             "errors": [str(e)]
         }
     return payload
+
+
+@convert_kwargs_to_snake_case
+def list_pengalaman_user_resolver(obj, info, user_iduser):
+    try:
+        pengalaman = [pengalaman.to_dict() for pengalaman in Pengalaman.query.filter_by(user_iduser=user_iduser)]
+        payload = {
+            "success": True,
+            "pengalaman": pengalaman
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_user_has_skills_resolver(obj, info, user_iduser):
+    try:
+        skills = [skills.to_dict() for skills in Skills.query.join(UserHasSkills).filter(UserHasSkills.user_iduser == user_iduser).all()]
+        payload = {
+            "success": True,
+            "skills": skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+

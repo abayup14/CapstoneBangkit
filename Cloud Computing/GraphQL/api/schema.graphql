@@ -11,6 +11,9 @@ type Query {
   listUserHasSkills: [UserSkills]
   cekLoginUser(email: String, password: String): UserResponse
   cekLoginCompany(email: String, password: String): CompanyResponse
+  listEdukasiUser(user_iduser: Int): EdukasiResponses
+  listPengalamanUser(user_iduser: Int): PengalamanResponses
+  listUserSkills(user_iduser: Int): SkillsResponses
 }
 
 type Mutation {
@@ -42,13 +45,9 @@ type Mutation {
     jmlh_butuh: Int, 
     company_id: Int, 
     url_photo: String): LowonganResponse
-
   createSkills(nama: String): SkillsResponse
-
   createUserHasSkills(user_iduser: Int, skills_id: Int): UserSkillsResponse
-
   createPengalaman(nama_pekerjaan: String, tgl_mulai: String, tgl_selesai: String, tmpt_bekerja: String, pkrjn_profesional: Boolean, user_iduser: Int): PengalamanResponse
-
   createEdukasi(nama_institusi: String, jenjang: String, tgl_awal: String, tgl_akhir: String, deskripsi: String, user_iduser: Int): EdukasiResponse
 }
 
@@ -104,6 +103,13 @@ type UserSkills {
   skills: Skills
 }
 
+# tak ubah - vincent
+type UserSkillsId{
+  user_iduser: Int
+  skills_id: Int
+}
+
+
 type Pengalaman {
   id: Int,
   nama_pekerjaan: String, 
@@ -147,11 +153,16 @@ type SkillsResponse {
   errors: [String]
   skills: Skills
 }
+type SkillsResponses {
+  success: Boolean
+  errors: [String]
+  skills: [Skills]
+}
 
 type UserSkillsResponse {
   success: Boolean
   errors: [String]
-  user_has_skills: UserSkills
+  user_has_skills: UserSkillsId
 }
 
 type PengalamanResponse {
@@ -164,4 +175,15 @@ type EdukasiResponse {
   success: Boolean
   errors: [String]
   edukasi: Edukasi
+}
+
+type EdukasiResponses {
+  success: Boolean
+  errors: [String]
+  edukasi: [Edukasi]
+}
+type PengalamanResponses {
+  success: Boolean
+  errors: [String]
+  pengalaman: [Pengalaman]
 }

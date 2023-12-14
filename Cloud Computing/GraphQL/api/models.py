@@ -106,13 +106,18 @@ class UserHasSkills(db.Model):
     skills_id = db.Column(db.Integer, db.ForeignKey('skills.id'), primary_key=True)
     # user = db.relationship('User', backref=db.backref('user_has_skills', lazy=True))
     # skills = db.relationship('Skills', backref=db.backref('user_has_skills', lazy=True))
+    def to_dict(self):
+        return {
+            "user_iduser": self.user_iduser,
+            "skills_id": self.skills_id
+        }
 
 
 class SkillsDibutuhkan(db.Model):
     skills_id = db.Column(db.Integer, db.ForeignKey('skills.id'), primary_key=True)
     lowongan_id = db.Column(db.Integer, db.ForeignKey('lowongan.id'), primary_key=True)
-    skills = db.relationship('Skills', backref=db.backref('skills_dibutuhkan', lazy=True))
-    lowongan = db.relationship('Lowongan', backref=db.backref('skills_dibutuhkan', lazy=True))
+    # skills = db.relationship('Skills', backref=db.backref('skills_dibutuhkan', lazy=True))
+    # lowongan = db.relationship('Lowongan', backref=db.backref('skills_dibutuhkan', lazy=True))
 
 
 class Apply(db.Model):

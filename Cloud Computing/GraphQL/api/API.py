@@ -88,7 +88,7 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # INSERT SKILL
 # graphql_query = '''
 #   mutation {
-#      createSkills(nama:"Java") {
+#      createSkills(nama:"HTML") {
 #        success
 #        errors
 #        skills {
@@ -101,7 +101,7 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # INSERT PENGALAMAN
 # graphql_query = '''
 #   mutation {
-#      createPengalaman(nama_pekerjaan: "Full Stack Dev", tgl_mulai: "2022-2-2", tgl_selesai: "2022-2-2", tmpt_bekerja: "BCA", pkrjn_profesional: true, user_iduser: 1) {
+#      createPengalaman(nama_pekerjaan: "P Dev", tgl_mulai: "2022-2-2", tgl_selesai: "2022-2-2", tmpt_bekerja: "BCA", pkrjn_profesional: true, user_iduser: 2) {
 #        success
 #        errors
 #        pengalaman {
@@ -117,23 +117,98 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #    }
 # '''
 # INSERT EDUKASI
-graphql_query = '''
-  mutation {
-     createEdukasi(nama_institusi: "test", jenjang: "Master", tgl_awal: "2022-2-2", tgl_akhir: "2022-2-2", deskripsi: "test", user_iduser: 1) {
-       success
-       errors
-       edukasi {
-        id
-        nama_institusi
-        jenjang
-        tgl_awal
-        tgl_akhir
-        deskripsi
-        user_iduser
-        }
-     } 
-   }
-'''
+# graphql_query = '''
+#   mutation {
+#      createEdukasi(nama_institusi: "tes2", jenjang: "Master", tgl_awal: "2022-2-2", tgl_akhir: "2022-2-2", deskripsi: "test", user_iduser: 2) {
+#        success
+#        errors
+#        edukasi {
+#         id
+#         nama_institusi
+#         jenjang
+#         tgl_awal
+#         tgl_akhir
+#         deskripsi
+#         user_iduser
+#         }
+#      } 
+#    }
+# '''
+# QUERY EDUKASI
+# graphql_query = '''
+#   query {
+#      listEdukasiUser(user_iduser: 1) {
+#        edukasi {
+#         id
+#         nama_institusi
+#         jenjang
+#         tgl_awal
+#         tgl_akhir
+#         deskripsi
+#         user_iduser
+#         }
+#      } 
+#    }
+# '''
+# QUERY PENGALAMAN
+# graphql_query = '''
+#   query {
+#      listPengalamanUser(user_iduser: 1) {
+#        pengalaman {
+#           id
+#           nama_pekerjaan
+#           tgl_mulai
+#           tgl_selesai
+#           tmpt_bekerja
+#           pkrjn_profesional
+#           user_iduser
+#         }
+#      } 
+#    }
+# '''
+
+# QUERY USER SKILLS
+# graphql_query = '''
+#   mutation {
+#     createUserHasSkills(user_iduser: 2, skills_id: 3) {
+#     success
+#     errors
+#       user_has_skills {
+#         user_iduser
+#         skills_id
+#       }
+#     } 
+#   }
+# '''
+# QUERY USER SKILLS
+# graphql_query = '''
+#   query {
+#     listUserSkills(user_iduser: 1) {
+#     success
+#     errors
+#       skills {
+#         id
+#         nama
+#       }
+#     } 
+#   }
+# '''
+# INSERT LOKER
+# graphql_query = '''
+#   mutation {
+#     createLowongan(nama:"test", deskripsi:"test", jmlh_butuh:100, company_id:1, url_photo:"test") {
+#     success
+#     errors
+#     lowongan {
+#     nama
+#     deskripsi
+#     jmlh_butuh
+#     company_id
+#     url_photo
+#     }
+#     } 
+#   }
+# '''
 
 # Headers (optional, include if needed)
 headers = {
