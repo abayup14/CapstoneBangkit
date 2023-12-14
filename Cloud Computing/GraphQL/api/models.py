@@ -142,6 +142,13 @@ class Notifikasi(db.Model):
     pesan = db.Column(db.String(100))
     user_iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'))
     # user = db.relationship('User', backref=db.backref('notifikasi', lazy=True))
+    def to_dict(self):
+        return {
+            "idnotifikasi" : self.idnotifikasi,
+            "waktu": self.waktu,
+            "pesan" : self.pesan,
+            "user_iduser": self.user_iduser
+        }
 
 
 class Edukasi(db.Model):

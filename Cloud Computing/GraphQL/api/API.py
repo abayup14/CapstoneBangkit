@@ -1,5 +1,6 @@
 import requests
 import json
+import sys
 
 # GraphQL endpoint
 graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual GraphQL endpoint
@@ -209,6 +210,7 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     } 
 #   }
 # '''
+# INSERT SKILL REQUIRED BY LOKER
 # graphql_query = '''
 #   mutation {
 #     createSkillRequired(skills_id: 1, lowongan_id: 1) {
@@ -221,19 +223,88 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     } 
 #   }
 #  '''
-
+# QUERY LOKER BY COMPANY
+# graphql_query = '''
+# query {
+#   listLowonganCompany(company_id: 1) {
+#     success
+#     errors
+#     lowongan {
+#       id
+#       nama
+#       deskripsi
+#       jmlh_butuh
+#       company_id
+#       url_photo
+#     }
+#   } 
+# }
+# '''
+# QUERY LOKER BY SEARCH
+# graphql_query = '''
+# query {
+#   listLowonganUserSearch(search: "te") {
+#     success
+#     errors
+#     lowongan {
+#       id
+#       nama
+#       deskripsi
+#       jmlh_butuh
+#       company_id
+#       url_photo
+#     }
+#   } 
+# }
+# '''
+# QUERY LOKER BY SEARCH
+# graphql_query = '''
+# query {
+#   listLowonganUserApply(user_iduser: 2) {
+#     success
+#     errors
+#     lowongan {
+#       id
+#       nama
+#       deskripsi
+#       jmlh_butuh
+#       company_id
+#       url_photo
+#     }
+#   } 
+# }
+# '''
+# INSERT NOTIFIKASI
+# graphql_query = '''
+# mutation {
+#   createNotification(waktu: "2022-2-2", pesan: "anda ketrima",user_iduser: 1) {
+#     success
+#     errors
+#     notifikasi{
+#       waktu
+#       pesan
+#       user_id
+#     }
+#   } 
+# }
+# '''
+# QUERY NOTIFIKASI
 graphql_query = '''
-  mutation {
-    createSkillRequired(skills_id: 1, lowongan_id: 1) {
+query {
+  listNotifikasiUser(user_iduser: 1) {
     success
     errors
-    skills_required {
-      skills_id
-      lowongan_id
+    notifikasi{
+      idnotifikasi
+      waktu
+      pesan
+      user_id
     }
-    } 
-  }
- '''
+  } 
+}
+'''
+
+
 # Headers (optional, include if needed)
 headers = {
     'Content-Type': 'application/json'

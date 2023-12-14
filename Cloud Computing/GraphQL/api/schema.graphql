@@ -16,7 +16,8 @@ type Query {
   listUserSkills(user_iduser: Int): SkillsResponses
   listLowonganCompany(company_id: Int): LowonganResponses
   listLowonganUserSearch(search: String): LowonganResponses
-  listNotifikasiUser(user_iduser: Int): LowonganResponses
+  listLowonganUserApply(user_iduser: Int): LowonganResponses
+  listNotifikasiUser(user_iduser: Int): NotifikasiResponses
 }
 
 type Mutation {
@@ -53,6 +54,7 @@ type Mutation {
   createPengalaman(nama_pekerjaan: String, tgl_mulai: String, tgl_selesai: String, tmpt_bekerja: String, pkrjn_profesional: Boolean, user_iduser: Int): PengalamanResponse
   createEdukasi(nama_institusi: String, jenjang: String, tgl_awal: String, tgl_akhir: String, deskripsi: String, user_iduser: Int): EdukasiResponse
   createSkillRequired(skills_id: Int, lowongan_id: Int): SkillRequiredResponse
+  createNotification(waktu: String, pesan: String,user_iduser: Int): NotifikasiResponse
 }
 
 type UserResult{
@@ -94,10 +96,9 @@ type Lowongan {
   jmlh_butuh: Int
   company_id: Int
   url_photo: String
-  company: Company
 }
 type Notifikasi{
-  id: Int
+  idnotifikasi: Int
   waktu: String
   pesan: String
   user_id: Int
@@ -217,4 +218,10 @@ type NotifikasiResponses{
   success: Boolean
   errors: [String]
   notifikasi: [Notifikasi]
+}
+
+type NotifikasiResponse{
+  success: Boolean
+  errors: [String]
+  notifikasi: Notifikasi
 }

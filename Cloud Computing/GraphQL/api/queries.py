@@ -269,7 +269,7 @@ def list_lowongans_company_resolver(obj, info, company_id):
         lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.filter(Lowongan.company_id == company_id).all()]
         payload = {
             "success": True,
-            "lowongans": lowongans
+            "lowongan": lowongans
         }
     except Exception as e:
         payload = {
@@ -284,7 +284,7 @@ def list_lowongans_user_search_resolver(obj, info, search):
         lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.filter(Lowongan.nama.like(f'%{search}%')).all()]
         payload = {
             "success": True,
-            "lowongans": lowongans
+            "lowongan": lowongans
         }
     except Exception as e:
         payload = {
@@ -299,7 +299,7 @@ def list_lowongans_user_apply_resolver(obj, info, user_iduser):
         lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.join(Apply).filter(Apply.user_iduser == user_iduser).all()]
         payload = {
             "success": True,
-            "lowongans": lowongans
+            "lowongan": lowongans
         }
     except Exception as e:
         payload = {

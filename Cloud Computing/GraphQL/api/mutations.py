@@ -188,7 +188,7 @@ def create_notifikasi_resolver(obj, info, waktu, pesan, user_iduser):
         db.session.commit()
         payload = {
             "success": True,
-            "edukasi": new_notifikasi.to_dict()
+            "notifikasi": new_notifikasi.to_dict()
         }
     except ValueError:
         payload = {
