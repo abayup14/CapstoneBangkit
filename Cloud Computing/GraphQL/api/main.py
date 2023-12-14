@@ -16,8 +16,9 @@ query.set_field("cekLogin", cek_login)
 
 #Untuk mutation
 mutation.set_field("createUser", create_user_resolver)
+mutation.set_field("createCompany", create_company_resolver)
 
-type_defs = load_schema_from_path("api/schema.graphql")
+type_defs = load_schema_from_path("schema.graphql")
 schema = make_executable_schema(type_defs, query, mutation, snake_case_fallback_resolvers)
 
 

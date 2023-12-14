@@ -8,7 +8,7 @@ CORS(app)
 # Import routes di sini setelah app diinisialisasi
 from app import routes  
 '''
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:mysql@mysql:3306/hAIre"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:mysql@localhost:3306/hAIre"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 app.app_context().push()

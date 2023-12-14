@@ -27,26 +27,42 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     } 
 #   }
 # '''
-graphql_query='''
-  query {
-    listUsers {
-      success
-      errors
-      users{
-        iduser
+# graphql_query='''
+#   query {
+#     listUsers {
+#       success
+#       errors
+#       users{
+#         iduser
+#         nama
+#         email
+#         password
+#         nomor_telepon
+#         tgl_lahir
+#         nik
+#         pengalaman
+#         pengalaman_pro
+#         edukasi
+#         url_photo
+#         deskripsi
+#         stream
+#       }
+#     }
+#   }
+# '''
+graphql_query = '''
+  mutation {
+    createCompany(nama:"test",alamat:"test",email:"test",password:"test",url_photo:"test",deskripsi:"test") {
+      company {
         nama
+        alamat
         email
         password
-        nomor_telepon
-        tgl_lahir
-        nik
-        pengalaman
-        pengalaman_pro
-        edukasi
         url_photo
         deskripsi
-        stream
       }
+      success
+      errors
     }
   }
 '''
