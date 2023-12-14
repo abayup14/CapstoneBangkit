@@ -134,6 +134,14 @@ class Apply(db.Model):
     skor_akhir = db.Column(db.Float)
     # user = db.relationship('User', backref=db.backref('apply', lazy=True))
     # lowongan = db.relationship('Lowongan', backref=db.backref('apply', lazy=True))
+    def to_dict(self):
+        return {
+            "user_iduser": self.user_iduser,
+            "lowongan_id": self.lowongan_id,
+            "probabilitas": self.probabilitas,
+            "jaccard": self.jaccard,
+            "skor_akhir": self.skor_akhir
+        }
 
 
 class Notifikasi(db.Model):
