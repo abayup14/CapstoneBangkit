@@ -29,10 +29,10 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # '''
 graphql_query='''
   query {
-    cekLogin(email:"test1", password:"test") {
+    listUsers {
       success
       errors
-      user {
+      users{
         iduser
         nama
         email
@@ -67,4 +67,3 @@ if response.status_code == 200:
 else:
     # Print error message for non-200 status codes
     print(f"Error: {response.status_code}, {response.text}")
-
