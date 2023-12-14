@@ -9,7 +9,8 @@ type Query {
   listLowongans: [Lowongan]
   listSkills: [Skills]
   listUserHasSkills: [UserSkills]
-  cekLogin(email: String, password: String): UserResponse
+  cekLoginUser(email: String, password: String): UserResponse
+  cekLoginCompany(email: String, password: String): CompanyResponse
 }
 
 type Mutation {

@@ -2,7 +2,7 @@ from api.models import User, Company, Lowongan, Skills, UserHasSkills
 from ariadne import convert_kwargs_to_snake_case
 
 @convert_kwargs_to_snake_case
-def cek_login(obj, info, email, password):
+def cek_login_user(obj, info, email, password):
     try:
         user = User.query.filter_by(email=email, password=password).first()
         payload = {
@@ -13,6 +13,21 @@ def cek_login(obj, info, email, password):
         payload = {
             "success": False,
             "errors": [f"User not found"]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def cek_login_company(obj, info, email, password):
+    try:
+        company = Company.query.filter_by(email=email, password=password).first()
+        payload = {
+            "success": True,
+            "company": company.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"Company not found"]
         }
     return payload
 
