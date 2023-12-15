@@ -21,6 +21,10 @@ type Query {
   listApplyLowongan(lowongan_id: Int): ApplyResponses
   listApplyUser(user_iduser: Int): ApplyResponses
   predictApply(list_input: [Float]): ModelPredictResponse
+  jaccardSkills(
+    list_skill_user: [String]
+    list_skill_required: [String]
+  ): JaccardResponse
 }
 
 type Mutation {
@@ -283,4 +287,10 @@ type ModelPredictResponse {
   success: Boolean
   errors: [String]
   prob: Float
+}
+
+type JaccardResponse {
+  success: Boolean
+  errors: [String]
+  jaccard: Float
 }

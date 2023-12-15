@@ -371,13 +371,15 @@ def predict_employee_resolver(obj, info, list_input):
     return payload
 
 @convert_kwargs_to_snake_case
-def jaccard_employee_resolver(obj, info, list1d):
+def jaccard_employee_resolver(obj, info, list_skill_user, list_skill_required):
     try:
-        model=tf.keras.models.load_model("model.h5")
-        prob = model.predict([list1d])[0]
+        setUser = set(list_skill_user)
+        setRequired = set(list_skill_required)
+        intersection = setRequired.intersection(setUser)
+        jaccard = len(intersection)*1.0/len(setRequired)
         payload = {
             "success": True,
-            "prob": prob
+            "jaccard": jaccard
         }
     except Exception as e:
         payload = {
