@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.education.AddEducationActivity">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,71 +19,147 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-    <EditText
-        android:id="@+id/editTextDegree"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/degreeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:layout_marginStart="16dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
-        android:hint="Degree"
-        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title">
 
-    <EditText
-        android:id="@+id/editTextSchoolName"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextDegree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Degree"
+            android:padding="16dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/schoolNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextDegree"
+        android:layout_below="@id/degreeLayout"
         android:layout_marginStart="16dp"
         android:layout_marginTop="29dp"
         android:layout_marginEnd="16dp"
-        android:hint="School Name"
-        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDegree" />
+        app:layout_constraintTop_toBottomOf="@+id/degreeLayout">
 
-    <EditText
-        android:id="@+id/editTextFieldOfStudy"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextSchoolName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="School Name"
+            android:padding="16dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/fieldOfStudyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextSchoolName"
+        android:layout_below="@id/schoolNameLayout"
         android:layout_marginStart="16dp"
         android:layout_marginTop="29dp"
         android:layout_marginEnd="16dp"
-        android:hint="Field of Study"
-        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSchoolName" />
+        app:layout_constraintTop_toBottomOf="@+id/schoolNameLayout">
 
-    <EditText
-        android:id="@+id/editTextEducationDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextFieldOfStudy"
-        android:layout_marginStart="16dp"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextFieldOfStudy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Field of Study"
+            android:padding="16dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Start Date-->
+    <ImageButton
+        android:id="@+id/btn_start_date"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="29dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Dates (e.g., Jan 2018 - Dec 2021)"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@android:drawable/ic_menu_my_calendar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextFieldOfStudy" />
+        app:layout_constraintTop_toBottomOf="@+id/fieldOfStudyLayout" />
 
-    <Button
+    <TextView
+        android:id="@+id/tv_start_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toEndOf="@+id/btn_start_date"
+        app:layout_constraintTop_toBottomOf="@+id/textView18"
+        tools:text="15/12/2023" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="29dp"
+        android:text="Start Date"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/btn_start_date"
+        app:layout_constraintTop_toBottomOf="@+id/fieldOfStudyLayout" />
+
+    <!--End Date-->
+    <ImageButton
+        android:id="@+id/btn_end_date"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="29dp"
+        android:src="@android:drawable/ic_menu_my_calendar"
+        app:layout_constraintStart_toEndOf="@+id/tv_start_date"
+        app:layout_constraintTop_toBottomOf="@+id/fieldOfStudyLayout" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="29dp"
+        android:text="End Date"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/btn_end_date"
+        app:layout_constraintTop_toBottomOf="@+id/fieldOfStudyLayout" />
+
+    <TextView
+        android:id="@+id/tv_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toEndOf="@+id/btn_end_date"
+        app:layout_constraintTop_toBottomOf="@+id/textView19"
+        tools:text="15/12/2023" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddEducation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextEducationDate"
         android:layout_marginStart="127dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="29dp"
         android:text="Add Education"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEducationDate" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_start_date" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
