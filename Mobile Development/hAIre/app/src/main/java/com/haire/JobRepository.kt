@@ -45,7 +45,18 @@ class JobRepository(private val pref: UserPreference) {
 
     }
 
-    fun loginAccount(email: String, password: String) {
+    suspend fun loginAccount(email: String, password: String) {
+        val email = Optional.present(email ?: "")
+        val pass = Optional.present(password ?: "")
+
+        try{
+            apolloClient.query(CekLoginUserQuery(email, pass)).execute()
+            _success.value = true
+        } catch (e: ApolloException) {
+            Log.w("Login", "Failed to Login", e)
+            _success.value = false
+        }
+
 //        val response = apiClient.query()
 
         // Firebase
@@ -125,7 +136,20 @@ class JobRepository(private val pref: UserPreference) {
 //        })
     }
 
-    fun registerCompany(company: Company, pass: String) {
+    suspend fun registerCompany(nama: String, alamat: String, email: String, password: String) {
+        val nama = Optional.present(nama ?: "")
+        val alamat = Optional.present(alamat ?: "")
+        val mail = Optional.present(email ?: "")
+        val pass = Optional.present(password ?: "")
+
+        try{
+            apolloClient.mutation(CreateCompanyMutation(nama, alamat, mail, pass)).execute()
+            _success.value = true
+        } catch (e: ApolloException) {
+            Log.w("Register", "Failed to Register", e)
+            _success.value = false
+        }
+//        Firebase
 //        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
 //            override fun onDataChange(snapshot: DataSnapshot) {
 //                val emailExist = snapshot.child(company.email).exists()

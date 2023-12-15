@@ -24,6 +24,8 @@ class RegisterViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun registerCompany(company: Company, password: String) =
-        repository.registerCompany(company, password)
+    fun registerCompany(nama: String, alamat: String, email: String, password: String) =
+        viewModelScope.launch {
+            repository.registerCompany(nama, alamat, email, password)
+        }
 }

@@ -1,0 +1,13 @@
+mutation createCompany($nama: String, $alamat: String, $email: String, $password: String){
+    createCompany(
+        nama: $nama,
+        alamat: $alamat,
+        email: $email,
+        password: $password,
+        url_photo: "",
+        deskripsi: ""
+    ) {
+        success
+        errors
+    }
+}

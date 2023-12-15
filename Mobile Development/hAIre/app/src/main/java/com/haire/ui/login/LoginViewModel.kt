@@ -31,5 +31,9 @@ class LoginViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun loginAcc(context: Context, email: String, password: String) = repository.loginAccount(email, password)
+    fun loginAcc(context: Context, email: String, password: String) {
+        viewModelScope.launch {
+            repository.loginAccount(email, password)
+        }
+    }
 }

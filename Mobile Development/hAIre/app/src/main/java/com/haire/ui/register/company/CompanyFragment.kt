@@ -36,6 +36,14 @@ class CompanyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.success.observe(viewLifecycleOwner) {
+            if (it) {
+                showAlert()
+            } else {
+                showText("Gagal")
+            }
+        }
+
         val validation = AwesomeValidation(ValidationStyle.BASIC)
         validation.apply {
             addValidation(
@@ -64,7 +72,7 @@ class CompanyFragment : Fragment() {
                 if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || address.isEmpty()) {
                     showText(getString(R.string.empty_field))
                 } else {
-                    viewModel.registerCompany(company, pass)
+                    viewModel.registerCompany(name, address, email, pass)
                 }
             }
         }
