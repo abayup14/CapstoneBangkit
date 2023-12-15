@@ -289,16 +289,67 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # }
 # '''
 # QUERY NOTIFIKASI
+# graphql_query = '''
+# query {
+#   listNotifikasiUser(user_iduser: 1) {
+#     success
+#     errors
+#     notifikasi{
+#       idnotifikasi
+#       waktu
+#       pesan
+#       user_id
+#     }
+#   } 
+# }
+# '''
+# INSERT APPLY
+# graphql_query = '''
+# mutation {
+#   createApply(user_iduser: 2, lowongan_id:1 , probabilitas: 0.9, jaccard: 0.9, skor_akhir: 0.81, status: "Ditolak") {
+#     success
+#     errors
+#     apply{
+#       user_iduser
+#       lowongan_id
+#       probabilitas
+#       jaccard
+#       skor_akhir
+#       status
+#     }
+#   } 
+# }
+# '''
+# QUERY APPLY LOWONGAN
+# graphql_query = '''
+# query {
+#   listApplyLowongan(lowongan_id: 1) {
+#     success
+#     errors
+#     apply{
+#       user_iduser
+#       lowongan_id
+#       probabilitas
+#       jaccard
+#       skor_akhir
+#       status
+#     }
+#   } 
+# }
+# '''
+# QUERY APPLY LOWONGAN
 graphql_query = '''
 query {
-  listNotifikasiUser(user_iduser: 1) {
+  listApplyUser(user_iduser: 1) {
     success
     errors
-    notifikasi{
-      idnotifikasi
-      waktu
-      pesan
-      user_id
+    apply{
+      user_iduser
+      lowongan_id
+      probabilitas
+      jaccard
+      skor_akhir
+      status
     }
   } 
 }
