@@ -324,9 +324,24 @@ def list_notifikasi_resolver(obj, info, user_iduser):
     return payload
 
 @convert_kwargs_to_snake_case
-def list_apply_resolver(obj, info, lowongan_id):
+def list_apply_lowongan_resolver(obj, info, lowongan_id):
     try:
         applies = [apply.to_dict() for apply in Apply.query.filter(Apply.lowongan_id == lowongan_id).all()]
+        payload = {
+            "success": True,
+            "apply": applies
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_apply_user_resolver(obj, info, user_iduser):
+    try:
+        applies = [apply.to_dict() for apply in Apply.query.filter(Apply.user_iduser == user_iduser).all()]
         payload = {
             "success": True,
             "apply": applies

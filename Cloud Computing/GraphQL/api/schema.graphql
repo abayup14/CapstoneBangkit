@@ -18,6 +18,8 @@ type Query {
   listLowonganUserSearch(search: String): LowonganResponses
   listLowonganUserApply(user_iduser: Int): LowonganResponses
   listNotifikasiUser(user_iduser: Int): NotifikasiResponses
+  listApplyLowongan(lowongan_id: Int): ApplyResponses
+  listApplyUser(user_iduser: Int): ApplyResponses
 }
 
 type Mutation {
@@ -76,6 +78,14 @@ type Mutation {
     pesan: String
     user_iduser: Int
   ): NotifikasiResponse
+  createApply(
+    user_iduser: Int
+    lowongan_id: Int
+    probabilitas: Float
+    jaccard: Float
+    skor_akhir: Float
+    status: String
+  ): ApplyResponse
 }
 
 type UserResult {
@@ -254,4 +264,16 @@ type NotifikasiResponse {
   success: Boolean
   errors: [String]
   notifikasi: Notifikasi
+}
+
+type ApplyResponses {
+  success: Boolean
+  errors: [String]
+  apply: [Apply]
+}
+
+type ApplyResponse {
+  success: Boolean
+  errors: [String]
+  apply: Apply
 }
