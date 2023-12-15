@@ -25,6 +25,7 @@ type Query {
     list_skill_user: [String]
     list_skill_required: [String]
   ): JaccardResponse
+  predictStream(list_input: [Float]): ModelPredictResponse
 }
 
 type Mutation {

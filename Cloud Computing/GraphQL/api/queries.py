@@ -357,7 +357,23 @@ def list_apply_user_resolver(obj, info, user_iduser):
 @convert_kwargs_to_snake_case
 def predict_employee_resolver(obj, info, list_input):
     try:
-        model=tf.keras.models.load_model("model.h5")
+        model=tf.keras.models.load_model("emp_model.h5")
+        prob = model.predict([list_input])[0]
+        payload = {
+            "success": True,
+            "prob": prob
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def predict_stream_resolver(obj, info, list_input):
+    try:
+        model = tf.keras.models.load_model("stream_model.h5")
         prob = model.predict([list_input])[0]
         payload = {
             "success": True,

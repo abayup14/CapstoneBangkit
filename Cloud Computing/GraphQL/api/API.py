@@ -374,6 +374,16 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     } 
 # }
 # '''
+# PREDICT STREAM USING MODEL
+graphql_query = '''
+query {
+  predictStream(list_input: [2,1,1,0,0,4,3,3]) {
+    success
+    errors
+    prob
+  } 
+}
+'''
 
 # Headers (optional, include if needed)
 headers = {
