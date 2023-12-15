@@ -338,23 +338,42 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # }
 # '''
 # QUERY APPLY LOWONGAN
-graphql_query = '''
-query {
-  listApplyUser(user_iduser: 1) {
-    success
-    errors
-    apply{
-      user_iduser
-      lowongan_id
-      probabilitas
-      jaccard
-      skor_akhir
-      status
-    }
-  } 
-}
-'''
-
+# graphql_query = '''
+# query {
+#   listApplyUser(user_iduser: 1) {
+#     success
+#     errors
+#     apply{
+#       user_iduser
+#       lowongan_id
+#       probabilitas
+#       jaccard
+#       skor_akhir
+#       status
+#     }
+#   } 
+# }
+# '''
+# PREDICT USING MODEL
+# graphql_query = '''
+# query {
+#   predictApply(list_input: [1,5,5,5,18]) {
+#     success
+#     errors
+#     prob
+#   } 
+# }
+# '''
+# PREDICT USING MODEL
+# graphql_query = '''
+#     query {
+#     jaccardSkills(list_skill_user: ["HTML","CSS","JS","MYSQL"], list_skill_required: ["HTML","CSS","JS","PHP","NODEJS"]) {
+#         success
+#         errors
+#         jaccard
+#     } 
+# }
+# '''
 
 # Headers (optional, include if needed)
 headers = {

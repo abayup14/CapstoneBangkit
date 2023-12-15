@@ -1,5 +1,6 @@
 from api.models import Notifikasi, User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
 from ariadne import convert_kwargs_to_snake_case
+import tensorflow as tf
 
 
 @convert_kwargs_to_snake_case
@@ -345,6 +346,40 @@ def list_apply_user_resolver(obj, info, user_iduser):
         payload = {
             "success": True,
             "apply": applies
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def predict_employee_resolver(obj, info, list_input):
+    try:
+        model=tf.keras.models.load_model("model.h5")
+        prob = model.predict([list_input])[0]
+        payload = {
+            "success": True,
+            "prob": prob
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def jaccard_employee_resolver(obj, info, list_skill_user, list_skill_required):
+    try:
+        setUser = set(list_skill_user)
+        setRequired = set(list_skill_required)
+        intersection = setRequired.intersection(setUser)
+        jaccard = len(intersection)*1.0/len(setRequired)
+        payload = {
+            "success": True,
+            "jaccard": jaccard
         }
     except Exception as e:
         payload = {
