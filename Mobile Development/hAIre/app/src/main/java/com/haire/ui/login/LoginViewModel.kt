@@ -24,7 +24,6 @@ class LoginViewModel(private val repository: JobRepository) : ViewModel() {
 
     val toastMsg:LiveData<String> = repository.toastMsg
     val success: LiveData<Boolean> = repository.success
-    val isCompany: LiveData<Boolean> = repository.isCompany
 
     fun saveUser(user: UserModel) {
         viewModelScope.launch {
@@ -32,5 +31,5 @@ class LoginViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun loginAcc(context: Context, email: String, password: String) = repository.loginAccount(context, email, password)
+    fun loginAcc(context: Context, email: String, password: String) = repository.loginAccount(email, password)
 }

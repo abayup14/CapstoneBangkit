@@ -19,6 +19,7 @@ import com.haire.data.User
 import com.haire.databinding.FragmentJobSeekerBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
+import com.haire.util.showText
 
 class JobSeekerFragment : Fragment() {
     private var _binding: FragmentJobSeekerBinding? = null
@@ -55,11 +56,11 @@ class JobSeekerFragment : Fragment() {
             }
         }
 
-        viewModel.isEmailExist.observe(viewLifecycleOwner) { emailExist ->
-            if (emailExist) {
-                showText("Email already exists")
-            } else {
+        viewModel.success.observe(viewLifecycleOwner) {
+            if (it) {
                 showAlert()
+            } else {
+                showText(requireContext(), "Gagal")
             }
         }
 
@@ -87,13 +88,11 @@ class JobSeekerFragment : Fragment() {
             val homelessIsChecked = binding.homelessRg.checkedRadioButtonId
             val disabledIsChecked = binding.disabledRg.checkedRadioButtonId
 
-            val user = User(name, phone, email, homeless, disabled)
-
             if (validation.validate()) {
                 if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || phone.isEmpty() || homelessIsChecked == -1 || disabledIsChecked == -1) {
-                    showText(getString(R.string.empty_field))
+                    showText(requireContext(), getString(R.string.empty_field))
                 } else {
-                    viewModel.registerAccount(user, pass)
+                    viewModel.registerAccount(name, email, pass, phone, "2002-1-19", "08741256486")
                 }
             }
         }
@@ -101,10 +100,6 @@ class JobSeekerFragment : Fragment() {
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
-    }
-
-    private fun showText(message: String) {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showAlert() {

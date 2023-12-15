@@ -30,13 +30,13 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
     fun saveProfile(imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) =
         repository.saveProfile(imageUri, onSuccess, onFailure)
 
-    fun updateDatabaseCompany(
-        email: String,
-        description: String,
-        imageUrl: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) = repository.updateDatabaseCompany(email, description, imageUrl, onSuccess, onFailure)
+//    fun updateDatabaseCompany(
+//        email: String,
+//        description: String,
+//        imageUrl: String,
+//        onSuccess: () -> Unit,
+//        onFailure: (Exception) -> Unit
+//    ) = repository.updateDatabaseCompany(email, description, imageUrl, onSuccess, onFailure)
 
     fun logout() {
         viewModelScope.launch {

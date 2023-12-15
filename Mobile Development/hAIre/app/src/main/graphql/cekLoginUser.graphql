@@ -1,0 +1,9 @@
+query cekLoginUser($email: String, $password: String) {
+    cekLoginUser(email: $email, password:$password) {
+        success
+        errors
+        user {
+            iduser
+        }
+    }
+}

@@ -1,8 +1,15 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-parcelize")
     id("com.google.gms.google-services")
+    id("kotlin-parcelize")
+    id("com.apollographql.apollo3") version "3.8.2"
+}
+
+apollo {
+    service("service") {
+        packageName.set("com.haire")
+    }
 }
 
 android {
@@ -58,9 +65,11 @@ dependencies {
 
     implementation("com.google.firebase:firebase-database:20.3.0")
 
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     implementation("androidx.datastore:datastore-core:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")

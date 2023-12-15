@@ -25,5 +25,5 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
     }
 
     fun saveProfile(imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) = repository.saveProfile(imageUri, onSuccess, onFailure)
-    fun updateDatabase(email: String, description: String, age: Int, imageUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) = repository.updateDatabase(email, description, age, imageUrl, onSuccess, onFailure)
+//    fun updateDatabase(email: String, description: String, age: Int, imageUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) = repository.updateDatabase(email, description, age, imageUrl, onSuccess, onFailure)
 }

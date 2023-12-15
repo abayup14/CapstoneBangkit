@@ -1,27 +1,29 @@
 package com.haire.ui.register
 
-import android.app.Activity
-import android.app.AlertDialog
-import android.content.Intent
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import androidx.lifecycle.viewModelScope
 import com.haire.JobRepository
-import com.haire.R
 import com.haire.data.Company
-import com.haire.data.User
-import com.haire.ui.login.LoginActivity
+import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val repository: JobRepository) : ViewModel() {
 
-    val isEmailExist: LiveData<Boolean> = repository.success
+    val success: LiveData<Boolean> = repository.success
 
-    fun registerAccount(user: User, password: String) = repository.registerAccount(user, password)
+    fun registerAccount(
+        nama: String?,
+        email: String?,
+        password: String?,
+        nomor: String?,
+        tgl: String?,
+        nik: String?
+    ) {
+        viewModelScope.launch {
+            repository.registerAccount(nama, email, password, nomor, tgl, nik)
+        }
+    }
 
-    fun registerCompany(company: Company, password: String) = repository.registerCompany(company, password)
+    fun registerCompany(company: Company, password: String) =
+        repository.registerCompany(company, password)
 }

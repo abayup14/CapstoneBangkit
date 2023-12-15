@@ -36,14 +36,6 @@ class CompanyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.isEmailExist.observe(viewLifecycleOwner) { emailExist ->
-            if (emailExist) {
-                showText("Email already exists")
-            } else {
-                showAlert()
-            }
-        }
-
         val validation = AwesomeValidation(ValidationStyle.BASIC)
         validation.apply {
             addValidation(

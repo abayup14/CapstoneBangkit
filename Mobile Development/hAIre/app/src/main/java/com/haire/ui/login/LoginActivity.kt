@@ -52,12 +52,6 @@ class LoginActivity : AppCompatActivity() {
                     showText(getString(R.string.email_password_empty))
                 } else {
                     viewModel.loginAcc(this, email, password)
-                    viewModel.isCompany.observe(this) {
-                        if (it) {
-                            viewModel.saveUser(UserModel(email, true, isCompany = true))
-                            showDialog(it, CompleteCompanyActivity::class.java)
-                        }
-                    }
                     viewModel.success.observe(this) {
                         if (it) {
                             viewModel.saveUser(UserModel(email, true, isCompany = false))

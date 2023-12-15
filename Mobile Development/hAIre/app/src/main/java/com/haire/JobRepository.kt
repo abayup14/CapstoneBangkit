@@ -2,34 +2,31 @@ package com.haire
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.exception.ApolloException
 import com.google.firebase.storage.FirebaseStorage
 import com.haire.data.Company
-import com.haire.data.EdukasiEnum
 import com.haire.data.Jobs
 import com.haire.data.User
 import com.haire.data.UserModel
 import com.haire.data.UserPreference
+import com.haire.network.ApiClient
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 class JobRepository(private val pref: UserPreference) {
-    private val dbUser: DatabaseReference = FirebaseDatabase.getInstance().getReference("users")
-    private val dbJobs: DatabaseReference = FirebaseDatabase.getInstance().getReference("jobs")
+//    private val dbUser: DatabaseReference = FirebaseDatabase.getInstance().getReference("users")
+    private val apiClient: ApolloClient = ApiClient.get()
+
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> = _toastMsg
 
     private val _success = MutableLiveData<Boolean>()
     val success: LiveData<Boolean> = _success
-
-    private val _isCompany = MutableLiveData<Boolean>()
-    val isCompany: LiveData<Boolean> = _isCompany
 
     private val _profileAccount = MutableLiveData<User>()
     val profileAccount: LiveData<User> = _profileAccount
@@ -40,180 +37,129 @@ class JobRepository(private val pref: UserPreference) {
     private val _companyData = MutableLiveData<Company>()
     val companyData: LiveData<Company> = _companyData
 
+    val apolloClient = ApolloClient.Builder()
+        .serverUrl("https://graphqlapi-vdnbldljhq-et.a.run.app/graphql")
+        .build()
+
     fun deleteAccount(email: String) {
-        val currentUser = dbUser.child(email)
-        currentUser.removeValue()
+
     }
 
-    fun loginAccount(context: Context, email: String, password: String) {
-        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.child(email).exists()) {
-                    val isCompany =
-                        snapshot.child(email).child("company").getValue(Boolean::class.java)
-                    if (snapshot.child(email).child("password").getValue(String::class.java)
-                            .equals(password)
-                    ) {
-                        if (isCompany == true) {
-                            _isCompany.value = true
-                            _success.value = false
-                        } else {
-                            _isCompany.value = false
-                            _success.value = true
-                        }
-                    } else {
-                        _success.value = false
-                        _toastMsg.value = context.getString(R.string.password_not_correct)
-                    }
-                } else {
-                    _success.value = false
-                    _toastMsg.value = context.getString(R.string.email_not_registered)
-                }
-            }
+    fun loginAccount(email: String, password: String) {
+//        val response = apiClient.query()
 
-            override fun onCancelled(error: DatabaseError) {
-                _success.value = false
-                _toastMsg.value = error.message
-            }
-        })
+        // Firebase
+//        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if (snapshot.child(email).exists()) {
+//                    val isCompany =
+//                        snapshot.child(email).child("company").getValue(Boolean::class.java)
+//                    if (snapshot.child(email).child("password").getValue(String::class.java)
+//                            .equals(password)
+//                    ) {
+//                        if (isCompany == true) {
+//                            _isCompany.value = true
+//                            _success.value = false
+//                        } else {
+//                            _isCompany.value = false
+//                            _success.value = true
+//                        }
+//                    } else {
+//                        _success.value = false
+//                        _toastMsg.value = context.getString(R.string.password_not_correct)
+//                    }
+//                } else {
+//                    _success.value = false
+//                    _toastMsg.value = context.getString(R.string.email_not_registered)
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                _success.value = false
+//                _toastMsg.value = error.message
+//            }
+//        })
     }
 
-    fun registerAccount(user: User, pass: String) {
-        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val emailExist = snapshot.child(user.email).exists()
-                _success.value = emailExist
-                if (!emailExist) {
-                    dbUser.child(user.email).apply {
-                        child("name").setValue(user.name)
-                        child("email").setValue(user.email)
-                        child("phone").setValue(user.phone)
-                        child("password").setValue(pass)
-                        child("isHomeless").setValue(user.homeless)
-                        child("isDisabled").setValue(user.disabled)
-                    }
-                }
-            }
+    suspend fun registerAccount(
+        nama: String?,
+        email: String?,
+        password: String?,
+        nomor: String?,
+        tgl: String?,
+        nik: String?
+        ) {
+        val name: Optional<String> = Optional.present(nama ?: "")
+        val mail: Optional<String> = Optional.present(email ?: "")
+        val pass: Optional<String> = Optional.present(password ?: "")
+        val hp: Optional<String> = Optional.present(nomor ?: "")
+        val lahir: Optional<String> = Optional.present(tgl ?: "")
+        val nikk: Optional<String> = Optional.present(nik ?: "")
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        try{
+            apolloClient.mutation(CreateUserMutation(nama = name, email = mail, password = pass, nomor = hp, tgl = lahir, nik = nikk)).execute()
+            _success.value = true
+        } catch (e: ApolloException) {
+            Log.w("Register", "Failed to Register", e)
+            _success.value = false
+        }
+
+        // Firebase
+//        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val emailExist = snapshot.child(user.email).exists()
+//                _success.value = emailExist
+//                if (!emailExist) {
+//                    dbUser.child(user.email).apply {
+//                        child("name").setValue(user.name)
+//                        child("email").setValue(user.email)
+//                        child("phone").setValue(user.phone)
+//                        child("password").setValue(pass)
+//                        child("isHomeless").setValue(user.homeless)
+//                        child("isDisabled").setValue(user.disabled)
+//                    }
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {}
+//        })
     }
 
     fun registerCompany(company: Company, pass: String) {
-        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val emailExist = snapshot.child(company.email).exists()
-                _success.value = emailExist
-                if (!emailExist) {
-                    dbUser.child(company.email).apply {
-                        child("name").setValue(company.name)
-                        child("email").setValue(company.email)
-                        child("address").setValue(company.address)
-                        child("password").setValue(pass)
-                        child("company").setValue(true)
-                    }
-                }
-            }
+//        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val emailExist = snapshot.child(company.email).exists()
+//                _success.value = emailExist
+//                if (!emailExist) {
+//                    dbUser.child(company.email).apply {
+//                        child("name").setValue(company.name)
+//                        child("email").setValue(company.email)
+//                        child("address").setValue(company.address)
+//                        child("password").setValue(pass)
+//                        child("company").setValue(true)
+//                    }
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {}
+//        })
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
     }
 
     fun addJob(jobs: Jobs) {
-        // Nunggu CC
+
     }
 
-    fun getJobVacancy(email: String) { // Error
-        dbJobs.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val jobsList = mutableListOf<Jobs>()
-                val emailSnapshot = snapshot.child(email)
-                for (a in emailSnapshot.children) {
-                    val pekerjaan = a.child("pekerjaan").getValue(String::class.java) ?: ""
-                    val alamat = a.child("alamat").getValue(String::class.java) ?: ""
-                    val photoUrl = a.child("photoUrl").getValue(String::class.java) ?: ""
-                    val deskripsiCompany =
-                        a.child("deskripsiCompany").getValue(String::class.java) ?: ""
-                    val deskripsi = a.child("deskripsi").getValue(String::class.java) ?: ""
-                    val jmlButuh = a.child("jml_butuh").getValue(Int::class.java) ?: 0
+    fun getJobVacancy(email: String) {
 
-                    val job = Jobs(
-                        Company(
-                            _profileAccount.value?.name ?: "",
-                            alamat,
-                            email,
-                            photoUrl,
-                            deskripsiCompany
-                        ), pekerjaan, deskripsi, jmlButuh
-                    )
-                    jobsList.add(job)
-                }
-                _jobVacancy.value = jobsList
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
     }
 
     fun getCompanyData(email: String) {
-        val name = _profileAccount.value?.name ?: ""
-        dbUser.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val emailSnapshot = snapshot.child(email)
-                val alamat = emailSnapshot.child("address").getValue(String::class.java) ?: ""
-                val photoUrl = emailSnapshot.child("photoUrl").getValue(String::class.java) ?: ""
-                val deskripsiCompany =
-                    emailSnapshot.child("company_desc").getValue(String::class.java) ?: ""
 
-                val company = Company(
-                    name,
-                    alamat,
-                    email,
-                    photoUrl,
-                    deskripsiCompany
-                )
-                _companyData.value = company
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
     }
 
     fun getProfileAccount(email: String) {
-        dbUser.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val name = snapshot.child(email).child("name").getValue(String::class.java) ?: ""
-                val phone = snapshot.child(email).child("phone").getValue(String::class.java) ?: ""
-                val photoUrl =
-                    snapshot.child(email).child(("photo_url")).getValue(String::class.java) ?: ""
-                val homeless =
-                    snapshot.child(email).child("homeless").getValue(Boolean::class.java) ?: false
-                val disabled =
-                    snapshot.child(email).child("disabled").getValue(Boolean::class.java) ?: false
-                val edukasi =
-                    snapshot.child(email).child("edukasi").getValue(EdukasiEnum::class.java)
-                        ?: EdukasiEnum.UNDERGRADUATE
-                val pengalaman =
-                    snapshot.child(email).child("pengalaman").getValue(Int::class.java) ?: 0
-                val about =
-                    snapshot.child(email).child("deskripsi").getValue(String::class.java) ?: ""
-                val user = User(
-                    name,
-                    phone,
-                    email,
-                    homeless,
-                    disabled,
-                    photoUrl,
-                    about,
-                    edukasi,
-                    listOf(),
-                    pengalaman
-                )
-                _profileAccount.value = user
-            }
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
     }
 
     fun saveProfile(
@@ -227,53 +173,50 @@ class JobRepository(private val pref: UserPreference) {
         val uploadTask = imageRef.putFile(imageUri)
 
         uploadTask.addOnSuccessListener {
-            // Image upload success
             imageRef.downloadUrl.addOnSuccessListener { uri ->
-                // URL of the uploaded image
                 onSuccess(uri.toString())
             }
         }.addOnFailureListener { exception ->
-            // Image upload failure
             onFailure(exception)
         }
     }
-    fun updateDatabase(
-        email: String,
-        description: String,
-        age: Int,
-        imageUrl: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val imagesReference = dbUser.child(email).child("photo_url")
-        imagesReference.setValue(imageUrl)
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
-        dbUser.child(email).child("deskripsi").setValue(description)
-        dbUser.child(email).child("umur").setValue(age)
-    }
+//    fun updateDatabase(
+//        email: String,
+//        description: String,
+//        age: Int,
+//        imageUrl: String,
+//        onSuccess: () -> Unit,
+//        onFailure: (Exception) -> Unit
+//    ) {
+//        val imagesReference = dbUser.child(email).child("photo_url")
+//        imagesReference.setValue(imageUrl)
+//            .addOnSuccessListener {
+//                onSuccess()
+//            }
+//            .addOnFailureListener { exception ->
+//                onFailure(exception)
+//            }
+//        dbUser.child(email).child("deskripsi").setValue(description)
+//        dbUser.child(email).child("umur").setValue(age)
+//    }
 
-    fun updateDatabaseCompany(
-        email: String,
-        description: String,
-        imageUrl: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val imagesReference = dbUser.child(email).child("photoUrl")
-        imagesReference.setValue(imageUrl)
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
-        dbUser.child(email).child("company_desc").setValue(description)
-    }
+//    fun updateDatabaseCompany(
+//        email: String,
+//        description: String,
+//        imageUrl: String,
+//        onSuccess: () -> Unit,
+//        onFailure: (Exception) -> Unit
+//    ) {
+//        val imagesReference = dbUser.child(email).child("photoUrl")
+//        imagesReference.setValue(imageUrl)
+//            .addOnSuccessListener {
+//                onSuccess()
+//            }
+//            .addOnFailureListener { exception ->
+//                onFailure(exception)
+//            }
+//        dbUser.child(email).child("company_desc").setValue(description)
+//    }
 
     fun getUser(): Flow<UserModel> = pref.getUser()
     suspend fun logout() = pref.logout()

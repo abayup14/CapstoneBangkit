@@ -1,0 +1,19 @@
+mutation createUser($nama: String, $email: String, $password: String, $nomor: String, $tgl: String, $nik: String) {
+    createUser(
+        nama: $nama,
+        email: $email,
+        password: $password,
+        nomor_telepon: $nomor,
+        tgl_lahir: $tgl,
+        nik: $nik,
+        pengalaman:0,
+        pengalaman_pro:0,
+        edukasi:"Other",
+        url_photo:"",
+        deskripsi:"",
+        stream:"Pelatihan"
+    ) {
+        success
+        errors
+    }
+}
