@@ -197,3 +197,21 @@ def create_notifikasi_resolver(obj, info, waktu, pesan, user_iduser):
         }
     return payload
 
+
+# diubah vincent
+@convert_kwargs_to_snake_case
+def create_apply_resolver(obj, info, user_iduser, lowongan_id, probabilitas, jaccard, skor_akhir, status):
+    try:
+        new_apply = Apply(user_iduser=user_iduser, lowongan_id=lowongan_id, probabilitas=probabilitas, jaccard=jaccard, skor_akhir=skor_akhir,status=status)
+        db.session.add(new_apply)
+        db.session.commit()
+        payload = {
+            "success": True,
+            "apply": new_apply.to_dict()
+        }
+    except ValueError:
+        payload = {
+            "success": False,
+            "errors": ["Incorrect data provided."]
+        }
+    return payload

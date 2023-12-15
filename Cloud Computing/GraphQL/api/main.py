@@ -5,10 +5,10 @@ from flask import request, jsonify
 from api.queries import list_users_resolver, list_companies_resolver, list_lowongans_resolver, list_skills_resolver, \
     list_user_has_skills_resolver, cek_login_user, cek_login_company, list_edukasi_user_resolver, list_pengalaman_user_resolver, \
     list_user_has_skills_resolver,list_lowongans_company_resolver,list_lowongans_user_apply_resolver,list_lowongans_user_search_resolver, \
-    list_notifikasi_resolver
+    list_notifikasi_resolver, list_apply_resolver
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, \
     create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver, create_skills_required_resolver, \
-    create_notifikasi_resolver
+    create_notifikasi_resolver, create_apply_resolver
 
 
 query = ObjectType("Query")
@@ -26,6 +26,7 @@ query.set_field("listLowonganCompany", list_lowongans_company_resolver)
 query.set_field("listLowonganUserSearch", list_lowongans_user_search_resolver)
 query.set_field("listLowonganUserApply", list_lowongans_user_apply_resolver)
 query.set_field("listNotifikasiUser", list_notifikasi_resolver)
+query.set_field("listApply", list_apply_resolver)
 
 
 #Untuk mutation
@@ -38,6 +39,7 @@ mutation.set_field("createUserHasSkills", create_user_has_skills_resolver)
 mutation.set_field("createLowongan", create_lowongan_resolver)
 mutation.set_field("createSkillRequired", create_skills_required_resolver)
 mutation.set_field("createNotification", create_notifikasi_resolver)
+mutation.set_field("createApply", create_apply_resolver)
 
 
 type_defs = load_schema_from_path("schema.graphql")

@@ -22,45 +22,76 @@ type Query {
 
 type Mutation {
   createUser(
-    nama: String, 
-    email: String, 
-    password: String, 
-    nomor_telepon: String, 
-    tgl_lahir: String, 
-    nik: String, 
-    pengalaman: Int, 
-    pengalaman_pro: Int, 
-    edukasi: String, 
-    url_photo: String, 
-    deskripsi: String, 
-    stream: String): UserResponse!
+    nama: String
+    email: String
+    password: String
+    nomor_telepon: String
+    tgl_lahir: String
+    nik: String
+    pengalaman: Int
+    pengalaman_pro: Int
+    edukasi: String
+    url_photo: String
+    deskripsi: String
+    stream: String
+  ): UserResponse!
 
   createCompany(
-    nama: String, 
-    alamat: String, 
-    email: String, 
-    password: String, 
-    url_photo: String, 
-    deskripsi: String): CompanyResponse
+    nama: String
+    alamat: String
+    email: String
+    password: String
+    url_photo: String
+    deskripsi: String
+  ): CompanyResponse
 
   createLowongan(
-    nama: String, 
-    deskripsi: String, 
-    jmlh_butuh: Int, 
-    company_id: Int, 
-    url_photo: String): LowonganResponse
+    nama: String
+    deskripsi: String
+    jmlh_butuh: Int
+    company_id: Int
+    url_photo: String
+  ): LowonganResponse
   createSkills(nama: String): SkillsResponse
   createUserHasSkills(user_iduser: Int, skills_id: Int): UserSkillsResponse
-  createPengalaman(nama_pekerjaan: String, tgl_mulai: String, tgl_selesai: String, tmpt_bekerja: String, pkrjn_profesional: Boolean, user_iduser: Int): PengalamanResponse
-  createEdukasi(nama_institusi: String, jenjang: String, tgl_awal: String, tgl_akhir: String, deskripsi: String, user_iduser: Int): EdukasiResponse
+  createPengalaman(
+    nama_pekerjaan: String
+    tgl_mulai: String
+    tgl_selesai: String
+    tmpt_bekerja: String
+    pkrjn_profesional: Boolean
+    user_iduser: Int
+  ): PengalamanResponse
+  createEdukasi(
+    nama_institusi: String
+    jenjang: String
+    tgl_awal: String
+    tgl_akhir: String
+    deskripsi: String
+    user_iduser: Int
+  ): EdukasiResponse
   createSkillRequired(skills_id: Int, lowongan_id: Int): SkillRequiredResponse
-  createNotification(waktu: String, pesan: String,user_iduser: Int): NotifikasiResponse
+  createNotification(
+    waktu: String
+    pesan: String
+    user_iduser: Int
+  ): NotifikasiResponse
 }
 
-type UserResult{
-    success: Boolean!
-    errors: [String]
-    users:[User]
+type UserResult {
+  success: Boolean!
+  errors: [String]
+  users: [User]
+}
+
+# ini tak tambah
+type Apply {
+  user_iduser: Int
+  lowongan_id: Int
+  probabilitas: Float
+  jaccard: Float
+  skor_akhir: Float
+  status: String
 }
 
 type User {
@@ -97,7 +128,7 @@ type Lowongan {
   company_id: Int
   url_photo: String
 }
-type Notifikasi{
+type Notifikasi {
   idnotifikasi: Int
   waktu: String
   pesan: String
@@ -114,29 +145,28 @@ type UserSkills {
 }
 
 # tak ubah - vincent
-type UserSkillsId{
+type UserSkillsId {
   user_iduser: Int
   skills_id: Int
 }
 
-
 type Pengalaman {
-  id: Int,
-  nama_pekerjaan: String, 
-  tgl_mulai: String, 
-  tgl_selesai: String, 
-  tmpt_bekerja: String, 
-  pkrjn_profesional: Boolean, 
+  id: Int
+  nama_pekerjaan: String
+  tgl_mulai: String
+  tgl_selesai: String
+  tmpt_bekerja: String
+  pkrjn_profesional: Boolean
   user_iduser: Int
 }
 
 type Edukasi {
-  id: Int, 
-  nama_institusi: String, 
-  jenjang: String, 
-  tgl_awal: String, 
-  tgl_akhir: String, 
-  deskripsi: String, 
+  id: Int
+  nama_institusi: String
+  jenjang: String
+  tgl_awal: String
+  tgl_akhir: String
+  deskripsi: String
   user_iduser: Int
 }
 
@@ -199,7 +229,7 @@ type PengalamanResponses {
 }
 
 type SkillRequired {
-  skills_id: Int,
+  skills_id: Int
   lowongan_id: Int
 }
 
@@ -214,13 +244,13 @@ type LowonganResponses {
   lowongan: [Lowongan]
 }
 
-type NotifikasiResponses{
+type NotifikasiResponses {
   success: Boolean
   errors: [String]
   notifikasi: [Notifikasi]
 }
 
-type NotifikasiResponse{
+type NotifikasiResponse {
   success: Boolean
   errors: [String]
   notifikasi: Notifikasi

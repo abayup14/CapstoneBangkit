@@ -132,6 +132,7 @@ class Apply(db.Model):
     probabilitas = db.Column(db.Float)
     jaccard = db.Column(db.Float)
     skor_akhir = db.Column(db.Float)
+    status = db.Column(db.String)
     # user = db.relationship('User', backref=db.backref('apply', lazy=True))
     # lowongan = db.relationship('Lowongan', backref=db.backref('apply', lazy=True))
     def to_dict(self):
@@ -140,7 +141,8 @@ class Apply(db.Model):
             "lowongan_id": self.lowongan_id,
             "probabilitas": self.probabilitas,
             "jaccard": self.jaccard,
-            "skor_akhir": self.skor_akhir
+            "skor_akhir": self.skor_akhir,
+            "status": self.status
         }
 
 
