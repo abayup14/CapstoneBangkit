@@ -364,6 +364,16 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #   } 
 # }
 # '''
+# PREDICT USING MODEL
+# graphql_query = '''
+#     query {
+#     jaccardSkills(list_skill_user: ["HTML","CSS","JS","MYSQL"], list_skill_required: ["HTML","CSS","JS","PHP","NODEJS"]) {
+#         success
+#         errors
+#         jaccard
+#     } 
+# }
+# '''
 
 # Headers (optional, include if needed)
 headers = {
