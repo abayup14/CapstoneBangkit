@@ -1,3 +1,0 @@
-{
-    "mutation" : "{createPost(title: \"New Blog Post2\",description: \"Some Description2\"){post {id\ntitle\ndescription\ncreated_at}success\nerrors}}"
-}
