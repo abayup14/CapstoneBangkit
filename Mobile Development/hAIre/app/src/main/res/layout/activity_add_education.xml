@@ -155,7 +155,6 @@
         android:id="@+id/btnAddEducation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextEducationDate"
         android:layout_marginStart="127dp"
         android:layout_marginTop="29dp"
         android:text="Add Education"
