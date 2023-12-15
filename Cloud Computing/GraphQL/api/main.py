@@ -40,7 +40,7 @@ mutation.set_field("createSkillRequired", create_skills_required_resolver)
 mutation.set_field("createNotification", create_notifikasi_resolver)
 
 
-type_defs = load_schema_from_path("schema.graphql")
+type_defs = load_schema_from_path("api/schema.graphql")
 schema = make_executable_schema(type_defs, query, mutation, snake_case_fallback_resolvers)
 
 
