@@ -447,3 +447,18 @@ def list_user_apply_lowongan_resolver(obj, info, lowongan_id):
             "errors": [str(e)]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def list_skills_required_resolver(obj, info, lowongan_id):
+    try:
+        skills = [skill.to_dict() for skill in Skills.query.join(Apply).filter(Apply.lowongan_id == lowongan_id).all()]
+        payload = {
+            "success": True,
+            "skills": skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload

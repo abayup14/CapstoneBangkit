@@ -29,6 +29,7 @@ type Query {
   predictStream(list_input: [Float]): ModelPredictResponse
   profileCompany(id: Int): CompanyResponse
   listUserApplyLowongan(lowongan_id: Int): UserResponse
+  listSkillsRequired(lowongan_id: Int): SkillsResponses
 }
 
 type Mutation {
