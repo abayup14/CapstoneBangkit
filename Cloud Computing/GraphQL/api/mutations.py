@@ -41,11 +41,12 @@ def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_la
 @convert_kwargs_to_snake_case
 def update_user_resolver(obj, info, iduser, pengalaman, pengalaman_pro):
     try:
-        user = User.query.filter(User.iduser == iduser).first()
+        user = User.query.get(iduser)
         if user:
             user.pengalaman = pengalaman
             user.pengalaman_pro = pengalaman_pro
-            db.session.commit(user)
+            db.session.add(user)
+            db.session.commit()
             payload = {
                 "success": True,
                 "user": user.to_dict()
