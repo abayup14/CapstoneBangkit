@@ -50,6 +50,21 @@ def cek_login_company(obj, info, email, password):
     return payload
 
 @convert_kwargs_to_snake_case
+def profile_company_resolver(obj, info, id):
+    try:
+        company = Company.query.filter(Company.id == id).first()
+        payload = {
+            "success": True,
+            "company": company.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"Company not found"]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
 def list_users_resolver(obj, info):
     try:
         users = [user.to_dict() for user in User.query.all()]
