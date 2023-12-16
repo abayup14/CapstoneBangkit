@@ -1,318 +1,449 @@
-type Schema {
-  query: Query
-  mutation: Mutation
-}
+from api.models import Notifikasi, User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
+from ariadne import convert_kwargs_to_snake_case
+import tensorflow as tf
+from api import model_emp
 
-type Query {
-  listUsers: UserResult!
-  listCompanies: CompanyResponses
-  listLowongans: LowonganResponses
-  listSkills: SkillsResponses
-  listUserHasSkills: [UserSkills]
-  cekLoginUser(email: String, password: String): UserResponse
-  profileUser(iduser: Int): UserResponse
-  cekLoginCompany(email: String, password: String): CompanyResponse
-  listEdukasiUser(user_iduser: Int): EdukasiResponses
-  listPengalamanUser(user_iduser: Int): PengalamanResponses
-  listUserSkills(user_iduser: Int): SkillsResponses
-  listLowonganCompany(company_id: Int): LowonganResponses
-  listLowonganUserSearch(search: String): LowonganResponses
-  listLowonganUserApply(user_iduser: Int): LowonganResponses
-  listNotifikasiUser(user_iduser: Int): NotifikasiResponses
-  listApplyLowongan(lowongan_id: Int): ApplyResponses
-  listApplyUser(user_iduser: Int): ApplyResponses
-  predictApply(list_input: [Float]): ModelPredictResponse
-  jaccardSkills(
-    list_skill_user: [String]
-    list_skill_required: [String]
-  ): JaccardResponse
-  predictStream(list_input: [Float]): ModelPredictResponse
-  profileCompany(id: Int): CompanyResponse
-  listUserApplyLowongan(lowongan_id: Int): UserResponse
-}
 
-type Mutation {
-  createUser(
-    nama: String
-    email: String
-    password: String
-    nomor_telepon: String
-    tgl_lahir: String
-    nik: String
-    pengalaman: Int
-    pengalaman_pro: Int
-    edukasi: String
-    tdk_pnyrmh: Boolean
-    disabilitas: Boolean
-    url_photo: String
-    deskripsi: String
-    stream: String
-  ): UserResponse!
+@convert_kwargs_to_snake_case
+def cek_login_user(obj, info, email, password):
+    try:
+        user = User.query.filter_by(email=email, password=password).first()
+        payload = {
+            "success": True,
+            "user": user.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"User not found"]
+        }
+    return payload
 
-  createCompany(
-    nama: String
-    alamat: String
-    email: String
-    password: String
-    url_photo: String
-    deskripsi: String
-  ): CompanyResponse
+@convert_kwargs_to_snake_case
+def profile_user_resolver(obj, info, iduser):
+    try:
+        user = User.query.filter_by(iduser=iduser).first()
+        payload = {
+            "success": True,
+            "user": user.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"User not found"]
+        }
+    return payload
 
-  createLowongan(
-    nama: String
-    deskripsi: String
-    jmlh_butuh: Int
-    company_id: Int
-    url_photo: String
-  ): LowonganResponse
-  createSkills(nama: String): SkillsResponse
-  createUserHasSkills(user_iduser: Int, skills_id: Int): UserSkillsResponse
-  createPengalaman(
-    nama_pekerjaan: String
-    tgl_mulai: String
-    tgl_selesai: String
-    tmpt_bekerja: String
-    pkrjn_profesional: Boolean
-    user_iduser: Int
-  ): PengalamanResponse
-  createEdukasi(
-    nama_institusi: String
-    jenjang: String
-    tgl_awal: String
-    tgl_akhir: String
-    deskripsi: String
-    user_iduser: Int
-  ): EdukasiResponse
-  createSkillRequired(skills_id: Int, lowongan_id: Int): SkillRequiredResponse
-  createNotification(
-    waktu: String
-    pesan: String
-    user_iduser: Int
-  ): NotifikasiResponse
-  createApply(
-    user_iduser: Int
-    lowongan_id: Int
-    probabilitas: Float
-    jaccard: Float
-    skor_akhir: Float
-    status: String
-  ): ApplyResponse
-  updateEducation(iduser: Int, edukasi: String): UserResponses
-  updateUser(iduser: Int, pengalaman: Int, pengalaman_pro: Int): UserResponse
-}
+@convert_kwargs_to_snake_case
+def cek_login_company(obj, info, email, password):
+    try:
+        company = Company.query.filter_by(email=email, password=password).first()
+        payload = {
+            "success": True,
+            "company": company.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"Company not found"]
+        }
+    return payload
 
-type UserResult {
-  success: Boolean!
-  errors: [String]
-  users: [User]
-}
+@convert_kwargs_to_snake_case
+def profile_company_resolver(obj, info, id):
+    try:
+        company = Company.query.filter(Company.id == id).first()
+        payload = {
+            "success": True,
+            "company": company.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"Company not found"]
+        }
+    return payload
 
-# ini tak tambah
-type Apply {
-  user_iduser: Int
-  lowongan_id: Int
-  probabilitas: Float
-  jaccard: Float
-  skor_akhir: Float
-  status: String
-}
+@convert_kwargs_to_snake_case
+def list_users_resolver(obj, info):
+    try:
+        users = [user.to_dict() for user in User.query.all()]
+        payload = {
+            "success": True,
+            "users": users
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type User {
-  iduser: Int
-  nama: String
-  email: String
-  password: String
-  nomor_telepon: String
-  tgl_lahir: String
-  nik: String
-  pengalaman: Int
-  pengalaman_pro: Int
-  edukasi: String
-  tdk_pnyrmh: Boolean
-  disabilitas: Boolean
-  url_photo: String
-  deskripsi: String
-  stream: String
-}
 
-type Company {
-  id: Int
-  nama: String
-  alamat: String
-  email: String
-  password: String
-  url_photo: String
-  deskripsi: String
-}
+@convert_kwargs_to_snake_case
+def list_companies_resolver(obj, info):
+    try:
+        companies = [company.to_dict() for company in Company.query.all()]
+        payload = {
+            "success": True,
+            "companies": companies
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type Lowongan {
-  id: Int
-  nama: String
-  deskripsi: String
-  jmlh_butuh: Int
-  company_id: Int
-  url_photo: String
-}
-type Notifikasi {
-  idnotifikasi: Int
-  waktu: String
-  pesan: String
-  user_id: Int
-}
-type Skills {
-  id: Int
-  nama: String
-}
+@convert_kwargs_to_snake_case
+def list_lowongans_resolver(obj, info):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.all()]
+        payload = {
+            "success": True,
+            "lowongans": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type UserSkills {
-  user: User
-  skills: Skills
-}
+@convert_kwargs_to_snake_case
+def list_skills_resolver(obj, info):
+    try:
+        skills = [skill.to_dict() for skill in Skills.query.all()]
+        payload = {
+            "success": True,
+            "skills": skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+'''
+@convert_kwargs_to_snake_case
+def list_user_has_skills_resolver(obj, info):
+    try:
+        user_has_skills = [uhs.to_dict() for uhs in UserHasSkills.query.all()]
+        payload = {
+            "success": True,
+            "user_has_skills": user_has_skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+'''
 
-# tak ubah - vincent
-type UserSkillsId {
-  user_iduser: Int
-  skills_id: Int
-}
+# @convert_kwargs_to_snake_case
+# def list_posts_resolver(obj, info):
+#     try:
+#         posts = [post.to_dict() for post in Post.query.filter(Post.description.like("%%")).all()]
+#         print(posts)
+#         payload = {
+#             "success": True,
+#             "posts": posts
+#         }
+#     except Exception as e:
+#         payload = {
+#             "success": False,
+#             "errors": [str(e)]
+#         }
+#     return payload
 
-type Pengalaman {
-  id: Int
-  nama_pekerjaan: String
-  tgl_mulai: String
-  tgl_selesai: String
-  tmpt_bekerja: String
-  pkrjn_profesional: Boolean
-  user_iduser: Int
-}
+# @convert_kwargs_to_snake_case
+# def list_users_resolver(obj, info):
+#     try:
+#         users = [user.to_dict() for user in User.query.all()]
+#         print(users)
+#         payload = {
+#             users
+#         }
+#     except Exception as e:
+#         payload = {
+#             "success": False,
+#             "errors": [str(e)]
+#         }
+#     return payload
 
-type Edukasi {
-  id: Int
-  nama_institusi: String
-  jenjang: String
-  tgl_awal: String
-  tgl_akhir: String
-  deskripsi: String
-  user_iduser: Int
-}
 
-type UserResponse {
-  success: Boolean
-  errors: [String]
-  user: User
-}
+# @convert_kwargs_to_snake_case
+# def get_post_resolver(obj, info, id):
+#     try:
+#         post = Post.query.get(id)
+#         payload = {   
+#             "success": True,
+#             "post": post.to_dict()
+#         }
+#     except AttributeError:
+#         payload = {
+#             "success": False,
+#             "errors": [f"Post item matching {id} not found"]
+#         }
+#     return payload
 
-#ini tak tambahi yg responses ya - cent
-type UserResponses {
-  success: Boolean
-  errors: [String]
-  user: [User]
-}
-type CompanyResponse {
-  success: Boolean
-  errors: [String]
-  company: Company
-}
+@convert_kwargs_to_snake_case
+def list_companies_resolver(obj, info):
+    try:
+        companies = [company.to_dict() for company in Company.query.all()]
+        payload = {
+            "success": True,
+            "companies": companies
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type CompanyResponses {
-  success: Boolean
-  errors: [String]
-  company: [Company]
-}
+@convert_kwargs_to_snake_case
+def list_lowongans_resolver(obj, info):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.all()]
+        payload = {
+            "success": True,
+            "lowongans": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type LowonganResponse {
-  success: Boolean
-  errors: [String]
-  lowongan: Lowongan
-}
+@convert_kwargs_to_snake_case
+def list_skills_resolver(obj, info):
+    try:
+        skills = [skill.to_dict() for skill in Skills.query.all()]
+        payload = {
+            "success": True,
+            "skills": skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type SkillsResponse {
-  success: Boolean
-  errors: [String]
-  skills: Skills
-}
-type SkillsResponses {
-  success: Boolean
-  errors: [String]
-  skills: [Skills]
-}
+# @convert_kwargs_to_snake_case
+# def list_user_has_skills_resolver(obj, info):
+#     try:
+#         user_has_skills = [uhs.to_dict() for uhs in UserHasSkills.query.all()]
+#         payload = {
+#             "success": True,
+#             "user_has_skills": user_has_skills
+#         }
+#     except Exception as e:
+#         payload = {
+#             "success": False,
+#             "errors": [str(e)]
+#         }
+#     return payload
 
-type UserSkillsResponse {
-  success: Boolean
-  errors: [String]
-  user_has_skills: UserSkillsId
-}
 
-type PengalamanResponse {
-  success: Boolean
-  errors: [String]
-  pengalaman: Pengalaman
-}
+@convert_kwargs_to_snake_case
+def list_edukasi_user_resolver(obj, info, user_iduser):
+    try:
+        edukasi = [edukasi.to_dict() for edukasi in Edukasi.query.filter_by(user_iduser=user_iduser)]
+        payload = {
+            "success": True,
+            "edukasi": edukasi
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type EdukasiResponse {
-  success: Boolean
-  errors: [String]
-  edukasi: Edukasi
-}
 
-type EdukasiResponses {
-  success: Boolean
-  errors: [String]
-  edukasi: [Edukasi]
-}
-type PengalamanResponses {
-  success: Boolean
-  errors: [String]
-  pengalaman: [Pengalaman]
-}
+@convert_kwargs_to_snake_case
+def list_pengalaman_user_resolver(obj, info, user_iduser):
+    try:
+        pengalaman = [pengalaman.to_dict() for pengalaman in Pengalaman.query.filter_by(user_iduser=user_iduser)]
+        payload = {
+            "success": True,
+            "pengalaman": pengalaman
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type SkillRequired {
-  skills_id: Int
-  lowongan_id: Int
-}
+@convert_kwargs_to_snake_case
+def list_user_has_skills_resolver(obj, info, user_iduser):
+    try:
+        skills = [skills.to_dict() for skills in Skills.query.join(UserHasSkills).filter(UserHasSkills.user_iduser == user_iduser).all()]
+        payload = {
+            "success": True,
+            "skills": skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type SkillRequiredResponse {
-  success: Boolean
-  errors: [String]
-  skills_required: SkillRequired
-}
-type LowonganResponses {
-  success: Boolean
-  errors: [String]
-  lowongan: [Lowongan]
-}
+@convert_kwargs_to_snake_case
+def list_lowongans_company_resolver(obj, info, company_id):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.filter(Lowongan.company_id == company_id).all()]
+        payload = {
+            "success": True,
+            "lowongan": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type NotifikasiResponses {
-  success: Boolean
-  errors: [String]
-  notifikasi: [Notifikasi]
-}
+@convert_kwargs_to_snake_case
+def list_lowongans_user_search_resolver(obj, info, search):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.filter(Lowongan.nama.like(f'%{search}%')).all()]
+        payload = {
+            "success": True,
+            "lowongan": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type NotifikasiResponse {
-  success: Boolean
-  errors: [String]
-  notifikasi: Notifikasi
-}
+@convert_kwargs_to_snake_case
+def list_lowongans_user_apply_resolver(obj, info, user_iduser):
+    try:
+        lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.join(Apply).filter(Apply.user_iduser == user_iduser).all()]
+        payload = {
+            "success": True,
+            "lowongan": lowongans
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type ApplyResponses {
-  success: Boolean
-  errors: [String]
-  apply: [Apply]
-}
+@convert_kwargs_to_snake_case
+def list_notifikasi_resolver(obj, info, user_iduser):
+    try:
+        notifikasis = [notifikasi.to_dict() for notifikasi in Notifikasi.query.filter(Notifikasi.user_iduser == user_iduser).all()]
+        payload = {
+            "success": True,
+            "notifikasi": notifikasis
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type ApplyResponse {
-  success: Boolean
-  errors: [String]
-  apply: Apply
-}
+@convert_kwargs_to_snake_case
+def list_apply_lowongan_resolver(obj, info, lowongan_id):
+    try:
+        applies = [apply.to_dict() for apply in Apply.query.filter(Apply.lowongan_id == lowongan_id).all()]
+        payload = {
+            "success": True,
+            "apply": applies
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type ModelPredictResponse {
-  success: Boolean
-  errors: [String]
-  prob: Float
-}
+@convert_kwargs_to_snake_case
+def list_apply_user_resolver(obj, info, user_iduser):
+    try:
+        applies = [apply.to_dict() for apply in Apply.query.filter(Apply.user_iduser == user_iduser).all()]
+        payload = {
+            "success": True,
+            "apply": applies
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
 
-type JaccardResponse {
-  success: Boolean
-  errors: [String]
-  jaccard: Float
-}
+@convert_kwargs_to_snake_case
+def predict_employee_resolver(obj, info, list_input):
+    try:
+        prob = model_emp.predict([list_input])[0]
+        payload = {
+            "success": True,
+            "prob": prob
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+'''''
+@convert_kwargs_to_snake_case
+def predict_stream_resolver(obj, info, list_input):
+    try:
+        prob = model_stream.predict([list_input])[0]
+        payload = {
+            "success": True,
+            "prob": prob
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+'''''
+@convert_kwargs_to_snake_case
+def jaccard_employee_resolver(obj, info, list_skill_user, list_skill_required):
+    try:
+        setUser = set(list_skill_user)
+        setRequired = set(list_skill_required)
+        intersection = setRequired.intersection(setUser)
+        jaccard = len(intersection)*1.0/len(setRequired)
+        payload = {
+            "success": True,
+            "jaccard": jaccard
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_user_apply_lowongan_resolver(obj, info, lowongan_id):
+    try:
+        users = [user.to_dict() for user in User.query.join(Apply).filter(Apply.lowongan_id == lowongan_id).all()]
+        payload = {
+            "success": True,
+            "users": users
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
