@@ -18,7 +18,7 @@ class User(db.Model):
     nik = db.Column(db.String(16))
     pengalaman = db.Column(db.Integer)
     pengalaman_pro = db.Column(db.Integer)
-    edukasi = db.Column(db.Enum('Master', 'Undergraduate', 'PhD', 'Other', 'NoHigherEd'))
+    edukasi = db.Column(db.Enum('Master', 'Undergraduate', 'PhD', 'Other', 'HighSchoolOrBelow'))
     tdk_pnyrmh = db.Column(db.Boolean)
     disabilitas = db.Column(db.Boolean)
     url_photo = db.Column(db.String(1000))
