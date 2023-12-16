@@ -279,4 +279,3 @@ def create_apply_resolver(obj, info, user_iduser, lowongan_id, probabilitas, jac
             "errors": ["Incorrect data provided."]
         }
     return payload
-
