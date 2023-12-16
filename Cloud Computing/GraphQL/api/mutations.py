@@ -45,7 +45,7 @@ def update_user_resolver(obj, info, iduser, pengalaman, pengalaman_pro):
         if user:
             user.pengalaman = pengalaman
             user.pengalaman_pro = pengalaman_pro
-            db.session.commit()
+            db.session.commit(user)
             payload = {
                 "success": True,
                 "user": user.to_dict()
