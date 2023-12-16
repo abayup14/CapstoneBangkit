@@ -20,6 +20,7 @@ class User(db.Model):
     pengalaman_pro = db.Column(db.Integer)
     edukasi = db.Column(db.Enum('Master', 'Undergraduate', 'PhD', 'Other', 'NoHigherEd'))
     tdk_pnyrmh = db.Column(db.Boolean)
+    disabilitas = db.Column(db.Boolean)
     url_photo = db.Column(db.String(1000))
     deskripsi = db.Column(db.String(1000))
     stream = db.Column(db.Enum('Pelatihan', 'Spesialisasi'))
@@ -29,6 +30,8 @@ class User(db.Model):
     user_has_skills = db.relationship('UserHasSkills', backref='user', lazy=True)
     applies = db.relationship('Apply', backref='user', lazy=True)
     notifikasis = db.relationship('Notifikasi', backref='user', lazy=True)
+
+
 
     def to_dict(self):
         return {
@@ -43,6 +46,7 @@ class User(db.Model):
             "pengalaman_pro": self.pengalaman_pro,
             "edukasi": self.edukasi,
             "tdk_pnyrmh": self.tdk_pnyrmh,
+            "disabilitas": self.disabilitas,
             "url_photo": self.url_photo,
             "deskripsi": self.deskripsi,
             "stream": self.stream

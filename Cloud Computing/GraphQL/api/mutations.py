@@ -7,7 +7,7 @@ from api.models import User, Company, Lowongan, Skills, UserHasSkills, SkillsDib
 
 @convert_kwargs_to_snake_case
 def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_lahir, nik, pengalaman, pengalaman_pro,
-                         edukasi, url_photo, deskripsi, stream):
+                         edukasi,tdk_pnyrmh,disabilitas, url_photo, deskripsi, stream):
     try:
         new_user = User(
             nama=nama,
@@ -19,6 +19,8 @@ def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_la
             pengalaman=pengalaman,
             pengalaman_pro=pengalaman_pro,
             edukasi=edukasi,
+            tdk_pnyrmh=tdk_pnyrmh,
+            disabilitas=disabilitas,
             url_photo=url_photo,
             deskripsi=deskripsi,
             stream=stream
@@ -277,3 +279,4 @@ def create_apply_resolver(obj, info, user_iduser, lowongan_id, probabilitas, jac
             "errors": ["Incorrect data provided."]
         }
     return payload
+
