@@ -462,3 +462,18 @@ def list_skills_required_resolver(obj, info, lowongan_id):
             "errors": [str(e)]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def check_skill_resolver(obj, info, nama_skills):
+    try:
+        skill = Skills.query.filter(Skills.nama==nama_skills).first()
+        payload = {
+            "success": True,
+            "skill": skill.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"Skill not found"]
+        }
+    return payload

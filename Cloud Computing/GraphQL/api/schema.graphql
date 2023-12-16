@@ -30,6 +30,7 @@ type Query {
   profileCompany(id: Int): CompanyResponse
   listUserApplyLowongan(lowongan_id: Int): UserResponse
   listSkillsRequired(lowongan_id: Int): SkillsResponses
+  checkSkill(nama_skill: String): SkillsResponse
 }
 
 type Mutation {
