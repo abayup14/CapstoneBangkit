@@ -64,6 +64,7 @@ def update_education_resolver(obj, info, iduser, edukasi):
         user = User.query.filter(User.iduser == iduser).first()
         if user:
             user.edukasi = edukasi
+            db.session.add(user)
             db.session.commit()
             payload = {
                 "success": True,
