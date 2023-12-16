@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
-    val profileAccount = repository.profileAccount
+//    val profileAccount = repository.profileAccount
     fun getProfileUI(email: String) = repository.getProfileAccount(email)
 
     fun getUser(): LiveData<UserModel> = repository.getUser().asLiveData()
 
-    fun deleteAccount(email: String) = repository.deleteAccount(email)
+//    fun deleteAccount(email: String) = repository.deleteAccount(email)
 
     fun logout() {
         viewModelScope.launch {

@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.haire.JobRepository
-import com.haire.data.Company
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val repository: JobRepository) : ViewModel() {
 
     val success: LiveData<Boolean> = repository.success
+    val toastMsg: LiveData<String> = repository.toastMsg
 
     fun registerAccount(
         nama: String?,
@@ -24,8 +24,9 @@ class RegisterViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun registerCompany(nama: String, alamat: String, email: String, password: String) =
+    fun registerCompany(nama: String, alamat: String, email: String, password: String) {
         viewModelScope.launch {
             repository.registerCompany(nama, alamat, email, password)
         }
+    }
 }

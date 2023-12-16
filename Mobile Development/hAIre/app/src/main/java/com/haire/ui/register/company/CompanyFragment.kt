@@ -18,6 +18,7 @@ import com.haire.data.Company
 import com.haire.databinding.FragmentCompanyBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
+import com.haire.util.showText
 
 class CompanyFragment : Fragment() {
     private var _binding: FragmentCompanyBinding? = null
@@ -39,9 +40,10 @@ class CompanyFragment : Fragment() {
         viewModel.success.observe(viewLifecycleOwner) {
             if (it) {
                 showAlert()
-            } else {
-                showText("Gagal")
             }
+        }
+        viewModel.toastMsg.observe(viewLifecycleOwner) {
+            showText(requireActivity(), it)
         }
 
         val validation = AwesomeValidation(ValidationStyle.BASIC)
@@ -61,16 +63,14 @@ class CompanyFragment : Fragment() {
 
         binding.btnRegister.setOnClickListener {
             val name = binding.edtName.text.toString()
-            val email = binding.edtEmail.text.toString().replace(".", ",")
+            val email = binding.edtEmail.text.toString()
             val pass = binding.edtPassword.text.toString()
             val rePass = binding.edtRePassword.text.toString()
             val address = binding.edtAddress.text.toString()
 
-            val company = Company(name, address, email, "", "")
-
             if (validation.validate()) {
                 if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || address.isEmpty()) {
-                    showText(getString(R.string.empty_field))
+                    showText(requireActivity(), getString(R.string.empty_field))
                 } else {
                     viewModel.registerCompany(name, address, email, pass)
                 }
@@ -80,10 +80,6 @@ class CompanyFragment : Fragment() {
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
-    }
-
-    private fun showText(message: String) {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showAlert() {

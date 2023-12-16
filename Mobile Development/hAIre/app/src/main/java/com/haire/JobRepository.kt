@@ -1,6 +1,5 @@
 package com.haire
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,18 +8,17 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
 import com.google.firebase.storage.FirebaseStorage
-import com.haire.data.Company
 import com.haire.data.Jobs
-import com.haire.data.User
 import com.haire.data.UserModel
 import com.haire.data.UserPreference
-import com.haire.network.ApiClient
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 class JobRepository(private val pref: UserPreference) {
-//    private val dbUser: DatabaseReference = FirebaseDatabase.getInstance().getReference("users")
-    private val apiClient: ApolloClient = ApiClient.get()
+    private val _isCompany = MutableLiveData<Boolean>()
+    val isCompany: LiveData<Boolean> = _isCompany
+
+    var id: Int = 0
 
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> = _toastMsg
@@ -28,68 +26,44 @@ class JobRepository(private val pref: UserPreference) {
     private val _success = MutableLiveData<Boolean>()
     val success: LiveData<Boolean> = _success
 
-    private val _profileAccount = MutableLiveData<User>()
-    val profileAccount: LiveData<User> = _profileAccount
+    private val _loker = MutableLiveData<List<ListLowongansQuery.ListLowongan?>>()
+    val loker: LiveData<List<ListLowongansQuery.ListLowongan?>> = _loker
 
-    private val _jobVacancy = MutableLiveData<List<Jobs>>()
-    val jobVacancy: LiveData<List<Jobs>> = _jobVacancy
-
-    private val _companyData = MutableLiveData<Company>()
-    val companyData: LiveData<Company> = _companyData
-
-    val apolloClient = ApolloClient.Builder()
+    private val apolloClient = ApolloClient.Builder()
         .serverUrl("https://graphqlapi-vdnbldljhq-et.a.run.app/graphql")
         .build()
-
-    fun deleteAccount(email: String) {
-
-    }
 
     suspend fun loginAccount(email: String, password: String) {
         val email = Optional.present(email ?: "")
         val pass = Optional.present(password ?: "")
 
-        try{
-            apolloClient.query(CekLoginUserQuery(email, pass)).execute()
-            _success.value = true
-        } catch (e: ApolloException) {
-            Log.w("Login", "Failed to Login", e)
-            _success.value = false
+        val response =
+            apolloClient.query(CekLoginUserQuery(email = email, password = pass))
+                .execute()
+        val response2 =
+            apolloClient.query(CekLoginCompanyQuery(email = email, password = pass))
+                .execute()
+        if (response2.hasErrors()) {
+            _toastMsg.value = "There's an error while connecting to server."
+        } else {
+            if (response2.data?.cekLoginCompany?.success == true) {
+                _success.value = false
+                _isCompany.value = true
+                id = response2.data?.cekLoginCompany?.company?.id ?: 0
+            } else {
+                if (response.hasErrors()) {
+                    _toastMsg.value = "There's an error while connecting to server."
+                } else {
+                    if (response.data?.cekLoginUser?.success == true) {
+                        _isCompany.value = false
+                        _success.value = true
+                        id = response.data?.cekLoginUser?.user?.iduser ?: 0
+                    } else {
+                        _toastMsg.value = response.data?.cekLoginUser?.errors?.component1()
+                    }
+                }
+            }
         }
-
-//        val response = apiClient.query()
-
-        // Firebase
-//        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                if (snapshot.child(email).exists()) {
-//                    val isCompany =
-//                        snapshot.child(email).child("company").getValue(Boolean::class.java)
-//                    if (snapshot.child(email).child("password").getValue(String::class.java)
-//                            .equals(password)
-//                    ) {
-//                        if (isCompany == true) {
-//                            _isCompany.value = true
-//                            _success.value = false
-//                        } else {
-//                            _isCompany.value = false
-//                            _success.value = true
-//                        }
-//                    } else {
-//                        _success.value = false
-//                        _toastMsg.value = context.getString(R.string.password_not_correct)
-//                    }
-//                } else {
-//                    _success.value = false
-//                    _toastMsg.value = context.getString(R.string.email_not_registered)
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                _success.value = false
-//                _toastMsg.value = error.message
-//            }
-//        })
     }
 
     suspend fun registerAccount(
@@ -99,7 +73,7 @@ class JobRepository(private val pref: UserPreference) {
         nomor: String?,
         tgl: String?,
         nik: String?
-        ) {
+    ) {
         val name: Optional<String> = Optional.present(nama ?: "")
         val mail: Optional<String> = Optional.present(email ?: "")
         val pass: Optional<String> = Optional.present(password ?: "")
@@ -107,33 +81,28 @@ class JobRepository(private val pref: UserPreference) {
         val lahir: Optional<String> = Optional.present(tgl ?: "")
         val nikk: Optional<String> = Optional.present(nik ?: "")
 
-        try{
-            apolloClient.mutation(CreateUserMutation(nama = name, email = mail, password = pass, nomor = hp, tgl = lahir, nik = nikk)).execute()
-            _success.value = true
+        try {
+            val response = apolloClient.mutation(
+                CreateUserMutation(
+                    nama = name,
+                    email = mail,
+                    password = pass,
+                    nomor = hp,
+                    tgl = lahir,
+                    nik = nikk
+                )
+            ).execute()
+            if (response.data?.createUser?.success == true) {
+                _success.value = true
+            } else {
+                _success.value = false
+                _toastMsg.value = response.data?.createUser?.errors?.component1()
+            }
         } catch (e: ApolloException) {
             Log.w("Register", "Failed to Register", e)
             _success.value = false
+            _toastMsg.value = e.message.toString()
         }
-
-        // Firebase
-//        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                val emailExist = snapshot.child(user.email).exists()
-//                _success.value = emailExist
-//                if (!emailExist) {
-//                    dbUser.child(user.email).apply {
-//                        child("name").setValue(user.name)
-//                        child("email").setValue(user.email)
-//                        child("phone").setValue(user.phone)
-//                        child("password").setValue(pass)
-//                        child("isHomeless").setValue(user.homeless)
-//                        child("isDisabled").setValue(user.disabled)
-//                    }
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {}
-//        })
     }
 
     suspend fun registerCompany(nama: String, alamat: String, email: String, password: String) {
@@ -142,43 +111,58 @@ class JobRepository(private val pref: UserPreference) {
         val mail = Optional.present(email ?: "")
         val pass = Optional.present(password ?: "")
 
-        try{
-            apolloClient.mutation(CreateCompanyMutation(nama, alamat, mail, pass)).execute()
-            _success.value = true
+        try {
+            val response =
+                apolloClient.mutation(CreateCompanyMutation(nama, alamat, mail, pass)).execute()
+            if (response.data?.createCompany?.success == true) {
+                _success.value = true
+            } else {
+                _success.value = false
+                _toastMsg.value = response.data?.createCompany?.errors?.component1()
+            }
         } catch (e: ApolloException) {
             Log.w("Register", "Failed to Register", e)
             _success.value = false
+            _toastMsg.value = e.message.toString()
         }
-//        Firebase
-//        dbUser.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                val emailExist = snapshot.child(company.email).exists()
-//                _success.value = emailExist
-//                if (!emailExist) {
-//                    dbUser.child(company.email).apply {
-//                        child("name").setValue(company.name)
-//                        child("email").setValue(company.email)
-//                        child("address").setValue(company.address)
-//                        child("password").setValue(pass)
-//                        child("company").setValue(true)
-//                    }
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {}
-//        })
+    }
 
+    suspend fun getListLoker() {
+        val response = apolloClient.query(ListLowongansQuery()).execute()
+        _loker.value = response.data?.listLowongans ?: emptyList()
+    }
+
+    suspend fun createLoker(
+        name: String?,
+        desc: String?,
+        butuh: Int?,
+        idCompany: Int?,
+        photoUrl: String?
+    ) {
+        val nama = Optional.present(name)
+        val deskripsi = Optional.present(desc)
+        val jmlhButuh = Optional.present(butuh)
+        val companyId = Optional.present(idCompany)
+        val urlPhoto = Optional.present(photoUrl)
+        try {
+            val response = apolloClient.mutation(CreateLowonganMutation(nama, deskripsi, jmlhButuh, companyId, urlPhoto)).execute()
+            if (response.data?.createLowongan?.success == true) {
+                _success.value = true
+            } else {
+                _success.value = false
+                _toastMsg.value = response.data?.createLowongan?.errors?.component1()
+            }
+        } catch (e: ApolloException) {
+            _success.value = false
+            _toastMsg.value = e.message.toString()
+        }
     }
 
     fun addJob(jobs: Jobs) {
 
     }
 
-    fun getJobVacancy(email: String) {
-
-    }
-
-    fun getCompanyData(email: String) {
+    fun getJobByCompany(email: String) {
 
     }
 
@@ -204,6 +188,7 @@ class JobRepository(private val pref: UserPreference) {
             onFailure(exception)
         }
     }
+
 //    fun updateDatabase(
 //        email: String,
 //        description: String,
