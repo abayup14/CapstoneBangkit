@@ -23,8 +23,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Create a SQLAlchemy instance
 db = SQLAlchemy(app)
 app.app_context().push()
-model_emp=tf.keras.models.load_model("emp_model.h5")
-model_stream = tf.keras.models.load_model("stream_model.h5")
+model_emp=tf.keras.models.load_model("api/emp_model.h5",compile=False)
+'''model_stream = tf.keras.models.load_model("stream_model.h5",compile=False)'''
 
 '''''
 # Import routes after initializing the app and configuring the database
