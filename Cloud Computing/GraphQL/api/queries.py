@@ -1,6 +1,7 @@
 from api.models import Notifikasi, User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
 from ariadne import convert_kwargs_to_snake_case
 import tensorflow as tf
+from api import model_emp, model_stream
 
 
 @convert_kwargs_to_snake_case
@@ -372,8 +373,7 @@ def list_apply_user_resolver(obj, info, user_iduser):
 @convert_kwargs_to_snake_case
 def predict_employee_resolver(obj, info, list_input):
     try:
-        model=tf.keras.models.load_model("emp_model.h5")
-        prob = model.predict([list_input])[0]
+        prob = model_emp.predict([list_input])[0]
         payload = {
             "success": True,
             "prob": prob
@@ -388,8 +388,7 @@ def predict_employee_resolver(obj, info, list_input):
 @convert_kwargs_to_snake_case
 def predict_stream_resolver(obj, info, list_input):
     try:
-        model = tf.keras.models.load_model("stream_model.h5")
-        prob = model.predict([list_input])[0]
+        prob = model_stream.predict([list_input])[0]
         payload = {
             "success": True,
             "prob": prob
