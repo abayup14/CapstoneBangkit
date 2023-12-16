@@ -6,7 +6,7 @@ from api.queries import list_users_resolver, list_companies_resolver, list_lowon
     list_user_has_skills_resolver, cek_login_user, cek_login_company, list_edukasi_user_resolver, list_pengalaman_user_resolver, \
     list_user_has_skills_resolver,list_lowongans_company_resolver,list_lowongans_user_apply_resolver,list_lowongans_user_search_resolver, \
     list_notifikasi_resolver, list_apply_lowongan_resolver, list_apply_user_resolver, predict_employee_resolver, jaccard_employee_resolver, \
-    predict_stream_resolver
+    predict_stream_resolver, profile_user_resolver
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, \
     create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver, create_skills_required_resolver, \
     create_notifikasi_resolver, create_apply_resolver, update_education_resolver, update_user_resolver
@@ -20,6 +20,7 @@ mutation = ObjectType("Mutation")
 query.set_field("listUsers", list_users_resolver)
 query.set_field("cekLoginUser", cek_login_user)
 query.set_field("cekLoginCompany", cek_login_company)
+query.set_field("profileUser", profile_user_resolver)
 query.set_field("listEdukasiUser", list_edukasi_user_resolver)
 query.set_field("listPengalamanUser", list_pengalaman_user_resolver)
 query.set_field("listUserSkills", list_user_has_skills_resolver)
