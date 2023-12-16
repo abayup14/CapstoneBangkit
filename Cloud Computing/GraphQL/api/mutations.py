@@ -41,15 +41,20 @@ def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_la
 @convert_kwargs_to_snake_case
 def update_user_resolver(obj, info, iduser, pengalaman, pengalaman_pro):
     try:
-        user = User.query.get(iduser)
+        user = User.query.filter_by(iduser=iduser).first()
         if user:
-            user.pengalaman = pengalaman
-            user.pengalaman_pro = pengalaman_pro
+            user.pengalaman += pengalaman
+            user.pengalaman_pro += pengalaman_pro
             db.session.add(user)
             db.session.commit()
             payload = {
                 "success": True,
                 "user": user.to_dict()
+            }
+        else:
+            payload = {
+                "success": False,
+                "errors": [f"item matching {iduser} not found"]
             }
     except AttributeError:
         payload = {
@@ -61,7 +66,7 @@ def update_user_resolver(obj, info, iduser, pengalaman, pengalaman_pro):
 @convert_kwargs_to_snake_case
 def update_education_resolver(obj, info, iduser, edukasi):
     try:
-        user = User.query.filter(User.iduser == iduser).first()
+        user = User.query.filter_by(iduser=iduser).first()
         if user:
             user.edukasi = edukasi
             db.session.add(user)
@@ -69,6 +74,11 @@ def update_education_resolver(obj, info, iduser, edukasi):
             payload = {
                 "success": True,
                 "user": user.to_dict()
+            }
+        else:
+            payload = {
+                "success": False,
+                "errors": [f"item matching {iduser} not found"]
             }
     except AttributeError:
         payload = {
