@@ -10,6 +10,7 @@ type Query {
   listSkills: SkillsResponses
   listUserHasSkills: [UserSkills]
   cekLoginUser(email: String, password: String): UserResponse
+  profileUser(iduser: Int): UserResponse
   cekLoginCompany(email: String, password: String): CompanyResponse
   listEdukasiUser(user_iduser: Int): EdukasiResponses
   listPengalamanUser(user_iduser: Int): PengalamanResponses

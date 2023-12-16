@@ -19,6 +19,21 @@ def cek_login_user(obj, info, email, password):
     return payload
 
 @convert_kwargs_to_snake_case
+def profile_user_resolver(obj, info, iduser):
+    try:
+        user = User.query.filter_by(iduser=iduser).first()
+        payload = {
+            "success": True,
+            "user": user.to_dict()
+        }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"User not found"]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
 def cek_login_company(obj, info, email, password):
     try:
         company = Company.query.filter_by(email=email, password=password).first()
