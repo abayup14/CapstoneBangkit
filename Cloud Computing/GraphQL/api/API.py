@@ -379,15 +379,15 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # }
 # '''
 # PREDICT USING MODEL
-# graphql_query = '''
-# query {
-#   predictApply(list_input: [1,5,5,5,18]) {
-#     success
-#     errors
-#     prob
-#   } 
-# }
-# '''
+graphql_query = '''
+query {
+  predictApply(list_input: [2,1,40,10]) {
+    success
+    errors
+    prob
+  } 
+}
+'''
 # PREDICT USING MODEL
 # graphql_query = '''
 #     query {
@@ -410,29 +410,29 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # '''
 
 # UPDATE USER PENGALAMAN
-graphql_query = '''
-mutation {
-  updateUser(iduser: 1, pengalaman: 100, pengalaman_pro: 100) {
-    success
-    errors
-    user{
-      iduser
-      nama
-      email
-      password
-      nomor_telepon
-      tgl_lahir
-      nik
-      pengalaman
-      pengalaman_pro
-      edukasi
-      url_photo
-      deskripsi
-      stream
-    }
-  } 
-}
-'''
+# graphql_query = '''
+# mutation {
+#   updateUser(iduser: 1, pengalaman: 100, pengalaman_pro: 100) {
+#     success
+#     errors
+#     user{
+#       iduser
+#       nama
+#       email
+#       password
+#       nomor_telepon
+#       tgl_lahir
+#       nik
+#       pengalaman
+#       pengalaman_pro
+#       edukasi
+#       url_photo
+#       deskripsi
+#       stream
+#     }
+#   } 
+# }
+# '''
 
 # Headers (optional, include if needed)
 headers = {
