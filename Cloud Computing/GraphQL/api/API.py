@@ -399,29 +399,40 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # }
 # '''
 # PREDICT STREAM USING MODEL
-graphql_query = '''
-query {
-  predictStream(list_input: [2,1,1,0,0,4,3,3]) {
-    success
-    errors
-    prob
-  } 
-}
-'''
-
-# UPDATE USER PENGALAMAN
 # graphql_query = '''
-# mutation {
-#   updateUser(iduser: 1, pengalaman: 100, pengalaman_pro: 100) {
+# query {
+#   predictStream(list_input: [2,1,1,0,0,4,3,3]) {
 #     success
 #     errors
-#     user{
-#       pengalaman
-#       pengalaman_pro
-#     }
+#     prob
 #   } 
 # }
 # '''
+
+# UPDATE USER PENGALAMAN
+graphql_query = '''
+mutation {
+  updateUser(iduser: 1, pengalaman: 100, pengalaman_pro: 100) {
+    success
+    errors
+    user{
+      iduser
+      nama
+      email
+      password
+      nomor_telepon
+      tgl_lahir
+      nik
+      pengalaman
+      pengalaman_pro
+      edukasi
+      url_photo
+      deskripsi
+      stream
+    }
+  } 
+}
+'''
 
 # Headers (optional, include if needed)
 headers = {
