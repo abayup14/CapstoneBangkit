@@ -113,10 +113,10 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # INSERT SKILL
 # graphql_query = '''
 #   mutation {
-#      createSkills(nama:"HTML") {
+#      createSkills(nama:"C#") {
 #        success
 #        errors
-#        skills {
+#        skill {
 #          id
 #          nama
 #         }
@@ -218,6 +218,21 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     } 
 #   }
 # '''
+
+# QUERY SKILL REQUIRED
+# graphql_query = '''
+#   query {
+#     listSkillsRequired(lowongan_id: 1) {
+#     success
+#     errors
+#       skills {
+#         id
+#         nama
+#       }
+#     } 
+#   }
+# '''
+
 # INSERT LOKER
 # graphql_query = '''
 #   mutation {
@@ -379,15 +394,15 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # }
 # '''
 # PREDICT USING MODEL
-graphql_query = '''
-query {
-  predictApply(list_input: [2,1,40,10]) {
-    success
-    errors
-    prob
-  } 
-}
-'''
+# graphql_query = '''
+# query {
+#   predictApply(list_input: [2,1,40,10]) {
+#     success
+#     errors
+#     prob
+#   } 
+# }
+# '''
 # PREDICT USING MODEL
 # graphql_query = '''
 #     query {
@@ -432,6 +447,20 @@ query {
 #     }
 #   } 
 # }
+# '''
+
+# QUERY CHECK SKILL
+# graphql_query='''
+#   query{
+#     checkSkill(nama_skill: "C++"){
+#       success
+#       errors
+#       skill{
+#         id
+#         nama
+#       }
+#     }
+#   }
 # '''
 
 # Headers (optional, include if needed)

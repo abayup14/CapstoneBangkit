@@ -166,7 +166,7 @@ def create_skills_resolver(obj, info, nama):
         db.session.commit()
         payload = {
             "success": True,
-            "skills": new_skills.to_dict()
+            "skill": new_skills.to_dict()
         }
     except ValueError:
         payload = {

@@ -230,7 +230,7 @@ type LowonganResponse {
 type SkillsResponse {
   success: Boolean
   errors: [String]
-  skills: Skills
+  skill: Skills
 }
 type SkillsResponses {
   success: Boolean

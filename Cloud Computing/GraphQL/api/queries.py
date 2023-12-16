@@ -1,4 +1,4 @@
-from api.models import Notifikasi, User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
+from api.models import Notifikasi, User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply, SkillsDibutuhkan
 from ariadne import convert_kwargs_to_snake_case
 import tensorflow as tf
 from api import model_emp
@@ -451,7 +451,7 @@ def list_user_apply_lowongan_resolver(obj, info, lowongan_id):
 @convert_kwargs_to_snake_case
 def list_skills_required_resolver(obj, info, lowongan_id):
     try:
-        skills = [skill.to_dict() for skill in Skills.query.join(Apply).filter(Apply.lowongan_id == lowongan_id).all()]
+        skills = [skill.to_dict() for skill in Skills.query.join(SkillsDibutuhkan).filter(SkillsDibutuhkan.lowongan_id == lowongan_id).all()]
         payload = {
             "success": True,
             "skills": skills
@@ -464,9 +464,9 @@ def list_skills_required_resolver(obj, info, lowongan_id):
     return payload
 
 @convert_kwargs_to_snake_case
-def check_skill_resolver(obj, info, nama_skills):
+def check_skill_resolver(obj, info, nama_skill):
     try:
-        skill = Skills.query.filter(Skills.nama==nama_skills).first()
+        skill = Skills.query.filter(Skills.nama==nama_skill).first()
         payload = {
             "success": True,
             "skill": skill.to_dict()
