@@ -18,7 +18,8 @@ class JobRepository(private val pref: UserPreference) {
     private val _isCompany = MutableLiveData<Boolean>()
     val isCompany: LiveData<Boolean> = _isCompany
 
-    var id: Int = 0
+    private val _id = MutableLiveData<Int>()
+    val id: LiveData<Int> = _id
 
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> = _toastMsg
@@ -49,7 +50,7 @@ class JobRepository(private val pref: UserPreference) {
             if (response2.data?.cekLoginCompany?.success == true) {
                 _success.value = false
                 _isCompany.value = true
-                id = response2.data?.cekLoginCompany?.company?.id ?: 0
+                _id.value = response2.data?.cekLoginCompany?.company?.id ?: 0
             } else {
                 if (response.hasErrors()) {
                     _toastMsg.value = "There's an error while connecting to server."
@@ -57,7 +58,7 @@ class JobRepository(private val pref: UserPreference) {
                     if (response.data?.cekLoginUser?.success == true) {
                         _isCompany.value = false
                         _success.value = true
-                        id = response.data?.cekLoginUser?.user?.iduser ?: 0
+                        _id.value = response.data?.cekLoginUser?.user?.iduser ?: 0
                     } else {
                         _toastMsg.value = response.data?.cekLoginUser?.errors?.component1()
                     }
@@ -150,16 +151,14 @@ class JobRepository(private val pref: UserPreference) {
                 _success.value = true
             } else {
                 _success.value = false
-                _toastMsg.value = response.data?.createLowongan?.errors?.component1()
+                if (response.data?.createLowongan?.errors?.isNotEmpty() == true) {
+                    _toastMsg.value = response.data?.createLowongan?.errors?.component1()
+                }
             }
         } catch (e: ApolloException) {
             _success.value = false
             _toastMsg.value = e.message.toString()
         }
-    }
-
-    fun addJob(jobs: Jobs) {
-
     }
 
     fun getJobByCompany(email: String) {

@@ -1,0 +1,11 @@
+query listLowonganCompany($company_id: Int) {
+    listLowonganCompany(company_id: $company_id) {
+        success
+        errors
+        lowongan {
+            company_id
+            url_photo
+
+        }
+    }
+}

@@ -17,8 +17,6 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
     val success: LiveData<Boolean> = repository.success
     val toastMsg: LiveData<String> = repository.toastMsg
 
-    fun addJob(jobs: Jobs) = repository.addJob(jobs) // kosong
-
     fun getSession(): LiveData<UserModel> {
         return repository.getUser().asLiveData()
     }

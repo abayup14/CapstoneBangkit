@@ -55,13 +55,17 @@ class LoginActivity : AppCompatActivity() {
                     viewModel.loginAcc(email, password)
                     viewModel.success.observe(this) {
                         if (it) {
-                            viewModel.saveUser(UserModel(0, email, true, isCompany = false))
+                            viewModel.id.observe(this) { id ->
+                                viewModel.saveUser(UserModel(id, email, true, isCompany = false))
+                            }
                             showDialog(it, MainActivity::class.java)
                         }
                     }
                     viewModel.isCompany.observe(this) {
                         if (it) {
-                            viewModel.saveUser(UserModel(0, email, true, isCompany = true))
+                            viewModel.id.observe(this) { id ->
+                                viewModel.saveUser(UserModel(id, email, true, isCompany = true))
+                            }
                             showDialog(it, CompanyActivity::class.java)
                         }
                     }
