@@ -66,15 +66,29 @@ def update_user_resolver(obj, info, iduser, pengalaman, pengalaman_pro):
 @convert_kwargs_to_snake_case
 def update_education_resolver(obj, info, iduser, edukasi):
     try:
+        dict_ed = {
+            "HighSchoolOrBelow": 1,
+            "Other": 2,
+            "Undergraduate": 3,
+            "Master": 4,
+            "PhD": 5
+        }
         user = User.query.filter_by(iduser=iduser).first()
         if user:
-            user.edukasi = edukasi
-            db.session.add(user)
-            db.session.commit()
-            payload = {
+            curr_ed = user.edukasi
+            if dict_ed[edukasi] > dict_ed[curr_ed]:
+                user.edukasi = edukasi
+                db.session.add(user)
+                db.session.commit()
+                payload = {
                 "success": True,
                 "user": user.to_dict()
-            }
+                }
+            else:
+                payload = {
+                    "success": False,
+                    "errors": [f"Inputted Education is lower than current education"]
+                }
         else:
             payload = {
                 "success": False,
