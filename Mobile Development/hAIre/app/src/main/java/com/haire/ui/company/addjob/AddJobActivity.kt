@@ -2,7 +2,9 @@ package com.haire.ui.company.addjob
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityAddJobBinding
 import com.haire.ui.company.CompanyViewModel
@@ -17,8 +19,14 @@ class AddJobActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        viewModel.getSession().observe(this) {
-            viewModel.getCompanyData(it.email)
+        viewModel.success.observe(this) {
+            if (it) {
+                showAlert()
+            }
+        }
+
+        viewModel.toastMsg.observe(this) {
+            showText(this, it)
         }
 
         binding.btnAdd.setOnClickListener {
@@ -30,13 +38,21 @@ class AddJobActivity : AppCompatActivity() {
                 showText(this, "All field must be filled")
             } else {
                 val butuhInt = jmlButuh.toInt()
-
-                viewModel.companyData.observe(this) {
-//                val job = Jobs(it, pekerjaan, deskripsi, jmlButuh)
-//                viewModel.addJob(job)
+                viewModel.getSession().observe(this) {
+                    viewModel.createLoker(name = pekerjaan, desc = deskripsi, butuh = butuhInt, idCompany = it.id, photoUrl = "")
                 }
+            }
+        }
+    }
+
+    private fun showAlert() {
+        AlertDialog.Builder(this).apply {
+            setMessage(getString(R.string.add_loker_succes))
+            setTitle("Add Job")
+            setPositiveButton(getString(R.string.yes)) { _, _ ->
                 finish()
             }
+            show()
         }
     }
 }

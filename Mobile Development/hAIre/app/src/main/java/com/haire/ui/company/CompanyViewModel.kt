@@ -14,10 +14,8 @@ import com.haire.data.UserModel
 import kotlinx.coroutines.launch
 
 class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
-    val vacancy: LiveData<List<Jobs>> = repository.jobVacancy
-    val companyData: LiveData<Company> = repository.companyData
-
-    fun getJob(email: String) = repository.getJobVacancy(email) // Error
+    val success: LiveData<Boolean> = repository.success
+    val toastMsg: LiveData<String> = repository.toastMsg
 
     fun addJob(jobs: Jobs) = repository.addJob(jobs) // kosong
 
@@ -25,7 +23,17 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
         return repository.getUser().asLiveData()
     }
 
-    fun getCompanyData(email: String) = repository.getCompanyData(email)
+    fun createLoker(
+        name: String?,
+        desc: String?,
+        butuh: Int?,
+        idCompany: Int?,
+        photoUrl: String?
+    ) {
+        viewModelScope.launch {
+            repository.createLoker(name, desc, butuh, idCompany, photoUrl)
+        }
+    }
 
     fun saveProfile(imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) =
         repository.saveProfile(imageUri, onSuccess, onFailure)

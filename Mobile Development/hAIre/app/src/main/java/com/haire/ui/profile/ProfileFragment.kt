@@ -34,18 +34,18 @@ class ProfileFragment : Fragment() {
         viewModel.getUser().observe(viewLifecycleOwner) { it ->
             if (it.isLogin) {
                 viewModel.getProfileUI(it.email)
-                viewModel.profileAccount.observe(viewLifecycleOwner) {user ->
-                    if (user.photoUrl != ""){
-                        Glide.with(requireActivity())
-                            .load(user.photoUrl)
-                            .circleCrop()
-                            .into(binding.profilePicture)
-                    }
-                    binding.apply {
-                        aboutMe.text = user.about
-                        username.text = user.name
-                    }
-                }
+//                viewModel.profileAccount.observe(viewLifecycleOwner) {user ->
+//                    if (user.photoUrl != ""){
+//                        Glide.with(requireActivity())
+//                            .load(user.photoUrl)
+//                            .circleCrop()
+//                            .into(binding.profilePicture)
+//                    }
+//                    binding.apply {
+//                        aboutMe.text = user.about
+//                        username.text = user.name
+//                    }
+//                }
                 binding.btnSetting.setOnClickListener {
                     startActivity(Intent(requireActivity(), SettingProfileActivity::class.java))
                 }

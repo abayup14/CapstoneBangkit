@@ -81,7 +81,7 @@ class JobSeekerFragment : Fragment() {
 
         binding.btnRegister.setOnClickListener {
             val name = binding.edtName.text.toString()
-            val email = binding.edtEmail.text.toString().replace(".", ",")
+            val email = binding.edtEmail.text.toString()
             val pass = binding.edtPassword.text.toString()
             val rePass = binding.edtRePassword.text.toString()
             val phone = binding.edtPhone.text.toString()

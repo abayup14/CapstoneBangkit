@@ -6,7 +6,7 @@ from api.queries import list_users_resolver, list_companies_resolver, list_lowon
     list_user_has_skills_resolver, cek_login_user, cek_login_company, list_edukasi_user_resolver, list_pengalaman_user_resolver, \
     list_user_has_skills_resolver,list_lowongans_company_resolver,list_lowongans_user_apply_resolver,list_lowongans_user_search_resolver, \
     list_notifikasi_resolver, list_apply_lowongan_resolver, list_apply_user_resolver, predict_employee_resolver, jaccard_employee_resolver, \
-    predict_stream_resolver, profile_user_resolver, profile_company_resolver, list_user_apply_lowongan_resolver
+    profile_user_resolver, profile_company_resolver, list_user_apply_lowongan_resolver
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, \
     create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver, create_skills_required_resolver, \
     create_notifikasi_resolver, create_apply_resolver, update_education_resolver, update_user_resolver
@@ -32,7 +32,7 @@ query.set_field("listApplyLowongan", list_apply_lowongan_resolver)
 query.set_field("listApplyUser", list_apply_user_resolver)
 query.set_field("predictApply", predict_employee_resolver)
 query.set_field("jaccardSkills", jaccard_employee_resolver)
-query.set_field("predictStream", predict_stream_resolver)
+'''query.set_field("predictStream", predict_stream_resolver)'''''
 query.set_field("listCompanies", list_companies_resolver)
 query.set_field("listLowongans", list_lowongans_resolver)
 query.set_field("listSkills", list_skills_resolver)
@@ -55,7 +55,7 @@ mutation.set_field("updateEducation", update_education_resolver)
 mutation.set_field("updateUser", update_user_resolver)
 
 
-type_defs = load_schema_from_path("schema.graphql")
+type_defs = load_schema_from_path("api/schema.graphql")
 schema = make_executable_schema(type_defs, query, mutation, snake_case_fallback_resolvers)
 
 

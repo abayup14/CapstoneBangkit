@@ -1,0 +1,9 @@
+query cekLoginCompany($email: String, $password: String) {
+    cekLoginCompany(email: $email, password: $password){
+        success
+        errors
+        company {
+            id
+        }
+    }
+}

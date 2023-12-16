@@ -1,7 +1,7 @@
 from api.models import Notifikasi, User, Company, Lowongan, Skills, UserHasSkills, Edukasi, Pengalaman, Skills, Apply
 from ariadne import convert_kwargs_to_snake_case
 import tensorflow as tf
-from api import model_emp, model_stream
+from api import model_emp
 
 
 @convert_kwargs_to_snake_case
@@ -399,7 +399,7 @@ def predict_employee_resolver(obj, info, list_input):
             "errors": [str(e)]
         }
     return payload
-
+'''''
 @convert_kwargs_to_snake_case
 def predict_stream_resolver(obj, info, list_input):
     try:
@@ -414,7 +414,7 @@ def predict_stream_resolver(obj, info, list_input):
             "errors": [str(e)]
         }
     return payload
-
+'''''
 @convert_kwargs_to_snake_case
 def jaccard_employee_resolver(obj, info, list_skill_user, list_skill_required):
     try:

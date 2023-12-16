@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.haire.ListLowongansQuery
 import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.data.InitialDummyValue
@@ -32,12 +33,13 @@ class OpenJobsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.jobs.observe(viewLifecycleOwner) {
+        viewModel.getListLoker()
+        viewModel.loker.observe(viewLifecycleOwner) {
             setData(it)
         }
     }
 
-    private fun setData(listJobs: List<Jobs>) {
+    private fun setData(listJobs: List<ListLowongansQuery.ListLowongan?>) {
         binding.apply {
             adapter = JobAdapter(listJobs) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)

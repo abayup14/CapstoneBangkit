@@ -1,0 +1,10 @@
+query listLowongans {
+    listLowongans {
+        id
+        nama
+        url_photo
+        company_id
+        deskripsi
+        jmlh_butuh
+    }
+}
