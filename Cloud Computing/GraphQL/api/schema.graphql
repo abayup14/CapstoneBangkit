@@ -28,6 +28,7 @@ type Query {
   ): JaccardResponse
   predictStream(list_input: [Float]): ModelPredictResponse
   profileCompany(id: Int): CompanyResponse
+  listUserApplyLowongan(lowongan_id: Int): UserResponse
 }
 
 type Mutation {
@@ -41,6 +42,8 @@ type Mutation {
     pengalaman: Int
     pengalaman_pro: Int
     edukasi: String
+    tdk_pnyrmh: Boolean
+    disabilitas: Boolean
     url_photo: String
     deskripsi: String
     stream: String
@@ -94,7 +97,7 @@ type Mutation {
     skor_akhir: Float
     status: String
   ): ApplyResponse
-  updateEducation (iduser: Int, edukasi: String): UserResponse
+  updateEducation(iduser: Int, edukasi: String): UserResponses
   updateUser(iduser: Int, pengalaman: Int, pengalaman_pro: Int): UserResponse
 }
 
@@ -103,7 +106,6 @@ type UserResult {
   errors: [String]
   users: [User]
 }
-
 
 # ini tak tambah
 type Apply {
@@ -126,6 +128,8 @@ type User {
   pengalaman: Int
   pengalaman_pro: Int
   edukasi: String
+  tdk_pnyrmh: Boolean
+  disabilitas: Boolean
   url_photo: String
   deskripsi: String
   stream: String
@@ -197,6 +201,12 @@ type UserResponse {
   user: User
 }
 
+#ini tak tambahi yg responses ya - cent
+type UserResponses {
+  success: Boolean
+  errors: [String]
+  user: [User]
+}
 type CompanyResponse {
   success: Boolean
   errors: [String]

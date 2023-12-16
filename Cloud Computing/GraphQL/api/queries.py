@@ -432,3 +432,18 @@ def jaccard_employee_resolver(obj, info, list_skill_user, list_skill_required):
             "errors": [str(e)]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def list_user_apply_lowongan_resolver(obj, info, lowongan_id):
+    try:
+        users = [user.to_dict() for user in User.query.join(Apply).filter(Apply.lowongan_id == lowongan_id).all()]
+        payload = {
+            "success": True,
+            "users": users
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
