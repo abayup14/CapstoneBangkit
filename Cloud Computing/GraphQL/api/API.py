@@ -53,29 +53,29 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #   }
 # '''
 # PROFILE USER
-graphql_query='''
-  query {
-    profileUser(iduser: 1) {
-      success
-      errors
-      user{
-        iduser
-        nama
-        email
-        password
-        nomor_telepon
-        tgl_lahir
-        nik
-        pengalaman
-        pengalaman_pro
-        edukasi
-        url_photo
-        deskripsi
-        stream
-      }
-    }
-  }
-'''
+# graphql_query='''
+#   query {
+#     profileUser(iduser: 1) {
+#       success
+#       errors
+#       user{
+#         iduser
+#         nama
+#         email
+#         password
+#         nomor_telepon
+#         tgl_lahir
+#         nik
+#         pengalaman
+#         pengalaman_pro
+#         edukasi
+#         url_photo
+#         deskripsi
+#         stream
+#       }
+#     }
+#   }
+# '''
 # INSERT COMPANY
 # graphql_query = '''
 #   mutation {
@@ -399,12 +399,26 @@ graphql_query='''
 # }
 # '''
 # PREDICT STREAM USING MODEL
+graphql_query = '''
+query {
+  predictStream(list_input: [2,1,1,0,0,4,3,3]) {
+    success
+    errors
+    prob
+  } 
+}
+'''
+
+# UPDATE USER PENGALAMAN
 # graphql_query = '''
-# query {
-#   predictStream(list_input: [2,1,1,0,0,4,3,3]) {
+# mutation {
+#   updateUser(iduser: 1, pengalaman: 100, pengalaman_pro: 100) {
 #     success
 #     errors
-#     prob
+#     user{
+#       pengalaman
+#       pengalaman_pro
+#     }
 #   } 
 # }
 # '''

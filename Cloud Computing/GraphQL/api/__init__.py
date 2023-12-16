@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import os
+import tensorflow as tf
 
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +23,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Create a SQLAlchemy instance
 db = SQLAlchemy(app)
 app.app_context().push()
+model_emp=tf.keras.models.load_model("emp_model.h5")
+model_stream = tf.keras.models.load_model("stream_model.h5")
 
 '''''
 # Import routes after initializing the app and configuring the database
