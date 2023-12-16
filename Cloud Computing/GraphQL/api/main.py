@@ -32,6 +32,9 @@ query.set_field("listApplyUser", list_apply_user_resolver)
 query.set_field("predictApply", predict_employee_resolver)
 query.set_field("jaccardSkills", jaccard_employee_resolver)
 query.set_field("predictStream", predict_stream_resolver)
+query.set_field("listCompanies", list_companies_resolver)
+query.set_field("listLowongans", list_lowongans_resolver)
+query.set_field("listSkills", list_skills_resolver)
 
 
 #Untuk mutation

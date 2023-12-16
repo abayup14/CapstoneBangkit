@@ -5,9 +5,9 @@ type Schema {
 
 type Query {
   listUsers: UserResult!
-  listCompanies: [Company]
-  listLowongans: [Lowongan]
-  listSkills: [Skills]
+  listCompanies: CompanyResponses
+  listLowongans: LowonganResponses
+  listSkills: SkillsResponses
   listUserHasSkills: [UserSkills]
   cekLoginUser(email: String, password: String): UserResponse
   cekLoginCompany(email: String, password: String): CompanyResponse
@@ -99,6 +99,7 @@ type UserResult {
   errors: [String]
   users: [User]
 }
+
 
 # ini tak tambah
 type Apply {
@@ -196,6 +197,12 @@ type CompanyResponse {
   success: Boolean
   errors: [String]
   company: Company
+}
+
+type CompanyResponses {
+  success: Boolean
+  errors: [String]
+  company: [Company]
 }
 
 type LowonganResponse {
