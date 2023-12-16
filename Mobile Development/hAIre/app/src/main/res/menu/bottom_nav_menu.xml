@@ -21,4 +21,9 @@
         android:icon="@drawable/ic_profile"
         android:title="@string/title_profile" />
 
+    <item
+        android:id="@+id/navigation_learning"
+        android:icon="@drawable/baseline_menu_book_24"
+        android:title="@string/title_learning" />
+
 </menu>

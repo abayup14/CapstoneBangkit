@@ -27,4 +27,9 @@
         android:name="com.haire.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/learningFragment"
+        android:name="com.haire.ui.learning.LearningFragment"
+        android:label="fragment_learning"
+        tools:layout="@layout/fragment_learning" />
 </navigation>
