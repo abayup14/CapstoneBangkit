@@ -86,7 +86,7 @@ def list_companies_resolver(obj, info):
         companies = [company.to_dict() for company in Company.query.all()]
         payload = {
             "success": True,
-            "companies": companies
+            "company": companies
         }
     except Exception as e:
         payload = {
@@ -101,7 +101,7 @@ def list_lowongans_resolver(obj, info):
         lowongans = [lowongan.to_dict() for lowongan in Lowongan.query.all()]
         payload = {
             "success": True,
-            "lowongans": lowongans
+            "lowongan": lowongans
         }
     except Exception as e:
         payload = {
@@ -187,7 +187,7 @@ def list_user_has_skills_resolver(obj, info):
 #             "errors": [f"Post item matching {id} not found"]
 #         }
 #     return payload
-
+'''
 @convert_kwargs_to_snake_case
 def list_companies_resolver(obj, info):
     try:
@@ -232,7 +232,7 @@ def list_skills_resolver(obj, info):
             "errors": [str(e)]
         }
     return payload
-
+'''
 # @convert_kwargs_to_snake_case
 # def list_user_has_skills_resolver(obj, info):
 #     try:
