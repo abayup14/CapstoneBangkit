@@ -92,6 +92,8 @@ type Mutation {
     skor_akhir: Float
     status: String
   ): ApplyResponse
+  updateEducation (iduser: Int, edukasi: String): UserResponse
+  updateUser(iduser: Int, pengalaman: Int, pengalaman_pro: Int): UserResponse
 }
 
 type UserResult {

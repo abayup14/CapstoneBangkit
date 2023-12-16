@@ -38,6 +38,42 @@ def create_user_resolver(obj, info, nama, email, password, nomor_telepon, tgl_la
         }
     return payload
 
+@convert_kwargs_to_snake_case
+def update_user_resolver(obj, info, iduser, pengalaman, pengalaman_pro):
+    try:
+        user = User.query.filter(User.iduser == iduser).first()
+        if user:
+            user.pengalaman = pengalaman
+            user.pengalaman_pro = pengalaman_pro
+            db.session.commit()
+            payload = {
+                "success": True,
+                "user": user.to_dict()
+            }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"item matching {iduser} not found"]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def update_education_resolver(obj, info, iduser, edukasi):
+    try:
+        user = User.query.filter(User.iduser == iduser).first()
+        if user:
+            user.edukasi = edukasi
+            db.session.commit()
+            payload = {
+                "success": True,
+                "user": user.to_dict()
+            }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"item matching {iduser} not found"]
+        }
+    return payload
 
 @convert_kwargs_to_snake_case
 def create_company_resolver(obj, info, nama, alamat, email, password, url_photo, deskripsi):

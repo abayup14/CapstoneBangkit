@@ -9,7 +9,7 @@ from api.queries import list_users_resolver, list_companies_resolver, list_lowon
     predict_stream_resolver
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, \
     create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver, create_skills_required_resolver, \
-    create_notifikasi_resolver, create_apply_resolver
+    create_notifikasi_resolver, create_apply_resolver, update_education_resolver, update_user_resolver
 
 
 query = ObjectType("Query")
@@ -48,6 +48,8 @@ mutation.set_field("createLowongan", create_lowongan_resolver)
 mutation.set_field("createSkillRequired", create_skills_required_resolver)
 mutation.set_field("createNotification", create_notifikasi_resolver)
 mutation.set_field("createApply", create_apply_resolver)
+mutation.set_field("updateEducation", update_education_resolver)
+mutation.set_field("updateUser", update_user_resolver)
 
 
 type_defs = load_schema_from_path("schema.graphql")
