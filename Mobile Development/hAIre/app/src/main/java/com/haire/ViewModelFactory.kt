@@ -36,7 +36,7 @@ class ViewModelFactory(private val context: Context) :
             }
 
             modelClass.isAssignableFrom(OpenJobsViewModel::class.java) -> {
-                OpenJobsViewModel() as T
+                OpenJobsViewModel(Injection.provideRepository(context)) as T
             }
 
             modelClass.isAssignableFrom(StatusViewModel::class.java) -> {

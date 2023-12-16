@@ -1,18 +1,18 @@
 package com.haire.ui.openjobs
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.haire.data.InitialDummyValue
-import com.haire.data.Jobs
+import androidx.lifecycle.viewModelScope
+import com.haire.JobRepository
+import com.haire.ListLowongansQuery
+import kotlinx.coroutines.launch
 
-class OpenJobsViewModel : ViewModel() {
-    private val _jobs = MutableLiveData<List<Jobs>>()
-    val jobs: LiveData<List<Jobs>> = _jobs
+class OpenJobsViewModel(private val repository: JobRepository) : ViewModel() {
+    val loker: LiveData<List<ListLowongansQuery.ListLowongan?>> = repository.loker
 
-    init {
-        val dummyData = InitialDummyValue.dummyJobs
-        _jobs.value = dummyData
+    fun getListLoker() {
+        viewModelScope.launch {
+            repository.getListLoker()
+        }
     }
 }

@@ -26,9 +26,9 @@ class SettingProfileActivity : AppCompatActivity() {
         binding.btnAbout.setOnClickListener {
 //            startActivity(Intent(this@SettingProfileActivity, AboutActivity::class.java))
         }
-        binding.btnDelete.setOnClickListener {
-            showDialog()
-        }
+//        binding.btnDelete.setOnClickListener {
+//            showDialog()
+//        }
         binding.btnBack.setOnClickListener {
             finish()
         }
@@ -50,9 +50,9 @@ class SettingProfileActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             setPositiveButton("Yes") { _, _ ->
-                viewModel.getUser().observe(this@SettingProfileActivity) {
-                    viewModel.deleteAccount(it.email)
-                }
+//                viewModel.getUser().observe(this@SettingProfileActivity) {
+//                    viewModel.deleteAccount(it.email)
+//                }
                 viewModel.logout()
                 startActivity(
                     Intent(

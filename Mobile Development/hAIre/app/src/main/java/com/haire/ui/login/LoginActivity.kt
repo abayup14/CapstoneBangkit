@@ -17,6 +17,7 @@ import com.haire.databinding.ActivityLoginBinding
 import com.haire.ui.company.CompanyActivity
 import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.register.RegisterActivity
+import com.haire.util.showText
 
 class LoginActivity : AppCompatActivity() {
     private var _binding: ActivityLoginBinding? = null
@@ -30,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         viewModel.toastMsg.observe(this) { msg ->
-            showText(msg)
+            showText(this, msg)
         }
 
         val validation = AwesomeValidation(ValidationStyle.BASIC)
@@ -44,18 +45,24 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            val email = binding.emailEditText.text.toString().replace(".", ",")
+            val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
             if (validation.validate()) {
                 if (email.isEmpty() || password.isEmpty()) {
-                    showText(getString(R.string.email_password_empty))
+                    showText(this, getString(R.string.email_password_empty))
                 } else {
-                    viewModel.loginAcc(this, email, password)
+                    viewModel.loginAcc(email, password)
                     viewModel.success.observe(this) {
                         if (it) {
-                            viewModel.saveUser(UserModel(email, true, isCompany = false))
+                            viewModel.saveUser(UserModel(0, email, true, isCompany = false))
                             showDialog(it, MainActivity::class.java)
+                        }
+                    }
+                    viewModel.isCompany.observe(this) {
+                        if (it) {
+                            viewModel.saveUser(UserModel(0, email, true, isCompany = true))
+                            showDialog(it, CompanyActivity::class.java)
                         }
                     }
                 }
@@ -65,10 +72,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             finish()
         }
-    }
-
-    private fun showText(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showDialog(isSuccess: Boolean, page: Class<*>) {

@@ -27,4 +27,5 @@
     <string name="open_file">Open File</string>
     <string name="save">Save</string>
     <string name="message_null_picture">Please pick a picture first.</string>
+    <string name="add_loker_succes">Add jobs Success</string>
 </resources>

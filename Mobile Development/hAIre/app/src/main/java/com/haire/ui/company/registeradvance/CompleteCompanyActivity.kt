@@ -26,17 +26,6 @@ class CompleteCompanyActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        viewModel.getSession().observe(this) {
-            viewModel.getCompanyData(it.email)
-        }
-
-        viewModel.companyData.observe(this) {
-            if (it.photoUrl != "") {
-                startActivity(Intent(this@CompleteCompanyActivity, CompanyActivity::class.java))
-                finish()
-            }
-        }
-
         binding.btnOpenFile.setOnClickListener {
             startGallery()
         }
