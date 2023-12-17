@@ -1,0 +1,11 @@
+query listUserSkills($id: Int) {
+    listUserSkills(user_iduser: $id) {
+        errors
+        success
+        skills {
+            id
+            nama
+
+        }
+    }
+}

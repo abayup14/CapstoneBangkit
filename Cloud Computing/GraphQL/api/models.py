@@ -168,7 +168,7 @@ class Notifikasi(db.Model):
 class Edukasi(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama_institusi = db.Column(db.String(100))
-    jenjang = db.Column(db.Enum('Master', 'Undergraduate', 'PhD', 'Other', 'NoHigherEd'))
+    jenjang = db.Column(db.Enum('Master', 'Undergraduate', 'PhD', 'Other', 'HighSchoolOrBelow'))
     tgl_awal = db.Column(db.Date)
     tgl_akhir = db.Column(db.Date)
     deskripsi = db.Column(db.String(1000))

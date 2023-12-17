@@ -39,7 +39,7 @@ class OpenJobsFragment : Fragment() {
         }
     }
 
-    private fun setData(listJobs: List<ListLowongansQuery.ListLowongan?>) {
+    private fun setData(listJobs: List<ListLowongansQuery.Lowongan?>) {
         binding.apply {
             adapter = JobAdapter(listJobs) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)

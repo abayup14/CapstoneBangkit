@@ -1,0 +1,16 @@
+query profileUser($idUser: Int) {
+    profileUser(iduser: $idUser) {
+        errors
+        success
+        user {
+            nama
+            deskripsi
+            url_photo
+            disabilitas
+            tdk_pnyrmh
+            pengalaman
+            pengalaman_pro
+            edukasi
+        }
+    }
+}

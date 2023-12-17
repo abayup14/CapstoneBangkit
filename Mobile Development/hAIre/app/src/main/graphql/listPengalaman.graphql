@@ -1,0 +1,14 @@
+query listPengalaman($id: Int) {
+    listPengalamanUser(user_iduser: $id) {
+        success
+        errors
+        pengalaman {
+            id
+            nama_pekerjaan
+            tmpt_bekerja
+            pkrjn_profesional
+            tgl_mulai
+            tgl_selesai
+        }
+    }
+}

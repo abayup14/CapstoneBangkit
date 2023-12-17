@@ -7,15 +7,17 @@ type Schema {
 type Query {
   listUsers: UserResult!
 
-  listCompanies: [Company]
+  listCompanies: CompanyResponses
 
-  listLowongans: [Lowongan]
+  listLowongans: LowonganResponses
 
-  listSkills: [Skills]
+  listSkills: SkillsResponses
 
   listUserHasSkills: [UserSkills]
 
   cekLoginUser(email: String, password: String): UserResponse
+
+  profileUser(iduser: Int): UserResponse
 
   cekLoginCompany(email: String, password: String): CompanyResponse
 
@@ -32,6 +34,20 @@ type Query {
   listLowonganUserApply(user_iduser: Int): LowonganResponses
 
   listNotifikasiUser(user_iduser: Int): NotifikasiResponses
+
+  listApplyLowongan(lowongan_id: Int): ApplyResponses
+
+  listApplyUser(user_iduser: Int): ApplyResponses
+
+  predictApply(list_input: [Float]): ModelPredictResponse
+
+  jaccardSkills(list_skill_user: [String], list_skill_required: [String]): JaccardResponse
+
+  predictStream(list_input: [Float]): ModelPredictResponse
+
+  profileCompany(id: Int): CompanyResponse
+
+  listUserApplyLowongan(lowongan_id: Int): UserResponse
 }
 
 """
@@ -44,8 +60,13 @@ The `Int` scalar type represents non-fractional signed whole numeric values. Int
 """
 scalar Int
 
+"""
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+"""
+scalar Float
+
 type Mutation {
-  createUser(nama: String, email: String, password: String, nomor_telepon: String, tgl_lahir: String, nik: String, pengalaman: Int, pengalaman_pro: Int, edukasi: String, url_photo: String, deskripsi: String, stream: String): UserResponse!
+  createUser(nama: String, email: String, password: String, nomor_telepon: String, tgl_lahir: String, nik: String, pengalaman: Int, pengalaman_pro: Int, edukasi: String, tdk_pnyrmh: Boolean, disabilitas: Boolean, url_photo: String, deskripsi: String, stream: String): UserResponse!
 
   createCompany(nama: String, alamat: String, email: String, password: String, url_photo: String, deskripsi: String): CompanyResponse
 
@@ -62,6 +83,12 @@ type Mutation {
   createSkillRequired(skills_id: Int, lowongan_id: Int): SkillRequiredResponse
 
   createNotification(waktu: String, pesan: String, user_iduser: Int): NotifikasiResponse
+
+  createApply(user_iduser: Int, lowongan_id: Int, probabilitas: Float, jaccard: Float, skor_akhir: Float, status: String): ApplyResponse
+
+  updateEducation(iduser: Int, edukasi: String): UserResponses
+
+  updateUser(iduser: Int, pengalaman: Int, pengalaman_pro: Int): UserResponse
 }
 
 """
@@ -75,6 +102,20 @@ type UserResult {
   errors: [String]
 
   users: [User]
+}
+
+type Apply {
+  user_iduser: Int
+
+  lowongan_id: Int
+
+  probabilitas: Float
+
+  jaccard: Float
+
+  skor_akhir: Float
+
+  status: String
 }
 
 type User {
@@ -97,6 +138,10 @@ type User {
   pengalaman_pro: Int
 
   edukasi: String
+
+  tdk_pnyrmh: Boolean
+
+  disabilitas: Boolean
 
   url_photo: String
 
@@ -203,12 +248,28 @@ type UserResponse {
   user: User
 }
 
+type UserResponses {
+  success: Boolean
+
+  errors: [String]
+
+  user: [User]
+}
+
 type CompanyResponse {
   success: Boolean
 
   errors: [String]
 
   company: Company
+}
+
+type CompanyResponses {
+  success: Boolean
+
+  errors: [String]
+
+  company: [Company]
 }
 
 type LowonganResponse {
@@ -311,6 +372,38 @@ type NotifikasiResponse {
   errors: [String]
 
   notifikasi: Notifikasi
+}
+
+type ApplyResponses {
+  success: Boolean
+
+  errors: [String]
+
+  apply: [Apply]
+}
+
+type ApplyResponse {
+  success: Boolean
+
+  errors: [String]
+
+  apply: Apply
+}
+
+type ModelPredictResponse {
+  success: Boolean
+
+  errors: [String]
+
+  prob: Float
+}
+
+type JaccardResponse {
+  success: Boolean
+
+  errors: [String]
+
+  jaccard: Float
 }
 
 """

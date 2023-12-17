@@ -1,0 +1,6 @@
+mutation updateUser($idUser: Int, $pengalaman: Int, $pengalaman_pro: Int) {
+    updateUser(iduser: $idUser, pengalaman: $pengalaman, pengalaman_pro: $pengalaman_pro) {
+        success
+        errors
+    }
+}

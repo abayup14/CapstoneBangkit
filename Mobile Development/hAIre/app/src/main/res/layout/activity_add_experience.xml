@@ -12,10 +12,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="16dp"
         android:src="@android:drawable/ic_menu_my_calendar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     <TextView
         android:id="@+id/tv_start_date"
@@ -32,12 +32,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="29dp"
         android:text="Start Date"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/btn_start_date"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionLayout" />
+        app:layout_constraintTop_toTopOf="@+id/btn_start_date" />
 
     <!--End Date-->
     <ImageButton
@@ -45,22 +44,20 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="29dp"
         android:src="@android:drawable/ic_menu_my_calendar"
-        app:layout_constraintStart_toEndOf="@+id/tv_start_date"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionLayout" />
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toTopOf="@+id/btn_start_date" />
 
     <TextView
         android:id="@+id/textView19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="29dp"
         android:text="End Date"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/btn_end_date"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionLayout" />
+        app:layout_constraintTop_toTopOf="@+id/btn_end_date" />
 
     <TextView
         android:id="@+id/tv_end_date"
@@ -86,8 +83,8 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/jobTitleLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
@@ -108,8 +105,8 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/companyNameLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/jobTitleLayout"
@@ -130,8 +127,8 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/descriptionLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/companyNameLayout"
@@ -150,6 +147,17 @@
             android:padding="16dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border"
+        android:entries="@array/pengalaman"
+        app:layout_constraintEnd_toEndOf="@+id/descriptionLayout"
+        app:layout_constraintStart_toStartOf="@+id/descriptionLayout"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionLayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddExperience"

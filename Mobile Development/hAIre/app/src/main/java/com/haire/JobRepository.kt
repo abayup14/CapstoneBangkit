@@ -21,14 +21,29 @@ class JobRepository(private val pref: UserPreference) {
     private val _id = MutableLiveData<Int>()
     val id: LiveData<Int> = _id
 
+    private val _skill = MutableLiveData<List<ListUserSkillsQuery.Skill?>>()
+    val skill: LiveData<List<ListUserSkillsQuery.Skill?>> = _skill
+
+    private val _exp = MutableLiveData<List<ListPengalamanQuery.Pengalaman?>>()
+    val exp: LiveData<List<ListPengalamanQuery.Pengalaman?>> = _exp
+
+    private val _edu = MutableLiveData<List<ListEdukasiQuery.Edukasi?>>()
+    val edu: LiveData<List<ListEdukasiQuery.Edukasi?>> = _edu
+
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> = _toastMsg
 
     private val _success = MutableLiveData<Boolean>()
     val success: LiveData<Boolean> = _success
 
-    private val _loker = MutableLiveData<List<ListLowongansQuery.ListLowongan?>>()
-    val loker: LiveData<List<ListLowongansQuery.ListLowongan?>> = _loker
+    private val _loker = MutableLiveData<List<ListLowongansQuery.Lowongan?>>()
+    val loker: LiveData<List<ListLowongansQuery.Lowongan?>> = _loker
+
+    private val _lokerCompany = MutableLiveData<List<ListLowonganCompanyQuery.Lowongan?>>()
+    val lokerCompany: LiveData<List<ListLowonganCompanyQuery.Lowongan?>> = _lokerCompany
+
+    private val _profileData = MutableLiveData<ProfileUserQuery.User>()
+    val profileData: LiveData<ProfileUserQuery.User> = _profileData
 
     private val apolloClient = ApolloClient.Builder()
         .serverUrl("https://graphqlapi-vdnbldljhq-et.a.run.app/graphql")
@@ -73,7 +88,9 @@ class JobRepository(private val pref: UserPreference) {
         password: String?,
         nomor: String?,
         tgl: String?,
-        nik: String?
+        nik: String?,
+        disabled: Boolean?,
+        homeless: Boolean?
     ) {
         val name: Optional<String> = Optional.present(nama ?: "")
         val mail: Optional<String> = Optional.present(email ?: "")
@@ -81,6 +98,8 @@ class JobRepository(private val pref: UserPreference) {
         val hp: Optional<String> = Optional.present(nomor ?: "")
         val lahir: Optional<String> = Optional.present(tgl ?: "")
         val nikk: Optional<String> = Optional.present(nik ?: "")
+        val disable: Optional<Boolean> = Optional.present(disabled ?: false)
+        val homeles: Optional<Boolean> = Optional.present(homeless ?: false)
 
         try {
             val response = apolloClient.mutation(
@@ -90,7 +109,9 @@ class JobRepository(private val pref: UserPreference) {
                     password = pass,
                     nomor = hp,
                     tgl = lahir,
-                    nik = nikk
+                    nik = nikk,
+                    homeless = homeles,
+                    disabilitas = disable
                 )
             ).execute()
             if (response.data?.createUser?.success == true) {
@@ -130,7 +151,85 @@ class JobRepository(private val pref: UserPreference) {
 
     suspend fun getListLoker() {
         val response = apolloClient.query(ListLowongansQuery()).execute()
-        _loker.value = response.data?.listLowongans ?: emptyList()
+        if (response.data?.listLowonganUserSearch?.success == true) {
+            _loker.value = response.data?.listLowonganUserSearch?.lowongan ?: emptyList()
+        } else {
+            _toastMsg.value = response.data?.listLowonganUserSearch?.errors?.component1()
+        }
+    }
+
+    suspend fun getLokerCompany(companyId: Int) {
+        val idCompany = Optional.present(companyId)
+        val response = apolloClient.query(ListLowonganCompanyQuery(idCompany)).execute()
+        if (response.data?.listLowonganCompany?.success == true) {
+            _lokerCompany.value = response.data?.listLowonganCompany?.lowongan ?: emptyList()
+        } else {
+            _toastMsg.value = response.data?.listLowonganCompany?.errors?.component1()
+        }
+    }
+
+    suspend fun getProfileData(idUser: Int?) {
+        val userId = Optional.present(idUser)
+        val response = apolloClient.query(ProfileUserQuery(userId)).execute()
+        if (response.data?.profileUser?.success == true) {
+            _profileData.value = response.data?.profileUser?.user!!
+        } else {
+            _toastMsg.value = response.data?.profileUser?.errors?.component1()
+        }
+    }
+
+    suspend fun getPengalaman(id: Int?) {
+        val userId = Optional.present(id)
+        val response = apolloClient.query(ListPengalamanQuery(userId)).execute()
+        if (response.data?.listPengalamanUser?.success == true) {
+            _exp.value = response.data?.listPengalamanUser?.pengalaman ?: emptyList()
+        } else {
+            if (response.data?.listPengalamanUser?.errors?.isNotEmpty() == true) {
+                _toastMsg.value = response.data?.listPengalamanUser?.errors?.component1()
+            }
+        }
+    }
+
+    suspend fun getEdukasi(id: Int?) {
+        val idUser = Optional.present(id)
+        val response = apolloClient.query(ListEdukasiQuery(idUser)).execute()
+        if (response.data?.listEdukasiUser?.success == true) {
+            _edu.value = response.data?.listEdukasiUser?.edukasi ?: emptyList()
+        } else {
+            if (response.data?.listEdukasiUser?.errors?.isNotEmpty() == true) {
+                _toastMsg.value = response.data?.listEdukasiUser?.errors?.component1()
+            }
+        }
+    }
+
+    suspend fun getSkills(id: Int?) {
+        val idUser = Optional.present(id)
+        val response = apolloClient.query(ListUserSkillsQuery(idUser)).execute()
+        if (response.data?.listUserSkills?.success == true) {
+            _skill.value = response.data?.listUserSkills?.skills ?: emptyList()
+        } else {
+            if (response.data?.listUserSkills?.errors?.isNotEmpty() == true) {
+                _toastMsg.value = response.data?.listUserSkills?.errors?.component1()
+            }
+        }
+    }
+
+    suspend fun createSkill(nama: String?) {
+        val name = Optional.present(nama)
+        try {
+            val response = apolloClient.mutation(CreateSkillsMutation(name)).execute()
+            if (response.data?.createSkills?.success == true) {
+                _success.value = true
+            } else {
+                _success.value = false
+                if (response.data?.createSkills?.errors?.isNotEmpty() == true) {
+                    _toastMsg.value = response.data?.createSkills?.errors?.component1()
+                }
+            }
+        } catch (e: ApolloException) {
+            _success.value = false
+            _toastMsg.value = e.message.toString()
+        }
     }
 
     suspend fun createLoker(
@@ -161,12 +260,91 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
-    fun getJobByCompany(email: String) {
-
+    suspend fun createPengalaman(
+        nama_pekerjaan: String,
+        tgl_mulai: String,
+        tgl_selesai: String,
+        tmpt_bekerja: String,
+        pkrjn_profesional: Boolean,
+        user_iduser: Int
+    ) {
+        val namaPekerjaan = Optional.present(nama_pekerjaan)
+        val tglMulai = Optional.present(tgl_mulai)
+        val tglSelesai = Optional.present(tgl_selesai)
+        val tmptBekerja = Optional.present(tmpt_bekerja)
+        val pkrjaanProfesional = Optional.present(pkrjn_profesional)
+        val idUser = Optional.present(user_iduser)
+        try {
+            val response = apolloClient.mutation(CreatePengalamanMutation(namaPekerjaan, tglMulai, tglSelesai, tmptBekerja, pkrjaanProfesional, idUser)).execute()
+            if (response.data?.createPengalaman?.success == true) {
+                _success.value = true
+            } else {
+                _success.value = false
+                if (response.data?.createPengalaman?.errors?.isNotEmpty() == true) {
+                    _toastMsg.value = response.data?.createPengalaman?.errors?.component1()
+                }
+                _toastMsg.value = "gagal"
+            }
+        } catch (e: ApolloException) {
+            _success.value = false
+            _toastMsg.value = e.message.toString()
+        }
     }
 
-    fun getProfileAccount(email: String) {
+    suspend fun createEdukasi(
+        user_iduser: Int,
+        nama_institusi: String,
+        deskripsi: String,
+        jenjang: String,
+        tgl_awal: String,
+        tgl_akhir: String
+    ) {
+        val idUser = Optional.present(user_iduser)
+        val nama = Optional.present(nama_institusi)
+        val desc = Optional.present(deskripsi)
+        val jenjang = Optional.present(jenjang)
+        val tglAwal = Optional.present(tgl_awal)
+        val tglAkhir = Optional.present(tgl_akhir)
 
+        try {
+            val response = apolloClient.mutation(CreateEdukasiMutation(idUser, nama, desc, jenjang, tglAwal, tglAkhir)).execute()
+            if (response.data?.createEdukasi?.success == true) {
+                _success.value = true
+            } else {
+                if (response.errors?.isNotEmpty() == true) {
+                    _toastMsg.value = response.errors?.component1()?.message
+                } else {
+                    _toastMsg.value = response.data?.createEdukasi?.errors?.component1()
+                }
+            }
+        } catch (e: ApolloException) {
+            _success.value = false
+            _toastMsg.value = e.message.toString()
+        }
+    }
+
+    suspend fun updateUser(
+        idUser: Int?,
+        pengalaman: Int?,
+        pengalamanPro: Int?
+    ) {
+        val idUser = Optional.present(idUser)
+        val pengalaman = Optional.present(pengalaman)
+        val pengalamanPro = Optional.present(pengalamanPro)
+        val response = apolloClient.mutation(UpdateUserMutation(idUser, pengalaman, pengalamanPro)).execute()
+        try {
+            if (response.data?.updateUser?.success == true)  {
+                _success.value = true
+            } else {
+                _success.value = false
+                if (response.data?.updateUser?.errors?.isNotEmpty() == true) {
+                    _toastMsg.value = response.data?.updateUser?.errors?.component1()
+                }
+            }
+        } catch (e: ApolloException) {
+            _toastMsg.value = e.message.toString()
+            _success.value = false
+        }
     }
 
     fun saveProfile(

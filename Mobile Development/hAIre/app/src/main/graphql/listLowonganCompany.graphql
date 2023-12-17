@@ -3,9 +3,11 @@ query listLowonganCompany($company_id: Int) {
         success
         errors
         lowongan {
+            id
+            nama
+            deskripsi
             company_id
             url_photo
-
         }
     }
 }

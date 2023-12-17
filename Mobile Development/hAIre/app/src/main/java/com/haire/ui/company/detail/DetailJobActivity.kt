@@ -17,6 +17,10 @@ class DetailJobActivity : AppCompatActivity() {
 
     }
 
+    companion object {
+        const val EXTRA_ID = "extra_id"
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

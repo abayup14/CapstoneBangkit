@@ -1,0 +1,9 @@
+mutation createSkills($nama: String) {
+    createSkills(nama: $nama) {
+        success
+        errors
+        skills {
+            id
+        }
+    }
+}

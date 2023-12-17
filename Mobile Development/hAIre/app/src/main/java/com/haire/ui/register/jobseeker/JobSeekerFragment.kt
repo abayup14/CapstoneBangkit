@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,7 +14,6 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.haire.R
 import com.haire.ViewModelFactory
-import com.haire.data.User
 import com.haire.databinding.FragmentJobSeekerBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
@@ -92,7 +90,16 @@ class JobSeekerFragment : Fragment() {
                 if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || phone.isEmpty() || homelessIsChecked == -1 || disabledIsChecked == -1) {
                     showText(requireContext(), getString(R.string.empty_field))
                 } else {
-                    viewModel.registerAccount(name, email, pass, phone, "2002-1-19", "08741256486")
+                    viewModel.registerAccount(
+                        name,
+                        email,
+                        pass,
+                        phone,
+                        "2002-1-19",
+                        "08741256486",
+                        disabled,
+                        homeless
+                    )
                 }
             }
         }

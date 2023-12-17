@@ -1,0 +1,13 @@
+query profileCompany($id: Int) {
+    profileCompany(id: $id) {
+        errors
+        success
+        company {
+            id
+            deskripsi
+            nama
+            url_photo
+            alamat
+        }
+    }
+}

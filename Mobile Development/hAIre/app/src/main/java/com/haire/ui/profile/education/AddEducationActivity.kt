@@ -1,45 +1,101 @@
 package com.haire.ui.profile.education
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.haire.R
+import com.haire.ViewModelFactory
+import com.haire.databinding.ActivityAddEducationBinding
+import com.haire.ui.profile.ProfileViewModel
+import com.haire.util.DatePickerFragment
+import com.haire.util.showText
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
-class AddEducationActivity : AppCompatActivity() {
+class AddEducationActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener {
 
-    private lateinit var editTextDegree: EditText
     private lateinit var editTextSchoolName: EditText
     private lateinit var editTextFieldOfStudy: EditText
     private lateinit var tvEducationStartDate: TextView
     private lateinit var tvEducationEndDate: TextView
     private lateinit var btnAddEducation: Button
+    private lateinit var binding: ActivityAddEducationBinding
+    private val viewModel by viewModels<ProfileViewModel> { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_education)
+        binding = ActivityAddEducationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        editTextDegree = findViewById(R.id.editTextDegree)
         editTextSchoolName = findViewById(R.id.editTextSchoolName)
         editTextFieldOfStudy = findViewById(R.id.editTextFieldOfStudy)
         tvEducationStartDate = findViewById(R.id.tv_start_date)
         tvEducationEndDate = findViewById(R.id.tv_end_date)
         btnAddEducation = findViewById(R.id.btnAddEducation)
 
-        btnAddEducation.setOnClickListener {
-            val degree = editTextDegree.text.toString().trim()
-            val schoolName = editTextSchoolName.text.toString().trim()
-            val fieldOfStudy = editTextFieldOfStudy.text.toString().trim()
+        binding.btnStartDate.setOnClickListener {
+            showDatePicker("dateStart")
+        }
+        binding.btnEndDate.setOnClickListener {
+            showDatePicker("dateEnd")
+        }
 
-            if (degree.isNotEmpty() && schoolName.isNotEmpty() && fieldOfStudy.isNotEmpty()) {
-                // Add logic to submit the education to LinkedIn or perform other actions
-                Toast.makeText(this, "Education added: $degree at $schoolName", Toast.LENGTH_SHORT).show()
-                finish() // Close the activity after adding the education
-            } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+        viewModel.toastMsg.observe(this) {
+            showText(this, it)
+        }
+
+        viewModel.success.observe(this) {
+            if (it) {
+                finish()
             }
         }
+
+        btnAddEducation.setOnClickListener {
+            val schoolName = editTextSchoolName.text.toString().trim()
+            val fieldOfStudy = editTextFieldOfStudy.text.toString().trim()
+            var selectedItem = binding.spinner.selectedItem.toString()
+            val tglAwal = tvEducationStartDate.text.toString()
+            val tglAkhir = tvEducationEndDate.text.toString()
+
+            if (schoolName.isNotEmpty() && fieldOfStudy.isNotEmpty() && tglAwal.isNotEmpty() && tglAkhir.isNotEmpty()) {
+                if (selectedItem == "HighSchool Or Below") {
+                    selectedItem = "HighSchoolOrBelow"
+//                    'Master','Undergraduate','PhD','Other','HighSchoolOrBelow'
+                }
+                viewModel.getUser().observe(this) {
+                    viewModel.createEdukasi(
+                        it.id,
+                        schoolName,
+                        fieldOfStudy,
+                        selectedItem,
+                        tglAwal,
+                        tglAkhir
+                    )
+                }
+            } else {
+                showText(this, "Please fill in all fields")
+            }
+        }
+    }
+
+    private fun showDatePicker(tag: String?) {
+        val dialogFragment = DatePickerFragment()
+        dialogFragment.show(supportFragmentManager, tag)
+    }
+
+    override fun onDialogDateSet(tag: String?, year: Int, month: Int, dayOfMonth: Int) {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, dayOfMonth)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        when (tag) {
+            "dateStart" -> tvEducationStartDate.text = dateFormat.format(calendar.time)
+            "dateEnd" -> tvEducationEndDate.text = dateFormat.format(calendar.time)
+        }
+
     }
 }

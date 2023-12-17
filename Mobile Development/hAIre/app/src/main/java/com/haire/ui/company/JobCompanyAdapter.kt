@@ -1,28 +1,26 @@
-package com.haire.ui.openjobs
+package com.haire.ui.company
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.haire.ListLowongansQuery
-import com.haire.data.Jobs
+import com.haire.ListLowonganCompanyQuery
 import com.haire.databinding.ItemJobsBinding
 import java.util.Locale
 
-class JobAdapter(
-    private var listJobs: List<ListLowongansQuery.Lowongan?>,
+class JobCompanyAdapter(
+    private var listJobs: List<ListLowonganCompanyQuery.Lowongan?>,
     private val onItemClick: (Int) -> Unit
 ) :
-    RecyclerView.Adapter<JobAdapter.JobViewHolder>(), Filterable {
-    private var filteredList: List<ListLowongansQuery.Lowongan?> = listJobs
+    RecyclerView.Adapter<JobCompanyAdapter.JobViewHolder>(), Filterable {
+    private var filteredList: List<ListLowonganCompanyQuery.Lowongan?> = listJobs
 
     inner class JobViewHolder(private var binding: ItemJobsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobs: ListLowongansQuery.Lowongan) {
+        fun bind(jobs: ListLowonganCompanyQuery.Lowongan) {
             binding.apply {
                 Glide.with(root.context)
                     .load("")
@@ -50,7 +48,7 @@ class JobAdapter(
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
                 val query = charSequence.toString().toLowerCase(Locale.getDefault())
-                val filteredList = ArrayList<ListLowongansQuery.Lowongan>()
+                val filteredList = ArrayList<ListLowonganCompanyQuery.Lowongan>()
                 for (item in listJobs) {
                     if (item?.nama?.toLowerCase(Locale.getDefault())?.contains(query) == true) {
                         filteredList.add(item)
@@ -63,7 +61,7 @@ class JobAdapter(
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-                filteredList = results.values as List<ListLowongansQuery.Lowongan>
+                filteredList = results.values as List<ListLowonganCompanyQuery.Lowongan>
                 notifyDataSetChanged()
             }
         }
