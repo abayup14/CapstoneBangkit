@@ -35,8 +35,8 @@ class OpenJobsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getListLoker()
-
         viewModel.loker.observe(viewLifecycleOwner) {
+            viewModel.getProfileComapny(it[0]?.company_id!!)
             viewModel.profileCompany.observe(viewLifecycleOwner) { company ->
                 setData(it, company)
             }

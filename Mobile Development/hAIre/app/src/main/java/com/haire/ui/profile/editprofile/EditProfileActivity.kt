@@ -29,13 +29,11 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.btnUpload.setOnClickListener {
             val description = binding.edtDescStory.text.toString()
-            val age = binding.edtAge.text.toString()
-            if (description.isEmpty() || age.isEmpty()) {
+            if (description.isEmpty()) {
                 showText(this, "Description and age are still empty")
             } else {
-                val ageInt = age.toInt()
                 viewModel.getUser().observe(this) {
-                    saveProfile(it.email, description, ageInt)
+                    saveProfile(it.email, description)
                 }
             }
         }
@@ -63,7 +61,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProfile(email: String, description: String, age: Int) {
+    private fun saveProfile(email: String, description: String) {
         currentImageUri?.let { uri ->
             viewModel.saveProfile(
                 uri,
@@ -71,7 +69,6 @@ class EditProfileActivity : AppCompatActivity() {
 //                    viewModel.updateDatabase(
 //                        email,
 //                        description,
-//                        age,
 //                        imageUrl,
 //                        onSuccess = {
 //                            finish()

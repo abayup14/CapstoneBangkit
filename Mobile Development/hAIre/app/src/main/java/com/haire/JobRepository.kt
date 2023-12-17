@@ -56,9 +56,6 @@ class JobRepository(private val pref: UserPreference) {
     private val _listSkill = MutableLiveData<List<ListSkillsQuery.Skill?>>()
     val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = _listSkill
 
-    private val _successAdd = MutableLiveData<Boolean>()
-    val successAdd: LiveData<Boolean> = _successAdd
-
     private val apolloClient = ApolloClient.Builder()
         .serverUrl("https://graphqlapi-vdnbldljhq-et.a.run.app/graphql")
         .build()
@@ -235,7 +232,7 @@ class JobRepository(private val pref: UserPreference) {
             if (response.hasErrors()) {
                 _success.value = false
                 _toastMsg.value = response.errors?.component1()?.message
-            } else {
+            } else if (response.data?.createUserHasSkills?.errors?.isNotEmpty() == true) {
                 _success.value = false
                 _toastMsg.value = response.data?.createUserHasSkills?.errors?.component1()
             }
@@ -362,7 +359,7 @@ class JobRepository(private val pref: UserPreference) {
                 }
             }
         } catch (e: ApolloException) {
-            _successAdd.value = false
+            _success.value = false
             _toastMsg.value = e.message.toString()
         }
     }
@@ -396,7 +393,7 @@ class JobRepository(private val pref: UserPreference) {
                 _success.value = false
                 if (response.errors?.isNotEmpty() == true) {
                     _toastMsg.value = response.errors?.component1()?.message
-                } else {
+                } else if (response.data?.createLowongan?.errors?.isNotEmpty() == true) {
                     _toastMsg.value = response.data?.createLowongan?.errors?.component1()
                 }
             }
@@ -414,7 +411,7 @@ class JobRepository(private val pref: UserPreference) {
             if (response.hasErrors()) {
                 _success.value = false
                 _toastMsg.value = response.errors?.component1()?.message
-            } else {
+            } else if (response.data?.createSkillRequired?.errors?.isNotEmpty() == true) {
                 _success.value = false
                 _toastMsg.value = response.data?.createSkillRequired?.errors?.component1()
             }

@@ -15,6 +15,7 @@ class DetailJobActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        binding.btnBack.setOnClickListener { finish() }
     }
 
     companion object {

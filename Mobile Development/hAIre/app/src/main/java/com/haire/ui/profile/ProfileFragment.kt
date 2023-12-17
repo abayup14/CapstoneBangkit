@@ -13,8 +13,10 @@ import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.haire.ListEdukasiQuery
 import com.haire.ListPengalamanQuery
+import com.haire.ListSkillsQuery
 import com.haire.ListUserSkillsQuery
 import com.haire.ViewModelFactory
+import com.haire.data.Skill
 import com.haire.databinding.FragmentProfileBinding
 import com.haire.ui.openjobs.JobAdapter
 import com.haire.ui.profile.education.AddEducationActivity
@@ -58,6 +60,7 @@ class ProfileFragment : Fragment() {
                 }
                 viewModel.getPengalaman(it.id)
                 viewModel.getEdukasi(it.id)
+                viewModel.getSkills(it.id)
             }
         }
 
@@ -70,7 +73,7 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.skill.observe(viewLifecycleOwner) {
-
+            setSkillData(it)
         }
 
         binding.btnSetting.setOnClickListener {
@@ -107,7 +110,7 @@ class ProfileFragment : Fragment() {
             // Atur parameter layout untuk Chip
             val layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                50
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
             layoutParams.marginEnd = 8
             newChip.layoutParams = layoutParams

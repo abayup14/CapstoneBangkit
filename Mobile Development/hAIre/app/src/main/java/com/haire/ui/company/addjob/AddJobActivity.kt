@@ -2,9 +2,11 @@ package com.haire.ui.company.addjob
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.chip.Chip
 import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.data.Skill
@@ -49,6 +51,7 @@ class AddJobActivity : AppCompatActivity(), DatePickerFragment.DialogDateListene
 
         binding.btnAddSkill.setOnClickListener {
             startActivity(Intent(this@AddJobActivity, AddSkillRequiredActivity::class.java))
+            finish()
         }
 
         binding.btnStartDate.setOnClickListener {
@@ -57,6 +60,8 @@ class AddJobActivity : AppCompatActivity(), DatePickerFragment.DialogDateListene
         binding.btnCloseDate.setOnClickListener {
             showDatePicker("dateEnd")
         }
+
+        setSkillData(Global.listRequired)
 
         binding.btnAdd.setOnClickListener {
             val pekerjaan = binding.edtJob.text.toString()
@@ -71,7 +76,13 @@ class AddJobActivity : AppCompatActivity(), DatePickerFragment.DialogDateListene
             } else {
                 val butuhInt = jmlButuh.toInt()
                 viewModel.getSession().observe(this) {
-                    viewModel.createLoker(name = pekerjaan, desc = deskripsi, butuh = butuhInt, idCompany = it.id, photoUrl = "")
+                    viewModel.createLoker(
+                        name = pekerjaan,
+                        desc = deskripsi,
+                        butuh = butuhInt,
+                        idCompany = it.id,
+                        photoUrl = ""
+                    )
                 }
             }
         }
@@ -85,6 +96,23 @@ class AddJobActivity : AppCompatActivity(), DatePickerFragment.DialogDateListene
                 finish()
             }
             show()
+        }
+    }
+
+    private fun setSkillData(listSkill: List<Skill>) {
+        for (skill in listSkill) {
+            val newChip = Chip(this)
+            newChip.text = skill.nama
+
+            // Atur parameter layout untuk Chip
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.marginEnd = 8
+            newChip.layoutParams = layoutParams
+
+            binding.skills.addView(newChip)
         }
     }
 
