@@ -62,7 +62,7 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
 
     fun listSkillSearch(search: String) {
         viewModelScope.launch {
-
+            repository.listSkillSearch(search)
         }
     }
 

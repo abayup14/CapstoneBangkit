@@ -1,0 +1,6 @@
+mutation createSkillRequired($skills_id: Int, $lowongan_id: Int) {
+    createSkillRequired(skills_id: $skills_id, lowongan_id: $lowongan_id) {
+        errors
+        success
+    }
+}

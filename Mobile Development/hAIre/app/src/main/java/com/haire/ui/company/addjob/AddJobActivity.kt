@@ -1,26 +1,44 @@
 package com.haire.ui.company.addjob
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.haire.R
 import com.haire.ViewModelFactory
+import com.haire.data.Skill
 import com.haire.databinding.ActivityAddJobBinding
 import com.haire.ui.company.CompanyViewModel
+import com.haire.util.DatePickerFragment
 import com.haire.util.showText
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
-class AddJobActivity : AppCompatActivity() {
+class AddJobActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener {
     private lateinit var binding: ActivityAddJobBinding
     private val viewModel by viewModels<CompanyViewModel> { ViewModelFactory(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        val data = intent.getParcelableExtra<Skill>(EXTRA_SKILL)
+        if (data != null) {
+            Global.listRequired.add(data)
+        }
+
         viewModel.success.observe(this) {
             if (it) {
+                viewModel.id.observe(this) { idLowongan ->
+                    for (a in Global.listRequired) {
+                        viewModel.createSkillRequired(idLowongan, a.id)
+                    }
+                    Global.listRequired = arrayListOf()
+                }
                 showAlert()
             }
         }
@@ -29,10 +47,24 @@ class AddJobActivity : AppCompatActivity() {
             showText(this, it)
         }
 
+        binding.btnAddSkill.setOnClickListener {
+            startActivity(Intent(this@AddJobActivity, AddSkillRequiredActivity::class.java))
+        }
+
+        binding.btnStartDate.setOnClickListener {
+            showDatePicker("dateStart")
+        }
+        binding.btnCloseDate.setOnClickListener {
+            showDatePicker("dateEnd")
+        }
+
         binding.btnAdd.setOnClickListener {
             val pekerjaan = binding.edtJob.text.toString()
             val deskripsi = binding.edtDeskripsi.text.toString()
             val jmlButuh = binding.edtButuh.text.toString()
+            val tglAwal = binding.tvStartDate.text.toString()
+            val tglAkhir = binding.tvCloseDate.text.toString()
+
 
             if (pekerjaan.isEmpty() || deskripsi.isEmpty() || jmlButuh.isEmpty()) {
                 showText(this, "All field must be filled")
@@ -54,5 +86,24 @@ class AddJobActivity : AppCompatActivity() {
             }
             show()
         }
+    }
+
+    private fun showDatePicker(tag: String?) {
+        val dialogFragment = DatePickerFragment()
+        dialogFragment.show(supportFragmentManager, tag)
+    }
+
+    override fun onDialogDateSet(tag: String?, year: Int, month: Int, dayOfMonth: Int) {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, dayOfMonth)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        when (tag) {
+            "dateStart" -> binding.tvStartDate.text = dateFormat.format(calendar.time)
+            "dateEnd" -> binding.tvCloseDate.text = dateFormat.format(calendar.time)
+        }
+    }
+
+    companion object {
+        const val EXTRA_SKILL = "extra_skill"
     }
 }

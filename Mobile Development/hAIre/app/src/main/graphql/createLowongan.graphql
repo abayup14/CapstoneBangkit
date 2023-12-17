@@ -2,5 +2,8 @@ mutation createLowongan($nama: String, $deskripsi: String, $jmlh_butuh: Int, $co
     createLowongan(nama: $nama, deskripsi: $deskripsi, jmlh_butuh: $jmlh_butuh, company_id: $company_id, url_photo: $url_photo) {
         success
         errors
+        lowongan {
+            id
+        }
     }
 }

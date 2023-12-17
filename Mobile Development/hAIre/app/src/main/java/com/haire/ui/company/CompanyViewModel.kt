@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.haire.JobRepository
 import com.haire.ListLowonganCompanyQuery
+import com.haire.ListSkillsQuery
 import com.haire.data.Company
 import com.haire.data.InitialDummyValue
 import com.haire.data.Jobs
@@ -18,6 +19,8 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
     val success: LiveData<Boolean> = repository.success
     val toastMsg: LiveData<String> = repository.toastMsg
     val lokerCompany: LiveData<List<ListLowonganCompanyQuery.Lowongan?>> = repository.lokerCompany
+    val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = repository.listSkill
+    val id: LiveData<Int> = repository.id
 
     fun getSession(): LiveData<UserModel> {
         return repository.getUser().asLiveData()
@@ -35,9 +38,27 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
+    fun createSkillRequired(idLowongan: Int, idSkill: Int) {
+        viewModelScope.launch {
+            repository.createSkillRequired(idLowongan, idSkill)
+        }
+    }
+
     fun getLokerCompany(idCompany: Int?) {
         viewModelScope.launch {
             repository.getLokerCompany(idCompany!!)
+        }
+    }
+
+    fun listSkills() {
+        viewModelScope.launch {
+            repository.listSkill()
+        }
+    }
+
+    fun checkSkill(nama: String) {
+        viewModelScope.launch{
+            repository.checkSkill(nama)
         }
     }
 

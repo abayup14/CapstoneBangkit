@@ -124,17 +124,17 @@
             android:layout_marginEnd="8dp"
             tools:text="Java" />
 
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:text="Android" />
+<!--        <com.google.android.material.chip.Chip-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:text="Android" />-->
 
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:text="Kotlin" />
+<!--        <com.google.android.material.chip.Chip-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:text="Kotlin" />-->
 
     </LinearLayout>
 
@@ -142,20 +142,20 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Open Date"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/skills"
-        app:layout_constraintTop_toBottomOf="@+id/skills" />
+        app:layout_constraintStart_toStartOf="@+id/tv_start_date"
+        app:layout_constraintTop_toTopOf="@+id/btn_start_date" />
 
     <ImageButton
+        android:layout_marginTop="16dp"
         android:id="@+id/btn_start_date"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@android:drawable/ic_menu_my_calendar"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintStart_toStartOf="@+id/skills"
+        app:layout_constraintTop_toBottomOf="@+id/skills" />
 
     <TextView
         android:id="@+id/tv_start_date"
@@ -164,28 +164,29 @@
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/btn_start_date"
         app:layout_constraintStart_toEndOf="@+id/btn_start_date"
-        app:layout_constraintTop_toTopOf="@+id/btn_start_date"
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
         tools:text="15/4/2023" />
 
     <TextView
+        android:layout_marginStart="16dp"
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
         android:text="Closed Date"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView13"
-        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintStart_toEndOf="@+id/btn_close_date"
         app:layout_constraintTop_toTopOf="@+id/textView13" />
 
     <ImageButton
         android:id="@+id/btn_close_date"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="60dp"
         android:src="@android:drawable/ic_menu_my_calendar"
-        app:layout_constraintStart_toStartOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="@+id/textView14" />
 
     <TextView
         android:id="@+id/tv_close_date"
@@ -194,7 +195,7 @@
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/btn_close_date"
         app:layout_constraintStart_toEndOf="@+id/btn_close_date"
-        app:layout_constraintTop_toTopOf="@+id/btn_close_date"
+        app:layout_constraintTop_toBottomOf="@+id/textView14"
         tools:text="15/12/2023" />
 
     <Button

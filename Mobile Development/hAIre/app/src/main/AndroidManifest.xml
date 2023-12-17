@@ -15,6 +15,9 @@
         android:theme="@style/Theme.HAIre"
         tools:targetApi="31">
         <activity
+            android:name=".ui.company.addjob.AddSkillRequiredActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.company.detail.DetailJobActivity"
             android:exported="false" />
         <activity

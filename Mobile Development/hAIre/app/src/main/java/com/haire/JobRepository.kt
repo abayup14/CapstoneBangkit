@@ -56,6 +56,9 @@ class JobRepository(private val pref: UserPreference) {
     private val _listSkill = MutableLiveData<List<ListSkillsQuery.Skill?>>()
     val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = _listSkill
 
+    private val _successAdd = MutableLiveData<Boolean>()
+    val successAdd: LiveData<Boolean> = _successAdd
+
     private val apolloClient = ApolloClient.Builder()
         .serverUrl("https://graphqlapi-vdnbldljhq-et.a.run.app/graphql")
         .build()
@@ -216,6 +219,7 @@ class JobRepository(private val pref: UserPreference) {
         val response = apolloClient.query(CheckSkillQuery(namaSkill)).execute()
         if (response.data?.checkSkill?.success == true) {
             _id.value = response.data?.checkSkill?.skill?.id ?: 0
+            _success.value = true
         } else if (response.hasErrors()) {
             _toastMsg.value = response.errors?.component1()?.message
         } else {
@@ -228,9 +232,7 @@ class JobRepository(private val pref: UserPreference) {
         val skillId = Optional.present(skills_id)
         try {
             val response = apolloClient.mutation(CreateUserHasSkillsMutation(userId, skillId)).execute()
-            if (response.data?.createUserHasSkills?.success == true) {
-                _success.value = true
-            } else if (response.hasErrors()) {
+            if (response.hasErrors()) {
                 _success.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
@@ -351,6 +353,7 @@ class JobRepository(private val pref: UserPreference) {
         try {
             val response = apolloClient.mutation(CreateSkillsMutation(name)).execute()
             if (response.data?.createSkills?.success == true) {
+                _id.value = response.data?.createSkills?.skill?.id ?: 0
                 _success.value = true
             } else {
                 _success.value = false
@@ -359,7 +362,7 @@ class JobRepository(private val pref: UserPreference) {
                 }
             }
         } catch (e: ApolloException) {
-            _success.value = false
+            _successAdd.value = false
             _toastMsg.value = e.message.toString()
         }
     }
@@ -388,6 +391,7 @@ class JobRepository(private val pref: UserPreference) {
             ).execute()
             if (response.data?.createLowongan?.success == true) {
                 _success.value = true
+                _id.value = response.data?.createLowongan?.lowongan?.id ?: 0
             } else {
                 _success.value = false
                 if (response.errors?.isNotEmpty() == true) {
@@ -398,6 +402,23 @@ class JobRepository(private val pref: UserPreference) {
             }
         } catch (e: ApolloException) {
             _success.value = false
+            _toastMsg.value = e.message.toString()
+        }
+    }
+
+    suspend fun createSkillRequired(idLowongan: Int, idSkill: Int) {
+        val lowonganId = Optional.present(idLowongan)
+        val skillId = Optional.present(idSkill)
+        try {
+            val response = apolloClient.mutation(CreateSkillRequiredMutation(skillId, lowonganId)).execute()
+            if (response.hasErrors()) {
+                _success.value = false
+                _toastMsg.value = response.errors?.component1()?.message
+            } else {
+                _success.value = false
+                _toastMsg.value = response.data?.createSkillRequired?.errors?.component1()
+            }
+        } catch (e: ApolloException) {
             _toastMsg.value = e.message.toString()
         }
     }
