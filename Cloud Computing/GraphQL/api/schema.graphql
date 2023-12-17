@@ -31,6 +31,7 @@ type Query {
   listUserApplyLowongan(lowongan_id: Int): UserResponse
   listSkillsRequired(lowongan_id: Int): SkillsResponses
   checkSkill(nama_skill: String): SkillsResponse
+  getLowongan(idlowongan: Int): LowonganResponse
 }
 
 type Mutation {

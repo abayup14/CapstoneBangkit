@@ -111,6 +111,21 @@ def list_lowongans_resolver(obj, info):
     return payload
 
 @convert_kwargs_to_snake_case
+def get_lowongan_resolver(obj, info, idlowongan):
+    try:
+        lowongan = Lowongan.query.filter(Lowongan.id == idlowongan).first()
+        payload = {
+            "success": True,
+            "lowongan": lowongan.to_dict()
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
 def list_skills_resolver(obj, info):
     try:
         skills = [skill.to_dict() for skill in Skills.query.all()]
