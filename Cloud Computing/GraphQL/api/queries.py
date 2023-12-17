@@ -492,3 +492,18 @@ def check_skill_resolver(obj, info, nama_skill):
             "errors": [f"Skill not found"]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def list_skill_search_resolver(obj, info, search):
+    try:
+        skills = [skill.to_dict() for skill in Skills.query.filter(Skills.nama.like(f'%{search}%')).all()]
+        payload = {
+            "success": True,
+            "skills": skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
