@@ -45,6 +45,9 @@ class JobRepository(private val pref: UserPreference) {
     private val _profileData = MutableLiveData<ProfileUserQuery.User>()
     val profileData: LiveData<ProfileUserQuery.User> = _profileData
 
+    private val _profileCompanyData = MutableLiveData<ProfileCompanyQuery.Company>()
+    val profileCompanyData: LiveData<ProfileCompanyQuery.Company> = _profileCompanyData
+
     private val apolloClient = ApolloClient.Builder()
         .serverUrl("https://graphqlapi-vdnbldljhq-et.a.run.app/graphql")
         .build()
@@ -165,6 +168,16 @@ class JobRepository(private val pref: UserPreference) {
             _lokerCompany.value = response.data?.listLowonganCompany?.lowongan ?: emptyList()
         } else {
             _toastMsg.value = response.data?.listLowonganCompany?.errors?.component1()
+        }
+    }
+
+    suspend fun getProfileDataCompany(idUser: Int?) {
+        val userId = Optional.present(idUser)
+        val response = apolloClient.query(ProfileCompanyQuery(userId)).execute()
+        if (response.data?.profileCompany?.success == true) {
+            _profileCompanyData.value = response.data?.profileCompany?.company!!
+        } else {
+            _toastMsg.value = response.data?.profileCompany?.errors?.component1()
         }
     }
 

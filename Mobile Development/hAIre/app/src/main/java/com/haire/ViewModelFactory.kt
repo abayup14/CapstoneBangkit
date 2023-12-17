@@ -10,6 +10,7 @@ import com.haire.ui.home.HomeViewModel
 import com.haire.ui.login.LoginViewModel
 import com.haire.ui.openjobs.OpenJobsViewModel
 import com.haire.ui.profile.ProfileViewModel
+import com.haire.ui.profile.company.CompanyProfileViewModel
 import com.haire.ui.register.RegisterViewModel
 import com.haire.ui.status.StatusViewModel
 
@@ -49,6 +50,10 @@ class ViewModelFactory(private val context: Context) :
 
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(Injection.provideRepository(context)) as T
+            }
+
+            modelClass.isAssignableFrom(CompanyProfileViewModel::class.java) -> {
+                CompanyProfileViewModel(Injection.provideRepository(context)) as T
             }
 
             modelClass.isAssignableFrom(CompanyViewModel::class.java) -> {

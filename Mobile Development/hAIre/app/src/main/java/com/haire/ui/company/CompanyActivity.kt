@@ -20,6 +20,7 @@ import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.openjobs.JobAdapter
 import com.haire.ui.openjobs.OpenJobsViewModel
+import com.haire.ui.profile.company.CompanyProfileActivity
 import com.haire.ui.welcome.WelcomeActivity
 import com.haire.util.showText
 
@@ -35,6 +36,10 @@ class CompanyActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        binding.btnProfile.setOnClickListener {
+            startActivity(Intent(this, CompanyProfileActivity::class.java))
+            finish()
+        }
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
             startActivity(Intent(this@CompanyActivity, WelcomeActivity::class.java))
