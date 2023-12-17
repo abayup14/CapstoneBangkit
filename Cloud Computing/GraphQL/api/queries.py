@@ -111,6 +111,21 @@ def list_lowongans_resolver(obj, info):
     return payload
 
 @convert_kwargs_to_snake_case
+def get_lowongan_resolver(obj, info, idlowongan):
+    try:
+        lowongan = Lowongan.query.filter(Lowongan.id == idlowongan).first()
+        payload = {
+            "success": True,
+            "lowongan": lowongan.to_dict()
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
 def list_skills_resolver(obj, info):
     try:
         skills = [skill.to_dict() for skill in Skills.query.all()]
@@ -475,5 +490,20 @@ def check_skill_resolver(obj, info, nama_skill):
         payload = {
             "success": False,
             "errors": [f"Skill not found"]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def list_skill_search_resolver(obj, info, search):
+    try:
+        skills = [skill.to_dict() for skill in Skills.query.filter(Skills.nama.like(f'%{search}%')).all()]
+        payload = {
+            "success": True,
+            "skills": skills
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
         }
     return payload
