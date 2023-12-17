@@ -1,0 +1,6 @@
+mutation createUserHasSkills($user_iduser: Int, $skills_id: Int) {
+    createUserHasSkills(user_iduser: $user_iduser, skills_id: $skills_id) {
+        success
+        errors
+    }
+}

@@ -1,0 +1,12 @@
+query getLowongan($id: Int) {
+    getLowongan(idlowongan: $id) {
+        success
+        errors
+        lowongan {
+            nama
+            jmlh_butuh
+            deskripsi
+            company_id
+        }
+    }
+}

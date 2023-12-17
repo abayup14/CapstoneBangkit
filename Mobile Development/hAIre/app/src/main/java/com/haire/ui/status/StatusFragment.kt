@@ -42,7 +42,7 @@ class StatusFragment : Fragment() {
         binding.apply {
             adapter = StatusAdapter(listStatus) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
-                detailIntent.putExtra(DetailActivity.EXTRA_JOBS, it)
+                detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it.jmlButuh)
                 startActivity(detailIntent)
             }
             rvStatus.layoutManager = LinearLayoutManager(context)

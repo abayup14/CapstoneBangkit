@@ -1,0 +1,10 @@
+query checkSkill($nama: String) {
+    checkSkill(nama_skill: $nama) {
+        errors
+        success
+        skill {
+            id
+            nama
+        }
+    }
+}

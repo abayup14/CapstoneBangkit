@@ -1,0 +1,13 @@
+query listLowonganUserApply($id: Int) {
+    listLowonganUserApply(user_iduser: $id) {
+        errors
+        success
+        lowongan {
+            id
+            nama
+            company_id
+            deskripsi
+            jmlh_butuh
+        }
+    }
+}

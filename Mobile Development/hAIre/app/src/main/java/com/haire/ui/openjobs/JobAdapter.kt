@@ -9,12 +9,14 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.haire.ListLowongansQuery
+import com.haire.ProfileCompanyQuery
 import com.haire.data.Jobs
 import com.haire.databinding.ItemJobsBinding
 import java.util.Locale
 
 class JobAdapter(
     private var listJobs: List<ListLowongansQuery.Lowongan?>,
+    private var companyData: ProfileCompanyQuery.Company,
     private val onItemClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<JobAdapter.JobViewHolder>(), Filterable {
@@ -22,13 +24,14 @@ class JobAdapter(
 
     inner class JobViewHolder(private var binding: ItemJobsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobs: ListLowongansQuery.Lowongan) {
+        fun bind(jobs: ListLowongansQuery.Lowongan, company: ProfileCompanyQuery.Company) {
+
             binding.apply {
                 Glide.with(root.context)
-                    .load("")
+                    .load(company.url_photo)
                     .into(ivJobs)
                 tvTitle.text = jobs.nama
-                tvAddres.text = jobs.deskripsi
+                tvAddres.text = company.alamat
             }
             itemView.setOnClickListener {
                 onItemClick(jobs.id ?: 0)
@@ -43,7 +46,7 @@ class JobAdapter(
 
     override fun getItemCount(): Int = filteredList.size
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        holder.bind(filteredList[position]!!)
+        holder.bind(filteredList[position]!!, companyData)
     }
 
     override fun getFilter(): Filter {

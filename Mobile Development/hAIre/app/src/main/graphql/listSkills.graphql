@@ -1,0 +1,10 @@
+query listSkills {
+    listSkills {
+        success
+        errors
+        skills {
+            id
+            nama
+        }
+    }
+}

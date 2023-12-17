@@ -1,0 +1,10 @@
+query skillSearch($search: String) {
+    listSkillSearch(search: $search) {
+        errors
+        success
+        skills {
+            id
+            nama
+        }
+    }
+}

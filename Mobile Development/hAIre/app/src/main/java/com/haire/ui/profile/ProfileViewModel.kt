@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.haire.JobRepository
 import com.haire.ListEdukasiQuery
 import com.haire.ListPengalamanQuery
+import com.haire.ListSkillsQuery
 import com.haire.ListUserSkillsQuery
 import com.haire.ProfileUserQuery
 import com.haire.data.UserModel
@@ -20,6 +21,9 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
     val exp: LiveData<List<ListPengalamanQuery.Pengalaman?>> = repository.exp
     val edu: LiveData<List<ListEdukasiQuery.Edukasi?>> = repository.edu
     val skill: LiveData<List<ListUserSkillsQuery.Skill?>> = repository.skill
+    val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = repository.listSkill
+    val id: LiveData<Int> = repository.id
+
     fun getProfileUI(id: Int) {
         viewModelScope.launch {
             repository.getProfileData(id)
@@ -35,6 +39,36 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
     fun getSkills(id: Int) {
         viewModelScope.launch {
             repository.getSkills(id)
+        }
+    }
+
+    fun listSkills() {
+        viewModelScope.launch {
+            repository.listSkill()
+        }
+    }
+
+    fun createUserHasSkill(userId: Int, skillId: Int) {
+        viewModelScope.launch {
+            repository.createUserHasSkill(userId, skillId)
+        }
+    }
+
+    fun checkSkill(nama: String) {
+        viewModelScope.launch{
+            repository.checkSkill(nama)
+        }
+    }
+
+    fun listSkillSearch(search: String) {
+        viewModelScope.launch {
+
+        }
+    }
+
+    fun updateEdukasi(id: Int, edu: String) {
+        viewModelScope.launch {
+            repository.updateEdukasi(id, edu)
         }
     }
 

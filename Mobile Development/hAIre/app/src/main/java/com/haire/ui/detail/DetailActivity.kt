@@ -2,41 +2,49 @@ package com.haire.ui.detail
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.haire.GetLowonganQuery
+import com.haire.ProfileCompanyQuery
+import com.haire.ViewModelFactory
 import com.haire.data.Jobs
 import com.haire.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
+    private val viewModel by viewModels<DetailViewModel> { ViewModelFactory(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
         binding.btnBack.setOnClickListener { finish() }
-        setData()
+
+        val jobId = intent.getIntExtra(EXTRA_JOBS_ID, 0)
+        viewModel.getDetail(jobId)
+        viewModel.detailLowongan.observe(this) { lowongan ->
+            viewModel.getCompany(lowongan?.company_id!!)
+            viewModel.companyData.observe(this) {
+                setData(lowongan, it)
+            }
+        }
     }
 
-    private fun setData() {
-        val data = intent.getParcelableExtra<Jobs>(EXTRA_JOBS)
+    private fun setData(detail: GetLowonganQuery.Lowongan?, company: ProfileCompanyQuery.Company?) {
         binding.apply {
             Glide.with(this@DetailActivity)
-                .load(data?.company?.photoUrl)
+                .load(company?.url_photo)
                 .into(ivJobs)
-            tvPekerjaan.text = data?.pekerjaan.toString()
-            tvAlamat.text = data?.company?.address.toString()
+            tvPekerjaan.text = detail?.nama.toString()
+            tvAlamat.text = company?.alamat
             btnApply.setOnClickListener {
-                Toast.makeText(
-                    this@DetailActivity,
-                    "Berhasil daftar!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // apply
             }
         }
     }
 
     companion object {
-        const val EXTRA_JOBS = "extra_jobs"
+        const val EXTRA_JOBS_ID = "extra_jobs_id"
     }
 }

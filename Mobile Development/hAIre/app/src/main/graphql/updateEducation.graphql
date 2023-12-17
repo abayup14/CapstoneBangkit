@@ -1,0 +1,6 @@
+mutation updateEducation($id: Int, $edukasi: String) {
+    updateEducation(iduser: $id, edukasi: $edukasi) {
+        success
+        errors
+    }
+}

@@ -25,7 +25,7 @@ class ViewModelFactory(private val context: Context) :
             }
 
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                DetailViewModel() as T
+                DetailViewModel(Injection.provideRepository(context)) as T
             }
 
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {

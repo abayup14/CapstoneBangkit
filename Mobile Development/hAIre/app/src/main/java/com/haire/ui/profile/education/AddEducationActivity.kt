@@ -65,7 +65,6 @@ class AddEducationActivity : AppCompatActivity(), DatePickerFragment.DialogDateL
             if (schoolName.isNotEmpty() && fieldOfStudy.isNotEmpty() && tglAwal.isNotEmpty() && tglAkhir.isNotEmpty()) {
                 if (selectedItem == "HighSchool Or Below") {
                     selectedItem = "HighSchoolOrBelow"
-//                    'Master','Undergraduate','PhD','Other','HighSchoolOrBelow'
                 }
                 viewModel.getUser().observe(this) {
                     viewModel.createEdukasi(
@@ -76,6 +75,7 @@ class AddEducationActivity : AppCompatActivity(), DatePickerFragment.DialogDateL
                         tglAwal,
                         tglAkhir
                     )
+                    viewModel.updateEdukasi(it.id, selectedItem)
                 }
             } else {
                 showText(this, "Please fill in all fields")

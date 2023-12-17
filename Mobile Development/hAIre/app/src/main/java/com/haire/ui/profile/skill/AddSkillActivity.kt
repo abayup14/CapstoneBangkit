@@ -7,11 +7,17 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
 import com.haire.R
+import com.haire.ViewModelFactory
+import com.haire.ui.profile.ProfileViewModel
+import com.haire.util.showText
 
 class AddSkillActivity : AppCompatActivity() {
 
     private lateinit var btnAddSkill: Button
+    private val viewModel by viewModels<ProfileViewModel> { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,25 +27,42 @@ class AddSkillActivity : AppCompatActivity() {
 
         val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.edt_skill)
 
-        val skillSuggestions = arrayOf("Java", "Android", "Kotlin", "HTML", "MySQL", "Unity", "C#", "C++")
+        viewModel.listSkills()
+        viewModel.listSkill.observe(this) {
+            val skillSuggestions = arrayListOf<String>()
+            val skill = it
+            for (a in skill) {
+                skillSuggestions.add(a?.nama!!)
+            }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, skillSuggestions)
-        autoCompleteTextView.setAdapter(adapter)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, skillSuggestions)
+            autoCompleteTextView.setAdapter(adapter)
 
-        autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
-            val selectedSkill = adapter.getItem(position).toString()
-            // Lakukan sesuatu dengan skill yang dipilih, misalnya tambahkan ke daftar skill
-//            addSkillToLayout(selectedSkill)
-            autoCompleteTextView.setText(selectedSkill)
+            viewModel.toastMsg.observe(this) { msg ->
+                showText(this, msg)
+            }
+
+            autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+                val selectedSkill = adapter.getItem(position).toString()
+                autoCompleteTextView.setText(selectedSkill)
+            }
         }
 
         btnAddSkill.setOnClickListener {
             val skill = autoCompleteTextView.text.toString().trim()
 
             if (skill.isNotEmpty()) {
-                // Add logic to submit the skill to LinkedIn or perform other actions
-                Toast.makeText(this, "Skill added: $skill", Toast.LENGTH_SHORT).show()
-                finish() // Close the activity after adding the skill
+                viewModel.checkSkill(skill)
+                viewModel.getUser().observe(this) { user ->
+                    viewModel.id.observe(this) { id ->
+                        viewModel.success.observe(this) { success ->
+                            if (success) {
+                                viewModel.createUserHasSkill(user.id, id)
+                                finish() // Close the activity after adding the skill
+                            }
+                        }
+                    }
+                }
             } else {
                 Toast.makeText(this, "Please enter a skill", Toast.LENGTH_SHORT).show()
             }
