@@ -8,7 +8,7 @@ import com.haire.ListLowongansQuery
 import kotlinx.coroutines.launch
 
 class OpenJobsViewModel(private val repository: JobRepository) : ViewModel() {
-    val loker: LiveData<List<ListLowongansQuery.ListLowongan?>> = repository.loker
+    val loker: LiveData<List<ListLowongansQuery.Lowongan?>> = repository.loker
 
     fun getListLoker() {
         viewModelScope.launch {

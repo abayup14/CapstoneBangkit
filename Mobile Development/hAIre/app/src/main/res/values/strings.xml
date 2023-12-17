@@ -29,4 +29,17 @@
     <string name="save">Save</string>
     <string name="message_null_picture">Please pick a picture first.</string>
     <string name="add_loker_succes">Add jobs Success</string>
+
+    <string-array name="pengalaman">
+        <item>Pengalaman Non-Professional</item>
+        <item>Pengalaman Professional</item>
+    </string-array>
+
+    <string-array name="edukasi">
+        <item>HighSchool Or Below</item>
+        <item>Other</item>
+        <item>Undergraduate</item>
+        <item>Master</item>
+        <item>PhD</item>
+    </string-array>
 </resources>

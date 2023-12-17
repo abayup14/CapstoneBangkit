@@ -1,10 +1,14 @@
 query listLowongans {
-    listLowongans {
-        id
-        nama
-        url_photo
-        company_id
-        deskripsi
-        jmlh_butuh
+    listLowonganUserSearch(search: "") {
+        success
+        errors
+        lowongan {
+            id
+            nama
+            deskripsi
+            jmlh_butuh
+            company_id
+            url_photo
+        }
     }
 }

@@ -1,4 +1,4 @@
-mutation createUser($nama: String, $email: String, $password: String, $nomor: String, $tgl: String, $nik: String) {
+mutation createUser($nama: String, $email: String, $password: String, $nomor: String, $tgl: String, $nik: String, $disabilitas: Boolean, $homeless: Boolean) {
     createUser(
         nama: $nama,
         email: $email,
@@ -6,6 +6,8 @@ mutation createUser($nama: String, $email: String, $password: String, $nomor: St
         nomor_telepon: $nomor,
         tgl_lahir: $tgl,
         nik: $nik,
+        disabilitas: $disabilitas,
+        tdk_pnyrmh: $homeless
         pengalaman:0,
         pengalaman_pro:0,
         edukasi:"Other",

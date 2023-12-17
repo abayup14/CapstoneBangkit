@@ -1,0 +1,23 @@
+mutation createEdukasi(
+    $id_user: Int,
+    $nama: String,
+    $deskripsi: String,
+    $jenjang: String,
+    $tglAwal: String,
+    $tgl_akhir: String
+) {
+    createEdukasi(
+        user_iduser: $id_user,
+        nama_institusi: $nama,
+        deskripsi: $deskripsi,
+        jenjang: $jenjang,
+        tgl_awal: $tglAwal,
+        tgl_akhir: $tgl_akhir
+    ) {
+        errors
+        success
+        edukasi {
+            id
+        }
+    }
+}

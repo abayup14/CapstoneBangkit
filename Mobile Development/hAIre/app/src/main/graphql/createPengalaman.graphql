@@ -1,0 +1,23 @@
+mutation createPengalaman(
+    $nama_pekerjaan: String,
+    $tgl_mulai: String,
+    $tgl_selesai: String,
+    $tmpt_bekerja: String,
+    $pkrjn_profesional: Boolean,
+    $user_iduser: Int
+) {
+    createPengalaman(
+        nama_pekerjaan: $nama_pekerjaan,
+        tgl_mulai: $tgl_mulai,
+        tgl_selesai: $tgl_selesai,
+        tmpt_bekerja: $tmpt_bekerja,
+        pkrjn_profesional: $pkrjn_profesional,
+        user_iduser: $user_iduser
+    ) {
+        success
+        errors
+        pengalaman {
+            id
+        }
+    }
+}

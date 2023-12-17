@@ -11,6 +11,7 @@ import com.haire.databinding.ActivitySettingProfileBinding
 import com.haire.ui.profile.ProfileViewModel
 import com.haire.ui.profile.editprofile.EditProfileActivity
 import com.haire.ui.welcome.WelcomeActivity
+import com.haire.util.showText
 
 class SettingProfileActivity : AppCompatActivity() {
     private var _binding: ActivitySettingProfileBinding? = null
@@ -24,11 +25,11 @@ class SettingProfileActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
         binding.btnAbout.setOnClickListener {
-//            startActivity(Intent(this@SettingProfileActivity, AboutActivity::class.java))
+            showText(this, "WIP")
         }
-//        binding.btnDelete.setOnClickListener {
-//            showDialog()
-//        }
+        binding.btnDelete.setOnClickListener {
+            showDialog()
+        }
         binding.btnBack.setOnClickListener {
             finish()
         }
@@ -49,18 +50,9 @@ class SettingProfileActivity : AppCompatActivity() {
             setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-            setPositiveButton("Yes") { _, _ ->
-//                viewModel.getUser().observe(this@SettingProfileActivity) {
-//                    viewModel.deleteAccount(it.email)
-//                }
-                viewModel.logout()
-                startActivity(
-                    Intent(
-                        this@SettingProfileActivity,
-                        WelcomeActivity::class.java
-                    )
-                )
-                finish()
+            setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+                showText(this@SettingProfileActivity, "Unfortunately you can't delete your account")
             }
             show()
         }

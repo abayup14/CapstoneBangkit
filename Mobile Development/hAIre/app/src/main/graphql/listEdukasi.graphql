@@ -1,0 +1,14 @@
+query listEdukasi($id: Int) {
+    listEdukasiUser(user_iduser: $id) {
+        errors
+        success
+        edukasi {
+            id
+            deskripsi
+            tgl_awal
+            tgl_akhir
+            jenjang
+            nama_institusi
+        }
+    }
+}

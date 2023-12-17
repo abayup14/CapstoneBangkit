@@ -1,7 +1,7 @@
 package com.haire.data
 
 enum class EdukasiEnum {
-    NoHigherEd,
+    HighSchoolOrBelow,
     Other,
     Undergraduate,
     Master,

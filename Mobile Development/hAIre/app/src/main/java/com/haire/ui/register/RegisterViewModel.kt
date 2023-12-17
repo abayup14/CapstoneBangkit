@@ -17,10 +17,12 @@ class RegisterViewModel(private val repository: JobRepository) : ViewModel() {
         password: String?,
         nomor: String?,
         tgl: String?,
-        nik: String?
+        nik: String?,
+        disabled: Boolean?,
+        homeless: Boolean?
     ) {
         viewModelScope.launch {
-            repository.registerAccount(nama, email, password, nomor, tgl, nik)
+            repository.registerAccount(nama, email, password, nomor, tgl, nik, disabled, homeless)
         }
     }
 
