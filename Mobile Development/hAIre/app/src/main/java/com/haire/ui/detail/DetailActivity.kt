@@ -10,6 +10,7 @@ import com.haire.ProfileCompanyQuery
 import com.haire.ViewModelFactory
 import com.haire.data.Jobs
 import com.haire.databinding.ActivityDetailBinding
+import com.haire.util.showText
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -21,12 +22,27 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.hide()
         binding.btnBack.setOnClickListener { finish() }
 
+
         val jobId = intent.getIntExtra(EXTRA_JOBS_ID, 0)
+        viewModel.getSkillRequired(jobId)
         viewModel.getDetail(jobId)
         viewModel.detailLowongan.observe(this) { lowongan ->
             viewModel.getCompany(lowongan?.company_id!!)
             viewModel.companyData.observe(this) {
                 setData(lowongan, it)
+            }
+        }
+
+        binding.btnApply.setOnClickListener {
+            viewModel.getSession().observe(this) {
+                viewModel.getJaccardSkill(it.id, jobId)
+                viewModel.jaccard.observe(this) { jaccard ->
+                    showText(this, "Jaccard $jaccard")
+                }
+            }
+            // apply
+            viewModel.skillRequired.observe(this) {
+
             }
         }
     }
@@ -38,9 +54,6 @@ class DetailActivity : AppCompatActivity() {
                 .into(ivJobs)
             tvPekerjaan.text = detail?.nama.toString()
             tvAlamat.text = company?.alamat
-            btnApply.setOnClickListener {
-                // apply
-            }
         }
     }
 
