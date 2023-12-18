@@ -28,8 +28,8 @@
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
-        android:id="@+id/learningFragment"
+        android:id="@+id/navigation_learning"
         android:name="com.haire.ui.learning.LearningFragment"
-        android:label="fragment_learning"
+        android:label="@string/title_learning"
         tools:layout="@layout/fragment_learning" />
 </navigation>

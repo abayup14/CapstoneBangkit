@@ -35,17 +35,17 @@ class OpenJobsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getListLoker()
-
         viewModel.loker.observe(viewLifecycleOwner) {
-            viewModel.profileCompany.observe(viewLifecycleOwner) { company ->
-                setData(it, company)
-            }
+            setData(it)
+//            viewModel.getProfileComapny(adapter?.getCompanyId()!!)
+//            viewModel.profileCompany.observe(viewLifecycleOwner) { company ->
+//            }
         }
     }
 
-    private fun setData(listJobs: List<ListLowongansQuery.Lowongan?>, company: ProfileCompanyQuery.Company?) {
+    private fun setData(listJobs: List<ListLowongansQuery.Lowongan?>) {
         binding.apply {
-            adapter = JobAdapter(listJobs, company!!) {
+            adapter = JobAdapter(listJobs) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
                 detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
                 startActivity(detailIntent)

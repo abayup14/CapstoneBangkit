@@ -118,11 +118,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/skillsTitle">
 
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            tools:text="Java" />
+<!--        <com.google.android.material.chip.Chip-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            tools:text="Java" />-->
 
 <!--        <com.google.android.material.chip.Chip-->
 <!--            android:layout_width="wrap_content"-->

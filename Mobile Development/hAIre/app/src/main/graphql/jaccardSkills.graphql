@@ -1,0 +1,7 @@
+query jaccardSkills($skillUser: [String], $skillRequired: [String]) {
+    jaccardSkills(list_skill_user: $skillUser, list_skill_required: $skillRequired) {
+        success
+        errors
+        jaccard
+    }
+}

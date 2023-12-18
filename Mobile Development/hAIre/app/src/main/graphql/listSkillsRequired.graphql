@@ -1,0 +1,10 @@
+query listSkillRequired($id: Int) {
+    listSkillsRequired(lowongan_id: $id) {
+        errors
+        success
+        skills {
+            nama
+            id
+        }
+    }
+}

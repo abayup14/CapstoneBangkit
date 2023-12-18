@@ -111,7 +111,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_layout"
+            android:id="@+id/nik_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -119,6 +119,31 @@
             app:layout_constraintEnd_toEndOf="@+id/email_layout"
             app:layout_constraintStart_toStartOf="@+id/email_layout"
             app:layout_constraintTop_toBottomOf="@+id/phone_layout"
+            tools:alpha="100">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_nik"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="NIK"
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="@+id/email_layout"
+                app:layout_constraintStart_toStartOf="@+id/email_layout"
+                app:layout_constraintTop_toBottomOf="@+id/phone_layout"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/email_layout"
+            app:layout_constraintStart_toStartOf="@+id/email_layout"
+            app:layout_constraintTop_toBottomOf="@+id/nik_layout"
             app:passwordToggleEnabled="true"
             tools:alpha="100">
 
@@ -156,17 +181,47 @@
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ImageButton
+            android:id="@+id/btn_edt_birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@android:drawable/ic_menu_my_calendar"
+            app:layout_constraintStart_toStartOf="@+id/re_password_layout"
+            app:layout_constraintTop_toBottomOf="@+id/re_password_layout"
+            tools:ignore="ContentDescription" />
 
         <TextView
+            android:id="@+id/textView20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Date of Birth"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/btn_edt_birth"
+            app:layout_constraintTop_toTopOf="@+id/btn_edt_birth" />
+
+        <TextView
+            android:id="@+id/tv_birth_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_edt_birth"
+            app:layout_constraintStart_toStartOf="@+id/textView20"
+            app:layout_constraintTop_toBottomOf="@+id/textView20"
+            tools:text="1945-08-17" />
+
+
+        <TextView
+            android:layout_marginTop="16dp"
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:text="Do you have a house of your own?"
             android:textColor="#181818"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/re_password_layout"
-            app:layout_constraintTop_toBottomOf="@id/re_password_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_edt_birth" />
 
         <RadioGroup
             android:id="@+id/homelessRg"
@@ -268,7 +323,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="1035dp" />
+            app:layout_constraintGuide_begin="1148dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

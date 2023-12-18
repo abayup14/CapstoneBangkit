@@ -21,6 +21,7 @@ import com.haire.ui.login.LoginActivity
 import com.haire.ui.openjobs.JobAdapter
 import com.haire.ui.openjobs.OpenJobsViewModel
 import com.haire.ui.profile.company.CompanyProfileActivity
+import com.haire.ui.profile.company.CompanyProfileViewModel
 import com.haire.ui.welcome.WelcomeActivity
 import com.haire.util.showText
 

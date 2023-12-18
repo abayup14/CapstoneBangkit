@@ -1,5 +1,6 @@
 package com.haire.ui.register.jobseeker
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
@@ -17,7 +18,12 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentJobSeekerBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
+import com.haire.util.DatePickerFragment
 import com.haire.util.showText
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class JobSeekerFragment : Fragment() {
     private var _binding: FragmentJobSeekerBinding? = null
@@ -62,6 +68,10 @@ class JobSeekerFragment : Fragment() {
             }
         }
 
+        binding.btnEdtBirth.setOnClickListener {
+            showDatePicker()
+        }
+
         val validation = AwesomeValidation(ValidationStyle.BASIC)
         validation.apply {
             addValidation(
@@ -83,11 +93,13 @@ class JobSeekerFragment : Fragment() {
             val pass = binding.edtPassword.text.toString()
             val rePass = binding.edtRePassword.text.toString()
             val phone = binding.edtPhone.text.toString()
+            val birthDate = binding.tvBirthDate.text.toString()
+            val nik = binding.edtNik.text.toString()
             val homelessIsChecked = binding.homelessRg.checkedRadioButtonId
             val disabledIsChecked = binding.disabledRg.checkedRadioButtonId
 
             if (validation.validate()) {
-                if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || phone.isEmpty() || homelessIsChecked == -1 || disabledIsChecked == -1) {
+                if (name.isEmpty() || email.isEmpty() || pass.isEmpty() || rePass.isEmpty() || phone.isEmpty() || birthDate.isEmpty() || nik.isEmpty() || homelessIsChecked == -1 || disabledIsChecked == -1) {
                     showText(requireContext(), getString(R.string.empty_field))
                 } else {
                     viewModel.registerAccount(
@@ -95,8 +107,8 @@ class JobSeekerFragment : Fragment() {
                         email,
                         pass,
                         phone,
-                        "2002-1-19",
-                        "08741256486",
+                        birthDate,
+                        nik,
                         disabled,
                         homeless
                     )
@@ -119,5 +131,28 @@ class JobSeekerFragment : Fragment() {
             }
             show()
         }
+    }
+
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                val selectedCalendar = Calendar.getInstance()
+                selectedCalendar.set(year, month, dayOfMonth)
+                val selectedDate = selectedCalendar.time
+
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val formattedDate = sdf.format(selectedDate)
+                binding.tvBirthDate.text = formattedDate
+            },
+            year, month, day
+        )
+
+        datePickerDialog.show()
     }
 }

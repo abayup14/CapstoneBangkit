@@ -23,6 +23,9 @@ class JobRepository(private val pref: UserPreference) {
     private val _skill = MutableLiveData<List<ListUserSkillsQuery.Skill?>>()
     val skill: LiveData<List<ListUserSkillsQuery.Skill?>> = _skill
 
+    private val _skillRequired = MutableLiveData<List<ListSkillRequiredQuery.Skill?>>()
+    val skillRequired: LiveData<List<ListSkillRequiredQuery.Skill?>> = _skillRequired
+
     private val _exp = MutableLiveData<List<ListPengalamanQuery.Pengalaman?>>()
     val exp: LiveData<List<ListPengalamanQuery.Pengalaman?>> = _exp
 
@@ -56,8 +59,13 @@ class JobRepository(private val pref: UserPreference) {
     private val _listSkill = MutableLiveData<List<ListSkillsQuery.Skill?>>()
     val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = _listSkill
 
-    private val _successAdd = MutableLiveData<Boolean>()
-    val successAdd: LiveData<Boolean> = _successAdd
+    private val _listLowonganUserApply =
+        MutableLiveData<List<ListLowonganUserApplyQuery.Lowongan?>>()
+    val listLowonganUserApply: LiveData<List<ListLowonganUserApplyQuery.Lowongan?>> =
+        _listLowonganUserApply
+
+    private val _jaccard = MutableLiveData<Double>()
+    val jaccard: LiveData<Double> = _jaccard
 
     private val apolloClient = ApolloClient.Builder()
         .serverUrl("https://graphqlapi-vdnbldljhq-et.a.run.app/graphql")
@@ -175,6 +183,19 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
+    suspend fun getListLowonganUserApply(id: Int) {
+        val idUser = Optional.present(id)
+        val response = apolloClient.query(ListLowonganUserApplyQuery(idUser)).execute()
+        if (response.data?.listLowonganUserApply?.success == true) {
+            _listLowonganUserApply.value =
+                response.data?.listLowonganUserApply?.lowongan ?: emptyList()
+        } else if (response.hasErrors()) {
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _toastMsg.value = response.data?.listLowonganUserApply?.errors?.component1()
+        }
+    }
+
     suspend fun getCompanyData(id: Int?) {
         val companyId = Optional.present(id)
         val response = apolloClient.query(ProfileCompanyQuery(companyId)).execute()
@@ -231,15 +252,16 @@ class JobRepository(private val pref: UserPreference) {
         val userId = Optional.present(user_iduser)
         val skillId = Optional.present(skills_id)
         try {
-            val response = apolloClient.mutation(CreateUserHasSkillsMutation(userId, skillId)).execute()
+            val response =
+                apolloClient.mutation(CreateUserHasSkillsMutation(userId, skillId)).execute()
             if (response.hasErrors()) {
                 _success.value = false
                 _toastMsg.value = response.errors?.component1()?.message
-            } else {
+            } else if (response.data?.createUserHasSkills?.errors?.isNotEmpty() == true) {
                 _success.value = false
                 _toastMsg.value = response.data?.createUserHasSkills?.errors?.component1()
             }
-        } catch (e:ApolloException) {
+        } catch (e: ApolloException) {
             _success.value = false
             _toastMsg.value = e.message.toString()
         }
@@ -265,6 +287,18 @@ class JobRepository(private val pref: UserPreference) {
             _toastMsg.value = response.errors?.component1()?.message
         } else {
             _toastMsg.value = response.data?.listSkills?.errors?.component1()
+        }
+    }
+
+    suspend fun listSkillRequired(id: Int) {
+        val idLowongan = Optional.present(id)
+        val response = apolloClient.query(ListSkillRequiredQuery(idLowongan)).execute()
+        if (response.data?.listSkillsRequired?.success == true) {
+            _skillRequired.value = response.data?.listSkillsRequired?.skills ?: emptyList()
+        } else if (response.hasErrors()) {
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _toastMsg.value = response.data?.listSkillsRequired?.errors?.component1()
         }
     }
 
@@ -334,17 +368,52 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
-    suspend fun getSkills(id: Int?) {
+    suspend fun getSkills(id: Int?) : List<String?> { // check 1
         val idUser = Optional.present(id)
         val response = apolloClient.query(ListUserSkillsQuery(idUser)).execute()
+        val listSkill = arrayListOf<String?>()
         if (response.data?.listUserSkills?.success == true) {
             _skill.value = response.data?.listUserSkills?.skills ?: emptyList()
+            for (a in response.data?.listUserSkills?.skills!!) {
+                listSkill.add(a?.nama)
+            }
         } else {
             if (response.errors?.isNotEmpty() == true) {
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
                 _toastMsg.value = response.data?.listUserSkills?.errors?.component1()
             }
+        }
+        return listSkill
+    }
+
+    suspend fun getSkillsRequired(id: Int?): List<String?> { // check 2
+        val idLowongan = Optional.present(id)
+        val listSkillReq = arrayListOf<String?>()
+        val response = apolloClient.query(ListSkillRequiredQuery(idLowongan)).execute()
+        if (response.data?.listSkillsRequired?.success == true) {
+            _skillRequired.value = response.data?.listSkillsRequired?.skills ?: emptyList()
+            for (a in response.data?.listSkillsRequired?.skills!!) {
+                listSkillReq.add(a?.nama)
+            }
+        } else if (response.hasErrors()) {
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _toastMsg.value = response.data?.listSkillsRequired?.errors?.component1()
+        }
+        return listSkillReq
+    }
+
+    suspend fun jaccardSkills(idUser: Int, idLowongan: Int) {
+        val listSkill = Optional.present(getSkills(idUser))
+        val listRequired = Optional.present(getSkillsRequired(idLowongan))
+        val response = apolloClient.query(JaccardSkillsQuery(listSkill, listRequired)).execute()
+        if (response.data?.jaccardSkills?.success == true) {
+            _jaccard.value = response.data?.jaccardSkills?.jaccard ?: 0.0
+        } else if (response.hasErrors()) {
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _toastMsg.value = response.data?.jaccardSkills?.errors?.component1()
         }
     }
 
@@ -355,14 +424,14 @@ class JobRepository(private val pref: UserPreference) {
             if (response.data?.createSkills?.success == true) {
                 _id.value = response.data?.createSkills?.skill?.id ?: 0
                 _success.value = true
-            } else {
+            } else if (response.hasErrors()) {
                 _success.value = false
-                if (response.errors?.isNotEmpty() == true) {
-                    _toastMsg.value = response.errors?.component1()?.message
-                }
+                _toastMsg.value = response.errors?.component1()?.message
+            } else {
+                _toastMsg.value = response.data?.createSkills?.errors?.component1()
             }
         } catch (e: ApolloException) {
-            _successAdd.value = false
+            _success.value = false
             _toastMsg.value = e.message.toString()
         }
     }
@@ -396,7 +465,7 @@ class JobRepository(private val pref: UserPreference) {
                 _success.value = false
                 if (response.errors?.isNotEmpty() == true) {
                     _toastMsg.value = response.errors?.component1()?.message
-                } else {
+                } else if (response.data?.createLowongan?.errors?.isNotEmpty() == true) {
                     _toastMsg.value = response.data?.createLowongan?.errors?.component1()
                 }
             }
@@ -410,11 +479,12 @@ class JobRepository(private val pref: UserPreference) {
         val lowonganId = Optional.present(idLowongan)
         val skillId = Optional.present(idSkill)
         try {
-            val response = apolloClient.mutation(CreateSkillRequiredMutation(skillId, lowonganId)).execute()
+            val response =
+                apolloClient.mutation(CreateSkillRequiredMutation(skillId, lowonganId)).execute()
             if (response.hasErrors()) {
                 _success.value = false
                 _toastMsg.value = response.errors?.component1()?.message
-            } else {
+            } else if (response.data?.createSkillRequired?.errors?.isNotEmpty() == true) {
                 _success.value = false
                 _toastMsg.value = response.data?.createSkillRequired?.errors?.component1()
             }
