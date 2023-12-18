@@ -290,6 +290,18 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
+    suspend fun listSkillRequired(id: Int) {
+        val idLowongan = Optional.present(id)
+        val response = apolloClient.query(ListSkillRequiredQuery(idLowongan)).execute()
+        if (response.data?.listSkillsRequired?.success == true) {
+            _skillRequired.value = response.data?.listSkillsRequired?.skills ?: emptyList()
+        } else if (response.hasErrors()) {
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _toastMsg.value = response.data?.listSkillsRequired?.errors?.component1()
+        }
+    }
+
     suspend fun getLokerCompany(companyId: Int) {
         val idCompany = Optional.present(companyId)
         val response = apolloClient.query(ListLowonganCompanyQuery(idCompany)).execute()

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.haire.di.Injection
 import com.haire.ui.company.CompanyViewModel
+import com.haire.ui.company.detail.DetailJobViewModel
 import com.haire.ui.detail.DetailViewModel
 import com.haire.ui.home.HomeViewModel
 import com.haire.ui.login.LoginViewModel
@@ -58,6 +59,10 @@ class ViewModelFactory(private val context: Context) :
 
             modelClass.isAssignableFrom(CompanyViewModel::class.java) -> {
                 CompanyViewModel(Injection.provideRepository(context)) as T
+            }
+
+            modelClass.isAssignableFrom(DetailJobViewModel::class.java) -> {
+                DetailJobViewModel(Injection.provideRepository(context)) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
