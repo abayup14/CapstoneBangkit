@@ -13,6 +13,7 @@ import com.haire.data.Skill
 import com.haire.databinding.ActivityAddJobBinding
 import com.haire.ui.company.CompanyViewModel
 import com.haire.util.DatePickerFragment
+import com.haire.util.showLoading
 import com.haire.util.showText
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,6 +28,10 @@ class AddJobActivity : AppCompatActivity(), DatePickerFragment.DialogDateListene
         binding = ActivityAddJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+        }
 
         val data = intent.getParcelableExtra<Skill>(EXTRA_SKILL)
         if (data != null) {

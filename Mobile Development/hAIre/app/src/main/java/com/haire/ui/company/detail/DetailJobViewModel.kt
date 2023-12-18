@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.haire.GetLowonganQuery
 import com.haire.JobRepository
 import com.haire.ListApplyLowonganQuery
-import com.haire.ListSkillsQuery
 import com.haire.ListSkillRequiredQuery
-import com.haire.ListUserSkillsQuery
 import kotlinx.coroutines.launch
 
 class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
@@ -17,6 +15,7 @@ class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
     val toastMsg: LiveData<String> = repository.toastMsg
     val skill: LiveData<List<ListSkillRequiredQuery.Skill?>> = repository.skillRequired
     val listLeaderBoard: LiveData<List<ListApplyLowonganQuery.Apply?>> = repository.listLeaderBoard
+    val isLoading: LiveData<Boolean> = repository.isLoading
 
     fun getLowongan(id: Int) {
         viewModelScope.launch {

@@ -1,16 +1,15 @@
 package com.haire.ui.company.addjob
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.viewModels
-import com.haire.R
+import androidx.appcompat.app.AppCompatActivity
 import com.haire.ViewModelFactory
 import com.haire.data.Skill
 import com.haire.databinding.ActivityAddSkillBinding
 import com.haire.ui.company.CompanyViewModel
+import com.haire.util.showLoading
 import com.haire.util.showText
 
 class AddSkillRequiredActivity : AppCompatActivity() {
@@ -20,6 +19,11 @@ class AddSkillRequiredActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddSkillBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+        }
 
         viewModel.listSkills()
         viewModel.listSkill.observe(this) {
@@ -29,7 +33,8 @@ class AddSkillRequiredActivity : AppCompatActivity() {
                 skillSuggestions.add(a?.nama!!)
             }
 
-            val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, skillSuggestions)
+            val adapter =
+                ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, skillSuggestions)
             binding.edtSkill.setAdapter(adapter)
 
             viewModel.toastMsg.observe(this) { msg ->
@@ -42,14 +47,15 @@ class AddSkillRequiredActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnAddSkill.setOnClickListener{
+        binding.btnAddSkill.setOnClickListener {
             val skill = binding.edtSkill.text.toString()
 
             if (skill.isNotEmpty()) {
                 viewModel.checkSkill(skill)
                 viewModel.id.observe(this) { id ->
                     val skill2 = Skill(id, skill)
-                    val intentAddJob = Intent(this@AddSkillRequiredActivity, AddJobActivity::class.java)
+                    val intentAddJob =
+                        Intent(this@AddSkillRequiredActivity, AddJobActivity::class.java)
                     intentAddJob.putExtra(AddJobActivity.EXTRA_SKILL, skill2)
                     startActivity(intentAddJob)
                     finish()

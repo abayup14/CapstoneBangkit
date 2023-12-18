@@ -3,7 +3,6 @@ package com.haire.ui.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +14,8 @@ import com.haire.ViewModelFactory
 import com.haire.data.UserModel
 import com.haire.databinding.ActivityLoginBinding
 import com.haire.ui.company.CompanyActivity
-import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.register.RegisterActivity
+import com.haire.util.showLoading
 import com.haire.util.showText
 
 class LoginActivity : AppCompatActivity() {
@@ -29,6 +28,10 @@ class LoginActivity : AppCompatActivity() {
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+        }
 
         viewModel.toastMsg.observe(this) { msg ->
             showText(this, msg)

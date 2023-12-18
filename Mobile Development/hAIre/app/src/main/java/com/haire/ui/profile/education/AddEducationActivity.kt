@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.haire.R
@@ -12,6 +11,7 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityAddEducationBinding
 import com.haire.ui.profile.ProfileViewModel
 import com.haire.util.DatePickerFragment
+import com.haire.util.showLoading
 import com.haire.util.showText
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -43,6 +43,10 @@ class AddEducationActivity : AppCompatActivity(), DatePickerFragment.DialogDateL
         }
         binding.btnEndDate.setOnClickListener {
             showDatePicker("dateEnd")
+        }
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
         }
 
         viewModel.toastMsg.observe(this) {

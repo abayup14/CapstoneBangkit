@@ -1,11 +1,13 @@
 package com.haire.ui.profile
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,19 +15,16 @@ import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.haire.ListEdukasiQuery
 import com.haire.ListPengalamanQuery
-import com.haire.ListSkillsQuery
 import com.haire.ListUserSkillsQuery
 import com.haire.ViewModelFactory
-import com.haire.data.Skill
 import com.haire.databinding.FragmentProfileBinding
-import com.haire.ui.openjobs.JobAdapter
 import com.haire.ui.profile.education.AddEducationActivity
 import com.haire.ui.profile.education.EducationAdapter
 import com.haire.ui.profile.experience.AddExperienceActivity
 import com.haire.ui.profile.experience.ExperienceAdapter
 import com.haire.ui.profile.setting.SettingProfileActivity
 import com.haire.ui.profile.skill.AddSkillActivity
-import com.haire.ui.welcome.WelcomeActivity
+import com.haire.util.showLoading
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -33,21 +32,20 @@ class ProfileFragment : Fragment() {
     private var adapter: ExperienceAdapter? = null
     private val viewModel by viewModels<ProfileViewModel> { ViewModelFactory(requireContext()) }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
+        }
         viewModel.getUser().observe(viewLifecycleOwner) {
             if (it.isLogin) {
                 viewModel.getProfileUI(it.id)
-                viewModel.profileData.observe(viewLifecycleOwner) {user ->
-                    if (user.url_photo != ""){
+                viewModel.profileData.observe(viewLifecycleOwner) { user ->
+                    if (user.url_photo != "") {
                         Glide.with(requireActivity())
                             .load(user.url_photo)
                             .circleCrop()
@@ -88,6 +86,7 @@ class ProfileFragment : Fragment() {
         binding.btnAddSkill.setOnClickListener {
             startActivity(Intent(requireActivity(), AddSkillActivity::class.java))
         }
+        return binding.root
     }
 
     private fun setEducationData(listEdu: List<ListEdukasiQuery.Edukasi?>) {

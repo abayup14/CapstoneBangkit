@@ -13,6 +13,7 @@ class CompanyProfileViewModel(private val repository: JobRepository) : ViewModel
     val profileCompanyData: LiveData<ProfileCompanyQuery.Company> = repository.profileCompanyData
     val success: LiveData<Boolean> = repository.success
     val toastMsg: LiveData<String> = repository.toastMsg
+    val isLoading: LiveData<Boolean> = repository.isLoading
 
     fun getProfileUI(id: Int) {
         viewModelScope.launch {

@@ -2,7 +2,6 @@ package com.haire
 
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,6 +19,9 @@ import java.util.UUID
 import kotlin.math.ln
 
 class JobRepository(private val pref: UserPreference) {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     private val _isCompany = MutableLiveData<Boolean>()
     val isCompany: LiveData<Boolean> = _isCompany
 
@@ -92,7 +94,7 @@ class JobRepository(private val pref: UserPreference) {
     suspend fun loginAccount(email: String, password: String) {
         val email = Optional.present(email)
         val pass = Optional.present(password)
-
+        _isLoading.value = true
         val response =
             apolloClient.query(CekLoginUserQuery(email = email, password = pass))
                 .execute()
@@ -103,21 +105,26 @@ class JobRepository(private val pref: UserPreference) {
             _toastMsg.value = "There's an error while connecting to server."
         } else {
             if (response2.data?.cekLoginCompany?.success == true) {
+                _isLoading.value = false
                 _success.value = false
                 _isCompany.value = true
                 _id.value = response2.data?.cekLoginCompany?.company?.id ?: 0
             } else {
                 if (response.hasErrors()) {
+                    _isLoading.value = false
                     _toastMsg.value = "There's an error while connecting to server."
                 } else {
                     if (response.data?.cekLoginUser?.success == true) {
+                        _isLoading.value = false
                         _isCompany.value = false
                         _success.value = true
                         _id.value = response.data?.cekLoginUser?.user?.iduser ?: 0
                     } else {
                         if (response.errors?.isNotEmpty() == true) {
+                            _isLoading.value = false
                             _toastMsg.value = response.errors?.component1()?.message
                         } else {
+                            _isLoading.value = false
                             _toastMsg.value = response.data?.cekLoginUser?.errors?.component1()
                         }
                     }
@@ -146,6 +153,7 @@ class JobRepository(private val pref: UserPreference) {
         val homeles: Optional<Boolean> = Optional.present(homeless ?: false)
 
         try {
+            _isLoading.value = true
             val response = apolloClient.mutation(
                 CreateUserMutation(
                     nama = name,
@@ -159,17 +167,20 @@ class JobRepository(private val pref: UserPreference) {
                 )
             ).execute()
             if (response.data?.createUser?.success == true) {
+                _isLoading.value = false
                 _success.value = true
             } else {
                 _success.value = false
                 if (response.errors?.isNotEmpty() == true) {
+                    _isLoading.value = false
                     _toastMsg.value = response.errors?.component1()?.message
                 } else {
+                    _isLoading.value = false
                     _toastMsg.value = response.data?.createUser?.errors?.component1()
                 }
             }
         } catch (e: ApolloException) {
-            Log.w("Register", "Failed to Register", e)
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = e.message.toString()
         }
@@ -182,20 +193,24 @@ class JobRepository(private val pref: UserPreference) {
         val pass = Optional.present(password)
 
         try {
+            _isLoading.value = true
             val response =
                 apolloClient.mutation(CreateCompanyMutation(nama, alamat, mail, pass)).execute()
             if (response.data?.createCompany?.success == true) {
+                _isLoading.value = false
                 _success.value = true
             } else {
                 _success.value = false
                 if (response.errors?.isNotEmpty() == true) {
+                    _isLoading.value = false
                     _toastMsg.value = response.errors?.component1()?.message
                 } else {
+                    _isLoading.value = false
                     _toastMsg.value = response.data?.createCompany?.errors?.component1()
                 }
             }
         } catch (e: ApolloException) {
-            Log.w("Register", "Failed to Register", e)
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = e.message.toString()
         }
@@ -203,51 +218,67 @@ class JobRepository(private val pref: UserPreference) {
 
     suspend fun getListLowonganUserApply(id: Int) {
         val idUser = Optional.present(id)
+        _isLoading.value = true
         val response = apolloClient.query(ListLowonganUserApplyQuery(idUser)).execute()
         if (response.data?.listLowonganUserApply?.success == true) {
+            _isLoading.value = false
             _listLowonganUserApply.value =
                 response.data?.listLowonganUserApply?.lowongan ?: emptyList()
         } else if (response.hasErrors()) {
+            _isLoading.value = false
             _toastMsg.value = response.errors?.component1()?.message
         } else {
+            _isLoading.value = false
             _toastMsg.value = response.data?.listLowonganUserApply?.errors?.component1()
         }
     }
 
     suspend fun getCompanyData(id: Int?) {
         val companyId = Optional.present(id)
+        _isLoading.value = true
         val response = apolloClient.query(ProfileCompanyQuery(companyId)).execute()
         if (response.data?.profileCompany?.success == true) {
+            _isLoading.value = false
             _profileCompany.value = response.data?.profileCompany?.company
         } else if (response.hasErrors()) {
+            _isLoading.value = false
             _toastMsg.value = response.errors?.component1()?.message
         } else {
+            _isLoading.value = false
             _toastMsg.value = response.data?.profileCompany?.errors?.component1()
         }
     }
 
     suspend fun getListLoker() {
+        _isLoading.value = true
         val response = apolloClient.query(ListLowongansQuery()).execute()
         if (response.data?.listLowonganUserSearch?.success == true) {
+            _isLoading.value = false
             _loker.value = response.data?.listLowonganUserSearch?.lowongan ?: emptyList()
         } else {
             if (response.errors?.isNotEmpty() == true) {
+                _isLoading.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.listLowonganUserSearch?.errors?.component1()
             }
         }
     }
 
     suspend fun listSkillSearch(search: String) {
+        _isLoading.value = true
         val search = Optional.present(search)
         val response = apolloClient.query(SkillSearchQuery(search)).execute()
         if (response.data?.listSkillSearch?.success == true) {
+            _isLoading.value = false
             _success.value = true
         } else if (response.hasErrors()) {
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = response.errors?.component1()?.message
         } else {
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = response.data?.listSkillSearch?.errors?.component1()
         }
@@ -287,56 +318,73 @@ class JobRepository(private val pref: UserPreference) {
 
     suspend fun getLoker(id: Int?) {
         val idLowongan = Optional.present(id)
+        _isLoading.value = true
         val response = apolloClient.query(GetLowonganQuery(idLowongan)).execute()
         if (response.data?.getLowongan?.success == true) {
+            _isLoading.value = false
             _detailLowongan.value = response.data?.getLowongan?.lowongan
             lowonganId = response.data?.getLowongan?.lowongan?.id ?: 0
         } else if (response.hasErrors()) {
+            _isLoading.value = false
             _toastMsg.value = response.errors?.component1()?.message
         } else {
+            _isLoading.value = false
             _toastMsg.value = response.data?.getLowongan?.errors?.component1()
         }
     }
 
     suspend fun listSkill() {
+        _isLoading.value = true
         val response = apolloClient.query(ListSkillsQuery()).execute()
         if (response.data?.listSkills?.success == true) {
+            _isLoading.value = false
             _listSkill.value = response.data?.listSkills?.skills ?: emptyList()
         } else if (response.hasErrors()) {
+            _isLoading.value = false
             _toastMsg.value = response.errors?.component1()?.message
         } else {
+            _isLoading.value = false
             _toastMsg.value = response.data?.listSkills?.errors?.component1()
         }
     }
 
     suspend fun getLokerCompany(companyId: Int) {
+        _isLoading.value = true
         val idCompany = Optional.present(companyId)
         val response = apolloClient.query(ListLowonganCompanyQuery(idCompany)).execute()
         if (response.data?.listLowonganCompany?.success == true) {
+            _isLoading.value = false
             _lokerCompany.value = response.data?.listLowonganCompany?.lowongan ?: emptyList()
         } else {
             if (response.errors?.isNotEmpty() == true) {
+                _isLoading.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.listLowonganCompany?.errors?.component1()
             }
         }
     }
 
     suspend fun getProfileDataCompany(idUser: Int?) {
+        _isLoading.value = true
         val userId = Optional.present(idUser)
         val response = apolloClient.query(ProfileCompanyQuery(userId)).execute()
         if (response.data?.profileCompany?.success == true) {
+            _isLoading.value = false
             _profileCompanyData.value = response.data?.profileCompany?.company!!
         } else {
+            _isLoading.value = false
             _toastMsg.value = response.data?.profileCompany?.errors?.component1()
         }
     }
 
     suspend fun getProfileData(idUser: Int?) {
+        _isLoading.value = true
         val userId = Optional.present(idUser)
         val response = apolloClient.query(ProfileUserQuery(userId)).execute()
         if (response.data?.profileUser?.success == true) {
+            _isLoading.value = false
             _profileData.value = response.data?.profileUser?.user!!
             iduser = response.data?.profileUser?.user?.iduser!!
             tglLahir = response.data?.profileUser?.user?.tgl_lahir!!
@@ -354,8 +402,10 @@ class JobRepository(private val pref: UserPreference) {
             }
         } else {
             if (response.errors?.isNotEmpty() == true) {
+                _isLoading.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.profileUser?.errors?.component1()
             }
         }
@@ -392,6 +442,7 @@ class JobRepository(private val pref: UserPreference) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun apply() {
+        _isLoading.value = true
         val hariIni: LocalDate = LocalDate.now()
         val pattern = "yyyy-MM-dd"
         val formatter = DateTimeFormatter.ofPattern(pattern)
@@ -405,23 +456,29 @@ class JobRepository(private val pref: UserPreference) {
         val parameter = Optional.present(listOf(lessThan35, edukasi, pengalamanTotal, skillSize))
         val predictApply = apolloClient.query(PredictApplyQuery(parameter)).execute()
         if (predictApply.data?.predictApply?.success == true) {
+            _isLoading.value = false
             val probabilitas = predictApply.data?.predictApply?.prob
             val skorAkhir = jaccard * probabilitas!!
             createApply(iduser, lowonganId, probabilitas, jaccard, skorAkhir, "Apply")
             _success.value = true
         } else if (predictApply.hasErrors()) {
+            _isLoading.value = false
             _toastMsg.value = predictApply.errors?.component1()?.message
         } else {
+            _isLoading.value = false
             _toastMsg.value = predictApply.data?.predictApply?.errors?.component1()
         }
     }
 
     suspend fun listApplyLowongan(id: Int) {
+        _isLoading.value = true
         val idLowongan = Optional.present(id)
         val response = apolloClient.query(ListApplyLowonganQuery(idLowongan)).execute()
         if (response.data?.listApplyLowongan?.success == true) {
+            _isLoading.value = false
             _listLeaderBoard.value = response.data?.listApplyLowongan?.apply ?: emptyList()
         } else if (response.hasErrors()) {
+            _isLoading.value = false
             _toastMsg.value = response.errors?.component1()?.message
         } else {
             _toastMsg.value = response.data?.listApplyLowongan?.errors?.component1()
@@ -429,38 +486,48 @@ class JobRepository(private val pref: UserPreference) {
     }
 
     suspend fun getPengalaman(id: Int?) {
+        _isLoading.value = true
         val userId = Optional.present(id)
         val response = apolloClient.query(ListPengalamanQuery(userId)).execute()
         if (response.data?.listPengalamanUser?.success == true) {
+            _isLoading.value = false
             _exp.value = response.data?.listPengalamanUser?.pengalaman ?: emptyList()
         } else {
             if (response.errors?.isNotEmpty() == true) {
+                _isLoading.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.listPengalamanUser?.errors?.component1()
             }
         }
     }
 
     suspend fun getEdukasi(id: Int?) {
+        _isLoading.value = true
         val idUser = Optional.present(id)
         val response = apolloClient.query(ListEdukasiQuery(idUser)).execute()
         if (response.data?.listEdukasiUser?.success == true) {
+            _isLoading.value = false
             _edu.value = response.data?.listEdukasiUser?.edukasi ?: emptyList()
         } else {
             if (response.errors?.isNotEmpty() == true) {
+                _isLoading.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.listEdukasiUser?.errors?.component1()
             }
         }
     }
 
-    suspend fun getSkills(id: Int?): List<String?> { // check 1
+    suspend fun getSkills(id: Int?): List<String?> {
+        _isLoading.value = true
         val idUser = Optional.present(id)
         val response = apolloClient.query(ListUserSkillsQuery(idUser)).execute()
         val listSkill = arrayListOf<String?>()
         if (response.data?.listUserSkills?.success == true) {
+            _isLoading.value = false
             _skill.value = response.data?.listUserSkills?.skills ?: emptyList()
             skillSize = response.data?.listUserSkills?.skills?.size?.toDouble() ?: 0.0
             for (a in response.data?.listUserSkills?.skills!!) {
@@ -468,26 +535,32 @@ class JobRepository(private val pref: UserPreference) {
             }
         } else {
             if (response.errors?.isNotEmpty() == true) {
+                _isLoading.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.listUserSkills?.errors?.component1()
             }
         }
         return listSkill
     }
 
-    suspend fun getSkillsRequired(id: Int?): List<String?> { // check 2
+    suspend fun getSkillsRequired(id: Int?): List<String?> {
+        _isLoading.value = true
         val idLowongan = Optional.present(id)
         val listSkillReq = arrayListOf<String?>()
         val response = apolloClient.query(ListSkillRequiredQuery(idLowongan)).execute()
         if (response.data?.listSkillsRequired?.success == true) {
+            _isLoading.value = false
             _skillRequired.value = response.data?.listSkillsRequired?.skills ?: emptyList()
             for (a in response.data?.listSkillsRequired?.skills!!) {
                 listSkillReq.add(a?.nama)
             }
         } else if (response.hasErrors()) {
+            _isLoading.value = false
             _toastMsg.value = response.errors?.component1()?.message
         } else {
+            _isLoading.value = false
             _toastMsg.value = response.data?.listSkillsRequired?.errors?.component1()
         }
         return listSkillReq
@@ -509,17 +582,22 @@ class JobRepository(private val pref: UserPreference) {
     suspend fun createSkill(nama: String?) {
         val name = Optional.present(nama)
         try {
+            _isLoading.value = true
             val response = apolloClient.mutation(CreateSkillsMutation(name)).execute()
             if (response.data?.createSkills?.success == true) {
+                _isLoading.value = false
                 _id.value = response.data?.createSkills?.skill?.id ?: 0
                 _success.value = true
             } else if (response.hasErrors()) {
+                _isLoading.value = false
                 _success.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.createSkills?.errors?.component1()
             }
         } catch (e: ApolloException) {
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = e.message.toString()
         }
@@ -538,6 +616,7 @@ class JobRepository(private val pref: UserPreference) {
         val companyId = Optional.present(idCompany)
         val urlPhoto = Optional.present(photoUrl)
         try {
+            _isLoading.value = true
             val response = apolloClient.mutation(
                 CreateLowonganMutation(
                     nama,
@@ -548,17 +627,21 @@ class JobRepository(private val pref: UserPreference) {
                 )
             ).execute()
             if (response.data?.createLowongan?.success == true) {
+                _isLoading.value = false
                 _success.value = true
                 _id.value = response.data?.createLowongan?.lowongan?.id ?: 0
             } else {
                 _success.value = false
                 if (response.errors?.isNotEmpty() == true) {
+                    _isLoading.value = false
                     _toastMsg.value = response.errors?.component1()?.message
                 } else if (response.data?.createLowongan?.errors?.isNotEmpty() == true) {
+                    _isLoading.value = false
                     _toastMsg.value = response.data?.createLowongan?.errors?.component1()
                 }
             }
         } catch (e: ApolloException) {
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = e.message.toString()
         }
@@ -568,16 +651,20 @@ class JobRepository(private val pref: UserPreference) {
         val lowonganId = Optional.present(idLowongan)
         val skillId = Optional.present(idSkill)
         try {
+            _isLoading.value = true
             val response =
                 apolloClient.mutation(CreateSkillRequiredMutation(skillId, lowonganId)).execute()
             if (response.hasErrors()) {
+                _isLoading.value = false
                 _success.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else if (response.data?.createSkillRequired?.errors?.isNotEmpty() == true) {
+                _isLoading.value = false
                 _success.value = false
                 _toastMsg.value = response.data?.createSkillRequired?.errors?.component1()
             }
         } catch (e: ApolloException) {
+            _isLoading.value = false
             _toastMsg.value = e.message.toString()
         }
     }
@@ -597,6 +684,7 @@ class JobRepository(private val pref: UserPreference) {
         val pkrjaanProfesional = Optional.present(pkrjn_profesional)
         val idUser = Optional.present(user_iduser)
         try {
+            _isLoading.value = true
             val response = apolloClient.mutation(
                 CreatePengalamanMutation(
                     namaPekerjaan,
@@ -608,17 +696,20 @@ class JobRepository(private val pref: UserPreference) {
                 )
             ).execute()
             if (response.data?.createPengalaman?.success == true) {
+                _isLoading.value = false
                 _success.value = true
             } else {
                 _success.value = false
                 if (response.errors?.isNotEmpty() == true) {
+                    _isLoading.value = false
                     _toastMsg.value = response.errors?.component1()?.message
                 } else {
+                    _isLoading.value = false
                     _toastMsg.value = response.data?.createPengalaman?.errors?.component1()
                 }
-                _toastMsg.value = "gagal"
             }
         } catch (e: ApolloException) {
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = e.message.toString()
         }
@@ -640,6 +731,7 @@ class JobRepository(private val pref: UserPreference) {
         val tglAkhir = Optional.present(tgl_akhir)
 
         try {
+            _isLoading.value = true
             val response = apolloClient.mutation(
                 CreateEdukasiMutation(
                     idUser,
@@ -651,15 +743,19 @@ class JobRepository(private val pref: UserPreference) {
                 )
             ).execute()
             if (response.data?.createEdukasi?.success == true) {
+                _isLoading.value = false
                 _success.value = true
             } else {
                 if (response.errors?.isNotEmpty() == true) {
+                    _isLoading.value = false
                     _toastMsg.value = response.errors?.component1()?.message
                 } else {
+                    _isLoading.value = false
                     _toastMsg.value = response.data?.createEdukasi?.errors?.component1()
                 }
             }
         } catch (e: ApolloException) {
+            _isLoading.value = false
             _success.value = false
             _toastMsg.value = e.message.toString()
         }

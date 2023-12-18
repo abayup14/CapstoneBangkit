@@ -8,16 +8,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.ListLowonganUserApplyQuery
-import com.haire.R
 import com.haire.ViewModelFactory
-import com.haire.data.InitialDummyValue
-import com.haire.data.Status
 import com.haire.databinding.FragmentStatusBinding
 import com.haire.ui.detail.DetailActivity
-import com.haire.ui.openjobs.OpenJobsViewModel
+import com.haire.util.showLoading
 
 class StatusFragment : Fragment() {
     private var _binding: FragmentStatusBinding? = null
@@ -30,17 +26,16 @@ class StatusFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStatusBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
+        }
         viewModel.getSession().observe(viewLifecycleOwner) {
             viewModel.getListLokerStatus(it.id)
             viewModel.listLoker.observe(viewLifecycleOwner) { listStatus ->
                 setData(listStatus)
             }
         }
+        return binding.root
     }
 
     private fun setData(listStatus: List<ListLowonganUserApplyQuery.Lowongan?>) {

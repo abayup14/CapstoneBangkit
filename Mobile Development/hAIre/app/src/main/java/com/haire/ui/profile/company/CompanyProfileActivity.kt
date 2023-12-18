@@ -1,11 +1,12 @@
 package com.haire.ui.profile.company
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityCompanyProfileBinding
+import com.haire.util.showLoading
 
 class CompanyProfileActivity : AppCompatActivity() {
     private var _binding: ActivityCompanyProfileBinding? = null
@@ -18,11 +19,15 @@ class CompanyProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+        }
+
         viewModel.getUser().observe(this) {
             if (it.isCompany) {
                 viewModel.getProfileUI(it.id)
                 viewModel.profileCompanyData.observe(this) { company ->
-                    if (company.url_photo != ""){
+                    if (company.url_photo != "") {
                         Glide.with(this)
                             .load(company.url_photo)
                             .circleCrop()

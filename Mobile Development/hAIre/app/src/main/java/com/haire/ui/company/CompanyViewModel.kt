@@ -2,17 +2,12 @@ package com.haire.ui.company
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.haire.GetLowonganQuery
 import com.haire.JobRepository
 import com.haire.ListLowonganCompanyQuery
 import com.haire.ListSkillsQuery
-import com.haire.data.Company
-import com.haire.data.InitialDummyValue
-import com.haire.data.Jobs
 import com.haire.data.UserModel
 import kotlinx.coroutines.launch
 
@@ -21,8 +16,8 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
     val toastMsg: LiveData<String> = repository.toastMsg
     val lokerCompany: LiveData<List<ListLowonganCompanyQuery.Lowongan?>> = repository.lokerCompany
     val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = repository.listSkill
-    val detailLowongan: LiveData<GetLowonganQuery.Lowongan?> = repository.detailLowongan
     val id: LiveData<Int> = repository.id
+    val isLoading: LiveData<Boolean> = repository.isLoading
 
     fun getSession(): LiveData<UserModel> {
         return repository.getUser().asLiveData()
@@ -59,14 +54,8 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
     }
 
     fun checkSkill(nama: String) {
-        viewModelScope.launch{
-            repository.checkSkill(nama)
-        }
-    }
-
-    fun getDetailLowongan(idLowongan: Int) {
         viewModelScope.launch {
-            repository.getLoker(idLowongan)
+            repository.checkSkill(nama)
         }
     }
 

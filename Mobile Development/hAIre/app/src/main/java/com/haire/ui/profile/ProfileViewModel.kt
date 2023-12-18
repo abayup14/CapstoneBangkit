@@ -25,6 +25,7 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
     val skill: LiveData<List<ListUserSkillsQuery.Skill?>> = repository.skill
     val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = repository.listSkill
     val id: LiveData<Int> = repository.id
+    val isLoading: LiveData<Boolean> = repository.isLoading
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getProfileUI(id: Int) {
@@ -58,7 +59,7 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
     }
 
     fun checkSkill(nama: String) {
-        viewModelScope.launch{
+        viewModelScope.launch {
             repository.checkSkill(nama)
         }
     }
@@ -120,7 +121,14 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
         tgl_akhir: String
     ) {
         viewModelScope.launch {
-            repository.createEdukasi(user_iduser, nama_institusi, deskripsi, jenjang, tgl_awal, tgl_akhir)
+            repository.createEdukasi(
+                user_iduser,
+                nama_institusi,
+                deskripsi,
+                jenjang,
+                tgl_awal,
+                tgl_akhir
+            )
         }
     }
 

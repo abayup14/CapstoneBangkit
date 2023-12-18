@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 class OpenJobsViewModel(private val repository: JobRepository) : ViewModel() {
     val loker: LiveData<List<ListLowongansQuery.Lowongan?>> = repository.loker
     val profileCompany: LiveData<ProfileCompanyQuery.Company?> = repository.profileCompany
+    val isLoading: LiveData<Boolean> = repository.isLoading
 
     fun getListLoker() {
         viewModelScope.launch {

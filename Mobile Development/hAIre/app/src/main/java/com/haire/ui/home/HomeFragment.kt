@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.haire.R
 import com.haire.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {

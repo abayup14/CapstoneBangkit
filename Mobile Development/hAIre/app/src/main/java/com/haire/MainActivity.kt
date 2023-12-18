@@ -11,7 +11,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.haire.databinding.ActivityMainBinding
 import com.haire.ui.company.CompanyActivity
-import com.haire.ui.company.registeradvance.CompleteCompanyActivity
 import com.haire.ui.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {

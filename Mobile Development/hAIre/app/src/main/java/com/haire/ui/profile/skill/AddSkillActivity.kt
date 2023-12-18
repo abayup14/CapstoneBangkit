@@ -1,17 +1,16 @@
 package com.haire.ui.profile.skill
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModel
+import androidx.appcompat.app.AppCompatActivity
 import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.ui.profile.ProfileViewModel
+import com.haire.util.showLoading
 import com.haire.util.showText
 
 class AddSkillActivity : AppCompatActivity() {
@@ -27,6 +26,9 @@ class AddSkillActivity : AppCompatActivity() {
 
         val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.edt_skill)
 
+        viewModel.isLoading.observe(this) {
+            showLoading(it, findViewById(R.id.progress_bar))
+        }
         viewModel.listSkills()
         viewModel.listSkill.observe(this) {
             val skillSuggestions = arrayListOf<String>()
@@ -35,7 +37,8 @@ class AddSkillActivity : AppCompatActivity() {
                 skillSuggestions.add(a?.nama!!)
             }
 
-            val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, skillSuggestions)
+            val adapter =
+                ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, skillSuggestions)
             autoCompleteTextView.setAdapter(adapter)
 
             viewModel.toastMsg.observe(this) { msg ->

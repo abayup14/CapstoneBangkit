@@ -6,7 +6,6 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,7 +13,6 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.haire.R
 import com.haire.ViewModelFactory
-import com.haire.data.Company
 import com.haire.databinding.FragmentCompanyBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
@@ -31,12 +29,6 @@ class CompanyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCompanyBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         viewModel.success.observe(viewLifecycleOwner) {
             if (it) {
                 showAlert()
@@ -80,6 +72,7 @@ class CompanyFragment : Fragment() {
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
+        return binding.root
     }
 
     private fun showAlert() {

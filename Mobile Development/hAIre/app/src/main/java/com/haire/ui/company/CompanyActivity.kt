@@ -1,29 +1,19 @@
 package com.haire.ui.company
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.ListLowonganCompanyQuery
-import com.haire.R
 import com.haire.ViewModelFactory
-import com.haire.data.Jobs
 import com.haire.databinding.ActivityCompanyBinding
-import com.haire.ui.detail.DetailActivity
 import com.haire.ui.company.addjob.AddJobActivity
 import com.haire.ui.company.detail.DetailJobActivity
-import com.haire.ui.company.registeradvance.CompleteCompanyActivity
-import com.haire.ui.login.LoginActivity
-import com.haire.ui.openjobs.JobAdapter
-import com.haire.ui.openjobs.OpenJobsViewModel
 import com.haire.ui.profile.company.CompanyProfileActivity
-import com.haire.ui.profile.company.CompanyProfileViewModel
 import com.haire.ui.welcome.WelcomeActivity
-import com.haire.util.showText
+import com.haire.util.showLoading
 
 class CompanyActivity : AppCompatActivity() {
     private var _binding: ActivityCompanyBinding? = null
@@ -36,6 +26,10 @@ class CompanyActivity : AppCompatActivity() {
         _binding = ActivityCompanyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+        }
 
         binding.btnProfile.setOnClickListener {
             startActivity(Intent(this, CompanyProfileActivity::class.java))

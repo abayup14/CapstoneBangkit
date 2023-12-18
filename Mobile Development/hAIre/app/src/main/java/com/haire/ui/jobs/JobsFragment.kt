@@ -6,14 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.haire.R
 import com.haire.SectionsPagerAdapter
 import com.haire.databinding.FragmentJobsBinding
-import com.haire.ui.openjobs.OpenJobsFragment
-import com.haire.ui.status.StatusFragment
 
 class JobsFragment : Fragment() {
     private var _binding: FragmentJobsBinding? = null
@@ -26,11 +23,6 @@ class JobsFragment : Fragment() {
     ): View {
         _binding = FragmentJobsBinding.inflate(inflater, container, false)
         (activity as AppCompatActivity?)?.supportActionBar?.hide()
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val sectionsPagerAdapter = SectionsPagerAdapter(requireActivity())
         binding.apply {
             viewPager.adapter = sectionsPagerAdapter
@@ -38,6 +30,7 @@ class JobsFragment : Fragment() {
                 tab.text = resources.getString(TAB_TITLES[position])
             }.attach()
         }
+        return binding.root
     }
 
     override fun onDestroyView() {

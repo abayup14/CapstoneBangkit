@@ -1,19 +1,16 @@
 package com.haire.ui.company.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.haire.ListApplyLowonganQuery
 import com.haire.ListSkillRequiredQuery
-import com.haire.ListUserSkillsQuery
-import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityDetailJobBinding
-import com.haire.ui.profile.ProfileViewModel
+import com.haire.util.showLoading
 
 class DetailJobActivity : AppCompatActivity() {
     private var _binding: ActivityDetailJobBinding? = null
@@ -26,14 +23,19 @@ class DetailJobActivity : AppCompatActivity() {
         _binding = ActivityDetailJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+        }
 
         binding.btnBack.setOnClickListener { finish() }
 
         val id = intent.getIntExtra(EXTRA_ID, 0)
 
         viewModel.getListApplyLoker(id)
-        viewModel.getLowongan(intent.getIntExtra(EXTRA_ID, 0))
-        viewModel.detailLowongan.observe(this) {job ->
+        viewModel.getLowongan(id)
+        viewModel.detailLowongan.observe(this) { job ->
             binding.apply {
                 tvPekerjaan.text = job?.nama
                 tvJmlh.text = job?.jmlh_butuh.toString()
@@ -45,14 +47,14 @@ class DetailJobActivity : AppCompatActivity() {
             setLeaderBoardData(it)
         }
 
-        viewModel.getSkills(intent.getIntExtra(EXTRA_ID, 0))
+        viewModel.getSkills(id)
         viewModel.skill.observe(this) {
             setSkillData(it)
         }
     }
 
-    private fun setLeaderBoardData(listUser: List<ListApplyLowonganQuery.Apply?>) {
-        adapter = UserAdapter(listUser) {
+    private fun setLeaderBoardData(listApply: List<ListApplyLowonganQuery.Apply?>) {
+        adapter = UserAdapter(listApply) {
             finish()
         }
         binding.rvLeaderboard.layoutManager = LinearLayoutManager(this)

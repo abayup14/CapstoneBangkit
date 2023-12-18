@@ -2,6 +2,7 @@ package com.haire.ui.openjobs
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,8 @@ import com.haire.ListLowongansQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentOpenJobsBinding
-import com.haire.ui.company.addjob.Global
 import com.haire.ui.detail.DetailActivity
+import com.haire.util.showLoading
 
 class OpenJobsFragment : Fragment() {
     private var _binding: FragmentOpenJobsBinding? = null
@@ -26,18 +27,20 @@ class OpenJobsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOpenJobsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
+        }
         viewModel.getListLoker()
         viewModel.loker.observe(viewLifecycleOwner) {
-            viewModel.getProfileCompany(1)
+            for (a in it) {
+                viewModel.getProfileCompany(a?.company_id!!)
+                Log.e("asw", "${a.company_id}")
+            }
             viewModel.profileCompany.observe(viewLifecycleOwner) { company ->
                 setData(it, company!!)
             }
         }
+        return binding.root
     }
 
     private fun setData(

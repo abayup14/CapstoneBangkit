@@ -17,8 +17,8 @@ class DetailViewModel(private val repository: JobRepository) : ViewModel() {
     val detailLowongan: LiveData<GetLowonganQuery.Lowongan?> = repository.detailLowongan
     val companyData: LiveData<ProfileCompanyQuery.Company?> = repository.profileCompany
     val skillRequired: LiveData<List<ListSkillRequiredQuery.Skill?>> = repository.skillRequired
-    val jaccard: Double = repository.jaccard
     val success: LiveData<Boolean> = repository.success
+    val isLoading: LiveData<Boolean> = repository.isLoading
 
     fun getDetail(id: Int) {
         viewModelScope.launch {

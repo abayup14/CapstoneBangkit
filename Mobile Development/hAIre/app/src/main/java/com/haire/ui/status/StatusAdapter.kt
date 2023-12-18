@@ -5,11 +5,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.haire.ListLowonganUserApplyQuery
-import com.haire.R
-import com.haire.data.Jobs
-import com.haire.data.Status
 import com.haire.databinding.ItemStatusBinding
 import java.util.Locale
 

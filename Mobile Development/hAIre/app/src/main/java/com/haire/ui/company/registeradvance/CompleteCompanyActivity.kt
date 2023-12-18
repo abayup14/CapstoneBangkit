@@ -1,6 +1,5 @@
 package com.haire.ui.company.registeradvance
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityCompleteCompanyBinding
-import com.haire.ui.company.CompanyActivity
 import com.haire.ui.company.CompanyViewModel
 import com.haire.util.showText
 

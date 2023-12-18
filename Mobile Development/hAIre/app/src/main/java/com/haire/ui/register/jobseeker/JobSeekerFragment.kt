@@ -18,11 +18,9 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentJobSeekerBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
-import com.haire.util.DatePickerFragment
 import com.haire.util.showText
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class JobSeekerFragment : Fragment() {
@@ -39,11 +37,6 @@ class JobSeekerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentJobSeekerBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         binding.homelessRg.setOnCheckedChangeListener { _, checkedId ->
             val selectedRadioButton: RadioButton = requireActivity().findViewById(checkedId)
             when (selectedRadioButton.text.toString()) {
@@ -119,6 +112,7 @@ class JobSeekerFragment : Fragment() {
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
+        return binding.root
     }
 
     private fun showAlert() {

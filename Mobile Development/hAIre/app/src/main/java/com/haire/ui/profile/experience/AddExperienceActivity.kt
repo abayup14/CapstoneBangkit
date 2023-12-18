@@ -1,8 +1,6 @@
 package com.haire.ui.profile.experience
 
 import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -13,6 +11,7 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityAddExperienceBinding
 import com.haire.ui.profile.ProfileViewModel
 import com.haire.util.DatePickerFragment
+import com.haire.util.showLoading
 import com.haire.util.showText
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -51,6 +50,10 @@ class AddExperienceActivity : AppCompatActivity(), DatePickerFragment.DialogDate
         }
         binding.btnEndDate.setOnClickListener {
             showDatePicker("dateEnd")
+        }
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
         }
 
         viewModel.success.observe(this) {
