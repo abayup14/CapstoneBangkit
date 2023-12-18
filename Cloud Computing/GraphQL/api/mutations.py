@@ -279,3 +279,27 @@ def create_apply_resolver(obj, info, user_iduser, lowongan_id, probabilitas, jac
             "errors": ["Incorrect data provided."]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def update_user_apply_status_resolver(obj, info, user_iduser, lowongan_id, status):
+    try:
+        apply_update = Apply.query.filter_by(user_iduser=user_iduser, lowongan_id=lowongan_id).first()
+        if apply_update:
+            apply_update.status = status
+            db.session.add(apply_update)
+            db.session.commit()
+            payload = {
+                "success": True,
+                "apply": apply_update.to_dict()
+            }
+        else:
+            payload = {
+                "success": False,
+                "errors": [f"item matching {apply_update} not found"]
+            }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"item matching {apply_update} not found"]
+        }
+    return payload

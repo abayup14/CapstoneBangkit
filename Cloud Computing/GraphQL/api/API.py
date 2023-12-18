@@ -396,7 +396,7 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # PREDICT USING MODEL
 # graphql_query = '''
 # query {
-#   predictApply(list_input: [2,1,40,10]) {
+#   predictApply(list_input: [2,1,4,20]) {
 #     success
 #     errors
 #     prob
@@ -462,6 +462,21 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 #     }
 #   }
 # '''
+
+# UPDATE STATUS APPLY USER
+graphql_query= '''
+    mutation{
+        updateUserApplyStatus(user_iduser: 1, lowongan_id: 1, status: "Diterima"){
+            success
+            errors
+            apply{
+                user_iduser
+                lowongan_id
+                status
+            }
+        }
+    }
+'''
 
 # Headers (optional, include if needed)
 headers = {
