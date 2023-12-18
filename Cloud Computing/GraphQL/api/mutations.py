@@ -303,3 +303,27 @@ def update_user_apply_status_resolver(obj, info, user_iduser, lowongan_id, statu
             "errors": [f"item matching {apply_update} not found"]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def update_user_description_resolver(obj, info, iduser, deskripsi):
+    try:
+        user_update = User.query.filter_by(iduser=iduser).first()
+        if user_update:
+            user_update.deskripsi = deskripsi
+            db.session.add(user_update)
+            db.session.commit()
+            payload = {
+                "success": True,
+                "user": user_update.to_dict()
+            }
+        else:
+            payload = {
+                "success": False,
+                "errors": [f"item matching {user_update} not found"]
+            }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"item matching {user_update} not found"]
+        }
+    return payload
