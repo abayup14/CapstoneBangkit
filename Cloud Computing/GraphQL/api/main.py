@@ -10,7 +10,8 @@ from api.queries import list_users_resolver, list_companies_resolver, list_lowon
     get_lowongan_resolver, list_skill_search_resolver
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, \
     create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver, create_skills_required_resolver, \
-    create_notifikasi_resolver, create_apply_resolver, update_education_resolver, update_user_resolver, update_user_apply_status_resolver
+    create_notifikasi_resolver, create_apply_resolver, update_education_resolver, update_user_resolver, update_user_apply_status_resolver, \
+    update_user_description_resolver
 
 
 query = ObjectType("Query")
@@ -59,9 +60,10 @@ mutation.set_field("createApply", create_apply_resolver)
 mutation.set_field("updateEducation", update_education_resolver)
 mutation.set_field("updateUser", update_user_resolver)
 mutation.set_field("updateUserApplyStatus", update_user_apply_status_resolver)
+mutation.set_field("updateUserDescription", update_user_description_resolver)
 
 
-type_defs = load_schema_from_path("schema.graphql")
+type_defs = load_schema_from_path("api/schema.graphql")
 schema = make_executable_schema(type_defs, query, mutation, snake_case_fallback_resolvers)
 
 
