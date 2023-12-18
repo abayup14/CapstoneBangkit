@@ -3,16 +3,24 @@ package com.haire.ui.status
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import com.haire.JobRepository
+import com.haire.ListLowonganUserApplyQuery
 import com.haire.data.InitialDummyValue
 import com.haire.data.Status
+import com.haire.data.UserModel
+import kotlinx.coroutines.launch
 
-class StatusViewModel : ViewModel() {
+class StatusViewModel(private val repository: JobRepository) : ViewModel() {
 
-    private val _status = MutableLiveData<List<Status>>()
-    val status: LiveData<List<Status>> = _status
+    val listLoker: LiveData<List<ListLowonganUserApplyQuery.Lowongan?>> = repository.listLowonganUserApply
 
-    init {
-        val dummyStatus = InitialDummyValue.dummyStatus
-        _status.value = dummyStatus
+    fun getListLokerStatus(idUser: Int) {
+        viewModelScope.launch {
+            repository.getListLowonganUserApply(idUser)
+        }
     }
+
+    fun getSession(): LiveData<UserModel> = repository.getUser().asLiveData()
 }

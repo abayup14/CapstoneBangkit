@@ -1,0 +1,7 @@
+query predictApply($listInput: [Float]) {
+    predictApply(list_input: $listInput) {
+        success
+        errors
+        prob
+    }
+}

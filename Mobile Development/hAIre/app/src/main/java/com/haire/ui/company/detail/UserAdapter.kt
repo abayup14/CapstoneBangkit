@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.haire.ListApplyLowonganQuery
 import com.haire.data.User
 import com.haire.databinding.ItemUserBinding
 
-class UserAdapter(private var listUser: List<User>, private val onAcceptClick: () -> Unit, private val onRejectClick: () -> Unit) :
+class UserAdapter(private var listUser: List<ListApplyLowonganQuery.Apply?>, private val onAcceptClick: () -> Unit) :
     RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -25,18 +26,15 @@ class UserAdapter(private var listUser: List<User>, private val onAcceptClick: (
 
     inner class UserViewHolder(private var binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: User) {
+        fun bind(user: ListApplyLowonganQuery.Apply?) {
             binding.apply {
-                Glide.with(root.context)
-                    .load(user.photoUrl)
-                    .circleCrop()
-                    .into(ivProfile)
-                tvNama.text = user.name
+//                Glide.with(root.context)
+//                    .load(user.photoUrl)
+//                    .circleCrop()
+//                    .into(ivProfile)
+                tvNama.text = user?.user_iduser.toString()
                 btnAccept.setOnClickListener {
                     onAcceptClick()
-                }
-                btnReject.setOnClickListener {
-                    onRejectClick()
                 }
             }
         }

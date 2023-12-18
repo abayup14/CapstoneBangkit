@@ -6,6 +6,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.haire.ListLowonganUserApplyQuery
 import com.haire.R
 import com.haire.data.Jobs
 import com.haire.data.Status
@@ -13,32 +14,32 @@ import com.haire.databinding.ItemStatusBinding
 import java.util.Locale
 
 class StatusAdapter(
-    private var listStatus: List<Status>,
-    private val onItemClick: (Jobs) -> Unit
+    private var listStatus: List<ListLowonganUserApplyQuery.Lowongan?>,
+    private val onItemClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<StatusAdapter.StatusViewHolder>(), Filterable {
-    private var filteredList: List<Status> = listStatus
+    private var filteredList: List<ListLowonganUserApplyQuery.Lowongan?> = listStatus
 
     inner class StatusViewHolder(private var binding: ItemStatusBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobs: Jobs, status: Status) {
+        fun bind(jobs: ListLowonganUserApplyQuery.Lowongan) {
             binding.apply {
-                Glide.with(root.context)
-                    .load(jobs.company.photoUrl)
-                    .into(ivJobs)
-                tvTitle.text = jobs.pekerjaan
-                tvAddres.text = jobs.company.address
-                tvStatus.text = status.status
-                when (status.status) {
-                    "Accepted" -> tvStatus.setBackgroundResource(R.drawable.status_accept)
-                    "Rejected" -> tvStatus.setBackgroundResource(R.drawable.status_reject)
-                    else -> {
-                        tvStatus.setBackgroundResource(R.drawable.bg_status)
-                    }
-                }
+//                Glide.with(root.context)
+//                    .load(jobs.company.photoUrl)
+//                    .into(ivJobs)
+                tvTitle.text = jobs.nama
+                tvAddres.text = jobs.deskripsi
+//                tvStatus.text = status.status
+//                when (status.status) {
+//                    "Accepted" -> tvStatus.setBackgroundResource(R.drawable.status_accept)
+//                    "Rejected" -> tvStatus.setBackgroundResource(R.drawable.status_reject)
+//                    else -> {
+//                        tvStatus.setBackgroundResource(R.drawable.bg_status)
+//                    }
+//                }
             }
             itemView.setOnClickListener {
-                onItemClick(jobs)
+                onItemClick(jobs.id ?: 0)
             }
         }
     }
@@ -50,16 +51,16 @@ class StatusAdapter(
 
     override fun getItemCount(): Int = filteredList.size
     override fun onBindViewHolder(holder: StatusViewHolder, position: Int) {
-        holder.bind(filteredList[position].jobs, filteredList[position])
+        holder.bind(filteredList[position]!!)
     }
 
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
                 val query = charSequence.toString().toLowerCase(Locale.getDefault())
-                val filteredList = ArrayList<Status>()
+                val filteredList = ArrayList<ListLowonganUserApplyQuery.Lowongan>()
                 for (item in listStatus) {
-                    if (item.jobs.pekerjaan.toLowerCase(Locale.getDefault()).contains(query)) {
+                    if (item?.nama?.toLowerCase(Locale.getDefault())?.contains(query) == true) {
                         filteredList.add(item)
                     }
                 }
@@ -69,7 +70,7 @@ class StatusAdapter(
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-                filteredList = results.values as List<Status>
+                filteredList = results.values as List<ListLowonganUserApplyQuery.Lowongan>
                 notifyDataSetChanged()
             }
         }

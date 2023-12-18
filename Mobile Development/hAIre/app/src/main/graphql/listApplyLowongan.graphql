@@ -1,0 +1,13 @@
+query listApplyLowongan($lowongan_id: Int) {
+    listApplyLowongan(lowongan_id: $lowongan_id) {
+        apply {
+            user_iduser
+            status
+            skor_akhir
+            jaccard
+            probabilitas
+        }
+        success
+        errors
+    }
+}

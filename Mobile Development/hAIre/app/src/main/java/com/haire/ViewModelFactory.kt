@@ -42,7 +42,7 @@ class ViewModelFactory(private val context: Context) :
             }
 
             modelClass.isAssignableFrom(StatusViewModel::class.java) -> {
-                StatusViewModel() as T
+                StatusViewModel(Injection.provideRepository(context)) as T
             }
 
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {

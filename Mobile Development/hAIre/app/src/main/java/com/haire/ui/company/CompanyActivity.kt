@@ -53,16 +53,16 @@ class CompanyActivity : AppCompatActivity() {
         viewModel.getSession().observe(this) { userModel ->
             viewModel.getLokerCompany(userModel.id)
             viewModel.lokerCompany.observe(this) {
-                setData(it, userModel.id)
+                setData(it)
             }
         }
     }
 
-    private fun setData(listJobs: List<ListLowonganCompanyQuery.Lowongan?>, id: Int) {
+    private fun setData(listJobs: List<ListLowonganCompanyQuery.Lowongan?>) {
         binding.apply {
             adapter = JobCompanyAdapter(listJobs) {
                 val intentToDetail = Intent(this@CompanyActivity, DetailJobActivity::class.java)
-                intentToDetail.putExtra(DetailJobActivity.EXTRA_ID, id)
+                intentToDetail.putExtra(DetailJobActivity.EXTRA_ID, it)
                 startActivity(intentToDetail)
             }
             rvOpenVacancy.layoutManager = LinearLayoutManager(applicationContext)

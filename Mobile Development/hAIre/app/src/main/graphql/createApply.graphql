@@ -1,0 +1,6 @@
+mutation createApply($user_iduser: Int, $lowongan_id: Int, $probabilitas: Float, $jaccard: Float, $skor_akhir: Float, $status: String) {
+    createApply(user_iduser: $user_iduser, lowongan_id: $lowongan_id, probabilitas: $probabilitas, jaccard: $jaccard, skor_akhir: $skor_akhir, status: $status) {
+        errors
+        success
+    }
+}

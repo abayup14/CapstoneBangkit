@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
+import com.haire.ListApplyLowonganQuery
 import com.haire.ListSkillRequiredQuery
 import com.haire.ListUserSkillsQuery
 import com.haire.R
@@ -16,6 +18,7 @@ import com.haire.ui.profile.ProfileViewModel
 class DetailJobActivity : AppCompatActivity() {
     private var _binding: ActivityDetailJobBinding? = null
     private val binding get() = _binding!!
+    private var adapter: UserAdapter? = null
     private val viewModel by viewModels<DetailJobViewModel> { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +29,9 @@ class DetailJobActivity : AppCompatActivity() {
 
         binding.btnBack.setOnClickListener { finish() }
 
+        val id = intent.getIntExtra(EXTRA_ID, 0)
+
+        viewModel.getListApplyLoker(id)
         viewModel.getLowongan(intent.getIntExtra(EXTRA_ID, 0))
         viewModel.detailLowongan.observe(this) {job ->
             binding.apply {
@@ -35,10 +41,22 @@ class DetailJobActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.listLeaderBoard.observe(this) {
+            setLeaderBoardData(it)
+        }
+
         viewModel.getSkills(intent.getIntExtra(EXTRA_ID, 0))
         viewModel.skill.observe(this) {
             setSkillData(it)
         }
+    }
+
+    private fun setLeaderBoardData(listUser: List<ListApplyLowonganQuery.Apply?>) {
+        adapter = UserAdapter(listUser) {
+            finish()
+        }
+        binding.rvLeaderboard.layoutManager = LinearLayoutManager(this)
+        binding.rvLeaderboard.adapter = adapter
     }
 
     private fun setSkillData(listSkill: List<ListSkillRequiredQuery.Skill?>) {

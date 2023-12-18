@@ -1,5 +1,7 @@
 package com.haire.ui.detail
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -15,11 +17,25 @@ class DetailViewModel(private val repository: JobRepository) : ViewModel() {
     val detailLowongan: LiveData<GetLowonganQuery.Lowongan?> = repository.detailLowongan
     val companyData: LiveData<ProfileCompanyQuery.Company?> = repository.profileCompany
     val skillRequired: LiveData<List<ListSkillRequiredQuery.Skill?>> = repository.skillRequired
-    val jaccard: LiveData<Double> = repository.jaccard
+    val jaccard: Double = repository.jaccard
+    val success: LiveData<Boolean> = repository.success
 
     fun getDetail(id: Int) {
         viewModelScope.launch {
             repository.getLoker(id)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun apply() {
+        viewModelScope.launch {
+            repository.apply()
+        }
+    }
+
+    fun getUserProfile(idUser: Int) {
+        viewModelScope.launch {
+            repository.getProfileData(idUser)
         }
     }
 
