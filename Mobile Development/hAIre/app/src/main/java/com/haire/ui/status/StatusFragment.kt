@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.haire.ListLowonganUserApplyQuery
 import com.haire.R
+import com.haire.ViewModelFactory
 import com.haire.data.InitialDummyValue
 import com.haire.data.Status
 import com.haire.databinding.FragmentStatusBinding
@@ -22,7 +24,7 @@ class StatusFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var adapter: StatusAdapter? = null
-    private val viewModel by viewModels<StatusViewModel> { ViewModelProvider.NewInstanceFactory() }
+    private val viewModel by viewModels<StatusViewModel> { ViewModelFactory(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,16 +35,19 @@ class StatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.status.observe(viewLifecycleOwner) {
-            setData(it)
+        viewModel.getSession().observe(viewLifecycleOwner) {
+            viewModel.getListLokerStatus(it.id)
+            viewModel.listLoker.observe(viewLifecycleOwner) { listStatus ->
+                setData(listStatus)
+            }
         }
     }
 
-    private fun setData(listStatus: List<Status>) {
+    private fun setData(listStatus: List<ListLowonganUserApplyQuery.Lowongan?>) {
         binding.apply {
             adapter = StatusAdapter(listStatus) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
-                detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it.jmlButuh)
+                detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
                 startActivity(detailIntent)
             }
             rvStatus.layoutManager = LinearLayoutManager(context)

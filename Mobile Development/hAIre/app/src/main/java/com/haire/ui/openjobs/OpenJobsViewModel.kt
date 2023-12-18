@@ -18,11 +18,9 @@ class OpenJobsViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun getProfileComapny(id: Int) {
+    fun getProfileCompany(id: Int) {
         viewModelScope.launch {
-            repository.getProfileData(id)
+            repository.getCompanyData(id)
         }
     }
-
-
 }

@@ -1,20 +1,27 @@
 package com.haire.ui.detail
 
+import android.os.Build
 import android.os.Bundle
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.chip.Chip
 import com.haire.GetLowonganQuery
+import com.haire.ListSkillRequiredQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.ViewModelFactory
 import com.haire.data.Jobs
+import com.haire.data.Skill
 import com.haire.databinding.ActivityDetailBinding
 import com.haire.util.showText
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private val viewModel by viewModels<DetailViewModel> { ViewModelFactory(this) }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -33,16 +40,22 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnApply.setOnClickListener {
-            viewModel.getSession().observe(this) {
-                viewModel.getJaccardSkill(it.id, jobId)
-                viewModel.jaccard.observe(this) { jaccard ->
-                    showText(this, "Jaccard $jaccard")
-                }
-            }
-            // apply
-            viewModel.skillRequired.observe(this) {
+        viewModel.getSession().observe(this) {
+            viewModel.getUserProfile(it.id)
+            viewModel.getJaccardSkill(it.id, jobId)
+        }
+        // apply
+        viewModel.skillRequired.observe(this) {
+            setSkillData(it)
+        }
 
+        binding.btnApply.setOnClickListener {
+            viewModel.apply()
+        }
+
+        viewModel.success.observe(this) {
+            if (it){
+                finish()
             }
         }
     }
@@ -54,6 +67,26 @@ class DetailActivity : AppCompatActivity() {
                 .into(ivJobs)
             tvPekerjaan.text = detail?.nama.toString()
             tvAlamat.text = company?.alamat
+            tvDetail.text = detail?.deskripsi
+            tvDetail2.text = company?.deskripsi
+            tvPerusahaan.text = company?.nama
+        }
+    }
+
+    private fun setSkillData(listSkill: List<ListSkillRequiredQuery.Skill?>) {
+        for (skill in listSkill) {
+            val newChip = Chip(this)
+            newChip.text = skill?.nama
+
+            // Atur parameter layout untuk Chip
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.marginEnd = 8
+            newChip.layoutParams = layoutParams
+
+            binding.linearLayout.addView(newChip)
         }
     }
 

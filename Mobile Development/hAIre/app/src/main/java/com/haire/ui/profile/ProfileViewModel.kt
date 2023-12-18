@@ -1,6 +1,8 @@
 package com.haire.ui.profile
 
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -24,6 +26,7 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
     val listSkill: LiveData<List<ListSkillsQuery.Skill?>> = repository.listSkill
     val id: LiveData<Int> = repository.id
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getProfileUI(id: Int) {
         viewModelScope.launch {
             repository.getProfileData(id)

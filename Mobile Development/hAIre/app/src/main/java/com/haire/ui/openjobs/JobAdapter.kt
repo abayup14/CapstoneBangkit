@@ -5,36 +5,39 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
 import com.bumptech.glide.Glide
 import com.haire.ListLowongansQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.databinding.ItemJobsBinding
+import com.haire.ui.company.addjob.Global
+import com.haire.ui.learning.LearningViewModel
 import java.util.Locale
 
 class JobAdapter(
     private var listJobs: List<ListLowongansQuery.Lowongan?>,
+    private var company: ProfileCompanyQuery.Company?,
     private val onItemClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<JobAdapter.JobViewHolder>(), Filterable {
     private var filteredList: List<ListLowongansQuery.Lowongan?> = listJobs
-    var selectedCompanyId: Int? = 0
 
     inner class JobViewHolder(private var binding: ItemJobsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobs: ListLowongansQuery.Lowongan) {
-
+        fun bind(jobs: ListLowongansQuery.Lowongan, company: ProfileCompanyQuery.Company) {
             binding.apply {
-//                Glide.with(root.context)
-//                    .load(company.url_photo)
-//                    .into(ivJobs)
+                Glide.with(root.context)
+                    .load(company.url_photo)
+                    .into(ivJobs)
                 tvTitle.text = jobs.nama
-                tvAddres.text = jobs.deskripsi
+                tvAddres.text = company.alamat
             }
             itemView.setOnClickListener {
                 onItemClick(jobs.id ?: 0)
             }
-            selectedCompanyId = jobs.company_id
         }
     }
 
@@ -45,7 +48,7 @@ class JobAdapter(
 
     override fun getItemCount(): Int = filteredList.size
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        holder.bind(filteredList[position]!!)
+        holder.bind(filteredList[position]!!, company!!)
     }
 
     override fun getFilter(): Filter {
@@ -69,9 +72,5 @@ class JobAdapter(
                 notifyDataSetChanged()
             }
         }
-    }
-
-    fun getCompanyId(): Int? {
-        return selectedCompanyId
     }
 }

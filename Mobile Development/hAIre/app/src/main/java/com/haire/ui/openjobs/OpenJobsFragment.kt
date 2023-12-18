@@ -8,15 +8,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.ListLowongansQuery
 import com.haire.ProfileCompanyQuery
-import com.haire.R
 import com.haire.ViewModelFactory
-import com.haire.data.InitialDummyValue
-import com.haire.data.Jobs
 import com.haire.databinding.FragmentOpenJobsBinding
+import com.haire.ui.company.addjob.Global
 import com.haire.ui.detail.DetailActivity
 
 class OpenJobsFragment : Fragment() {
@@ -36,16 +33,19 @@ class OpenJobsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getListLoker()
         viewModel.loker.observe(viewLifecycleOwner) {
-            setData(it)
-//            viewModel.getProfileComapny(adapter?.getCompanyId()!!)
-//            viewModel.profileCompany.observe(viewLifecycleOwner) { company ->
-//            }
+            viewModel.getProfileCompany(1)
+            viewModel.profileCompany.observe(viewLifecycleOwner) { company ->
+                setData(it, company!!)
+            }
         }
     }
 
-    private fun setData(listJobs: List<ListLowongansQuery.Lowongan?>) {
+    private fun setData(
+        listJobs: List<ListLowongansQuery.Lowongan?>,
+        company: ProfileCompanyQuery.Company
+    ) {
         binding.apply {
-            adapter = JobAdapter(listJobs) {
+            adapter = JobAdapter(listJobs, company) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
                 detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
                 startActivity(detailIntent)
@@ -72,6 +72,7 @@ class OpenJobsFragment : Fragment() {
             })
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -3,6 +3,7 @@ query getLowongan($id: Int) {
         success
         errors
         lowongan {
+            id
             nama
             jmlh_butuh
             deskripsi
