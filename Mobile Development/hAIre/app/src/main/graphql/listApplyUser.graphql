@@ -1,0 +1,10 @@
+query listApplyUser($user_iduser: Int) {
+    listApplyUser(user_iduser: $user_iduser) {
+        success
+        errors
+        apply {
+            status
+            lowongan_id
+        }
+    }
+}

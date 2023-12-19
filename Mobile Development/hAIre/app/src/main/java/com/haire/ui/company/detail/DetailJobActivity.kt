@@ -1,8 +1,10 @@
 package com.haire.ui.company.detail
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +18,8 @@ import com.haire.util.showLoading
 import com.haire.util.showText
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class DetailJobActivity : AppCompatActivity() {
     private var _binding: ActivityDetailJobBinding? = null
@@ -24,6 +28,7 @@ class DetailJobActivity : AppCompatActivity() {
     var isHandled: Boolean = false
     private val viewModel by viewModels<DetailJobViewModel> { ViewModelFactory(this) }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailJobBinding.inflate(layoutInflater)
@@ -70,6 +75,7 @@ class DetailJobActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setLeaderBoardData(
         listApply: List<ListApplyLowonganQuery.Apply?>,
         listUser: List<ProfileUserQuery.User?>
@@ -80,19 +86,31 @@ class DetailJobActivity : AppCompatActivity() {
         binding.rvLeaderboard.adapter = adapter
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun onAcceptClick(idUser: Int) {
+        val pekerjaan = binding.tvPekerjaan.text.toString()
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formattedDateTime = currentDateTime.format(formatter)
         val idLowongan = intent.getIntExtra(EXTRA_ID, 0)
         viewModel.updateUserApplyStatus(idUser, idLowongan, "Diterima")
         showText(this, "Accepted")
+        viewModel.createNotification(formattedDateTime, "Congratulation! You are accepted as $pekerjaan", idUser)
         val updatedListApply = adapter?.getListApply()?.toMutableList()
         updatedListApply?.removeAll { it?.user_iduser == idUser }
         adapter?.updateListApply(updatedListApply!!)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun onRejectClick(idUser: Int) {
+        val pekerjaan = binding.tvPekerjaan.text.toString()
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formattedDateTime = currentDateTime.format(formatter)
         val id = intent.getIntExtra(EXTRA_ID, 0)
         viewModel.updateUserApplyStatus(idUser, id, "Ditolak")
         showText(this, "Rejected")
+        viewModel.createNotification(formattedDateTime, "We're sorry that you are rejected as $pekerjaan", idUser)
         val updatedListApply = adapter?.getListApply()?.toMutableList()
         updatedListApply?.removeAll { it?.user_iduser == idUser }
         adapter?.updateListApply(updatedListApply!!)

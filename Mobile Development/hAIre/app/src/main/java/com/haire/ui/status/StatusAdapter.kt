@@ -5,12 +5,16 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
+import com.haire.ListApplyLowonganQuery
+import com.haire.ListApplyUserQuery
 import com.haire.ListLowonganUserApplyQuery
 import com.haire.ProfileCompanyQuery
+import com.haire.R
 import com.haire.databinding.ItemStatusBinding
 import java.util.Locale
 
 class StatusAdapter(
+    private var listApply: List<ListApplyUserQuery.Apply?>,
     private var listStatus: List<ListLowonganUserApplyQuery.Lowongan?>,
     private var companies: List<ProfileCompanyQuery.Company?>,
     private val onItemClick: (Int) -> Unit
@@ -20,21 +24,30 @@ class StatusAdapter(
 
     inner class StatusViewHolder(private var binding: ItemStatusBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobs: ListLowonganUserApplyQuery.Lowongan, company: ProfileCompanyQuery.Company) {
+        fun bind(
+            apply: ListApplyUserQuery.Apply?,
+            jobs: ListLowonganUserApplyQuery.Lowongan,
+            company: ProfileCompanyQuery.Company
+        ) {
             binding.apply {
 //                Glide.with(root.context)
 //                    .load(jobs.company.photoUrl)
 //                    .into(ivJobs)
                 tvTitle.text = jobs.nama
                 tvAddres.text = company.alamat
-//                tvStatus.text = status.status
-//                when (status.status) {
-//                    "Accepted" -> tvStatus.setBackgroundResource(R.drawable.status_accept)
-//                    "Rejected" -> tvStatus.setBackgroundResource(R.drawable.status_reject)
-//                    else -> {
-//                        tvStatus.setBackgroundResource(R.drawable.bg_status)
-//                    }
-//                }
+                when (apply?.status) {
+                    "Diterima" -> {
+                        tvStatus.setBackgroundResource(R.drawable.status_accept)
+                        tvStatus.text = "Accepted"
+                    }
+                    "Ditola" -> {
+                        tvStatus.setBackgroundResource(R.drawable.status_reject)
+                        tvStatus.text = "Rejected"
+                    }
+                    else -> {
+                        tvStatus.setBackgroundResource(R.drawable.bg_status)
+                    }
+                }
             }
             itemView.setOnClickListener {
                 onItemClick(jobs.id ?: 0)
@@ -49,7 +62,7 @@ class StatusAdapter(
 
     override fun getItemCount(): Int = filteredList.size
     override fun onBindViewHolder(holder: StatusViewHolder, position: Int) {
-        holder.bind(filteredList[position]!!, companies[position]!!)
+        holder.bind(listApply[position], filteredList[position]!!, companies[position]!!)
     }
 
     override fun getFilter(): Filter {

@@ -59,4 +59,10 @@ class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
             repository.getProfileData(idUser)
         }
     }
+
+    fun createNotification(waktu: String, pesan: String, idUser: Int) {
+        viewModelScope.launch {
+            repository.createNotification(waktu, pesan, idUser)
+        }
+    }
 }

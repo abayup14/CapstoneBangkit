@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.haire.ListApplyUserQuery
 import com.haire.ListLowonganUserApplyQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentStatusBinding
 import com.haire.ui.detail.DetailActivity
 import com.haire.util.showLoading
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class StatusFragment : Fragment() {
@@ -33,28 +33,32 @@ class StatusFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it, binding.progressBar)
         }
-        viewModel.getSession().observe(viewLifecycleOwner) {
-            viewModel.getListLokerStatus(it.id)
+        viewModel.getSession().observe(viewLifecycleOwner) { user ->
+            viewModel.getListLokerStatus(user.id)
             viewModel.listLoker.observe(viewLifecycleOwner) { listStatus ->
-                val requests = listStatus.map { status ->
-                    viewModel.getProfileCompanyAsync(status?.company_id!!)
+                viewModel.getApplyStatusAsync(user.id)
+                viewModel.listApplyUser.observe(viewLifecycleOwner) {
+                    lifecycleScope.launch {
+                        val companiesDeferred = listStatus.map { viewModel.getProfileCompanyAsync(it?.company_id!!) }
+                        val companies = companiesDeferred.map { it.await() }
+
+                        setData(it, listStatus, companies)
+                    }
                 }
 
-                lifecycleScope.launch {
-                    val companies = requests.awaitAll()
-                    setData(listStatus, companies)
-                }
             }
         }
         return binding.root
     }
 
     private fun setData(
+        listApply: List<ListApplyUserQuery.Apply?>,
         listStatus: List<ListLowonganUserApplyQuery.Lowongan?>,
         companies: List<ProfileCompanyQuery.Company?>
     ) {
+
         binding.apply {
-            adapter = StatusAdapter(listStatus, companies) {
+            adapter = StatusAdapter(listApply, listStatus, companies) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
                 detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
                 startActivity(detailIntent)

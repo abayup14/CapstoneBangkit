@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.haire.JobRepository
+import com.haire.ListApplyLowonganQuery
+import com.haire.ListApplyUserQuery
 import com.haire.ListLowonganUserApplyQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.data.UserModel
@@ -17,6 +19,7 @@ class StatusViewModel(private val repository: JobRepository) : ViewModel() {
     val listLoker: LiveData<List<ListLowonganUserApplyQuery.Lowongan?>> =
         repository.listLowonganUserApply
     val isLoading: LiveData<Boolean> = repository.isLoading
+    val listApplyUser: LiveData<List<ListApplyUserQuery.Apply?>> = repository.listStatus
 
     fun getListLokerStatus(idUser: Int) {
         viewModelScope.launch {
@@ -27,6 +30,12 @@ class StatusViewModel(private val repository: JobRepository) : ViewModel() {
     fun getProfileCompanyAsync(companyId: Int): Deferred<ProfileCompanyQuery.Company?> {
         return viewModelScope.async {
             repository.getCompanyData(companyId)
+        }
+    }
+
+    fun getApplyStatusAsync(userId: Int) {
+        viewModelScope.launch {
+            repository.listApplyUser(userId)
         }
     }
 

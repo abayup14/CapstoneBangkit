@@ -1,0 +1,6 @@
+mutation createNotification($waktu: String, $pesan: String, $user_iduser: Int) {
+    createNotification(waktu: $waktu, pesan: $pesan, user_iduser: $user_iduser) {
+        errors
+        success
+    }
+}

@@ -9,6 +9,7 @@ import com.haire.ui.company.detail.DetailJobViewModel
 import com.haire.ui.detail.DetailViewModel
 import com.haire.ui.home.HomeViewModel
 import com.haire.ui.login.LoginViewModel
+import com.haire.ui.notification.NotificationViewModel
 import com.haire.ui.openjobs.OpenJobsViewModel
 import com.haire.ui.profile.ProfileViewModel
 import com.haire.ui.profile.company.CompanyProfileViewModel
@@ -63,6 +64,10 @@ class ViewModelFactory(private val context: Context) :
 
             modelClass.isAssignableFrom(DetailJobViewModel::class.java) -> {
                 DetailJobViewModel(Injection.provideRepository(context)) as T
+            }
+
+            modelClass.isAssignableFrom(NotificationViewModel::class.java) -> {
+                NotificationViewModel(Injection.provideRepository(context)) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

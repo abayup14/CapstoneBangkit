@@ -70,6 +70,12 @@ class JobRepository(private val pref: UserPreference) {
     private val _listLeaderBoard = MutableLiveData<List<ListApplyLowonganQuery.Apply?>>()
     val listLeaderBoard: LiveData<List<ListApplyLowonganQuery.Apply?>> = _listLeaderBoard
 
+    private val _listStatus = MutableLiveData<List<ListApplyUserQuery.Apply?>>()
+    val listStatus: LiveData<List<ListApplyUserQuery.Apply?>> = _listStatus
+
+    private val _notifikasi = MutableLiveData<List<ListNotifikasiUserQuery.Notifikasi?>>()
+    val notifikasi: LiveData<List<ListNotifikasiUserQuery.Notifikasi?>> = _notifikasi
+
     var skillSize: Double = 0.0
     var userAge: Double = 0.0
     var pengalamanLog: Double = 0.0
@@ -233,7 +239,7 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
-    suspend fun getCompanyData(id: Int?) : ProfileCompanyQuery.Company {
+    suspend fun getCompanyData(id: Int?): ProfileCompanyQuery.Company {
         val companyId = Optional.present(id)
         _isLoading.value = true
         val response = apolloClient.query(ProfileCompanyQuery(companyId)).execute()
@@ -276,7 +282,9 @@ class JobRepository(private val pref: UserPreference) {
         val idLowongan = Optional.present(lowongan_id)
         val stat = Optional.present(status)
         try {
-            val response = apolloClient.mutation(UpdateUserApplyStatusMutation(idUser, idLowongan, stat)).execute()
+            val response =
+                apolloClient.mutation(UpdateUserApplyStatusMutation(idUser, idLowongan, stat))
+                    .execute()
             if (response.data?.updateUserApplyStatus?.success == true) {
                 _success.value = true
             } else if (response.hasErrors()) {
@@ -387,7 +395,7 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
-    suspend fun getProfileData(idUser: Int?) : ProfileUserQuery.User {
+    suspend fun getProfileData(idUser: Int?): ProfileUserQuery.User {
         _isLoading.value = true
         val userId = Optional.present(idUser)
         val response = apolloClient.query(ProfileUserQuery(userId)).execute()
@@ -491,6 +499,55 @@ class JobRepository(private val pref: UserPreference) {
             _toastMsg.value = response.errors?.component1()?.message
         } else {
             _toastMsg.value = response.data?.listApplyLowongan?.errors?.component1()
+        }
+    }
+
+    suspend fun listApplyUser(user_iduser: Int) {
+        val userId = Optional.present(user_iduser)
+        val response = apolloClient.query(ListApplyUserQuery(userId)).execute()
+        if (response.data?.listApplyUser?.success == true) {
+            _isLoading.value = false
+            _listStatus.value = response.data?.listApplyUser?.apply ?: emptyList()
+        } else if (response.hasErrors()) {
+            _isLoading.value = false
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _toastMsg.value = response.data?.listApplyUser?.errors?.component1()
+        }
+    }
+
+    suspend fun createNotification(waktu: String, pesan: String, user_iduser: Int) {
+        val waktu = Optional.present(waktu)
+        val message = Optional.present(pesan)
+        val idUser = Optional.present(user_iduser)
+        _isLoading.value = true
+        val response =
+            apolloClient.mutation(CreateNotificationMutation(waktu, message, idUser)).execute()
+        if (response.data?.createNotification?.success == true) {
+            _success.value = true
+            _isLoading.value = false
+        } else if (response.hasErrors()) {
+            _isLoading.value = false
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _isLoading.value = false
+            _toastMsg.value = response.data?.createNotification?.errors?.component1()
+        }
+    }
+
+    suspend fun getNotification(idUser: Int) {
+        val userId = Optional.present(idUser)
+        val response = apolloClient.query(ListNotifikasiUserQuery(userId)).execute()
+        _isLoading.value = true
+        if (response.data?.listNotifikasiUser?.success == true) {
+            _isLoading.value = false
+            _notifikasi.value = response.data?.listNotifikasiUser?.notifikasi ?: emptyList()
+        } else if (response.hasErrors()) {
+            _isLoading.value = false
+            _toastMsg.value = response.errors?.component1()?.message
+        } else {
+            _isLoading.value = false
+            _toastMsg.value = response.data?.listNotifikasiUser?.errors?.component1()
         }
     }
 
@@ -810,7 +867,7 @@ class JobRepository(private val pref: UserPreference) {
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
                 _success.value = false
-                _toastMsg.value = response.data?.updateEducation?.errors?.component1()
+//                _toastMsg.value = response.data?.updateEducation?.errors?.component1()
             }
         } catch (e: ApolloException) {
             _success.value = false

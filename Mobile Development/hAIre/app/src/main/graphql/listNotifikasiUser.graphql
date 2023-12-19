@@ -1,0 +1,11 @@
+query listNotifikasiUser($user_iduser: Int) {
+    listNotifikasiUser(user_iduser: $user_iduser) {
+        success
+        errors
+        notifikasi {
+            idnotifikasi
+            pesan
+            waktu
+        }
+    }
+}
