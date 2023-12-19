@@ -11,8 +11,8 @@ CORS(app)
 # Replace 'your-connection-parameters' with your actual MySQL connection details
 google_cloud_sql_connection_params = {
     'user': 'root',
-    'password': 'root',
-    'host': '34.128.118.209',
+    'password': 'roothaire123',
+    'host': '34.101.167.107',
     'database': 'haire',
 }
 
