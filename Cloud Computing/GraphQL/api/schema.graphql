@@ -106,6 +106,8 @@ type Mutation {
   updateUser(iduser: Int, pengalaman: Int, pengalaman_pro: Int): UserResponse
   updateUserApplyStatus(user_iduser: Int, lowongan_id: Int, status: String): ApplyResponse
   updateUserDescription(iduser: Int, deskripsi: String): UserResponse
+  updateUserUrlPhoto(iduser: Int, url_photo: String): UserResponse
+  updateCompanyUrlPhoto(id: Int, url_photo: String): CompanyResponse
 }
 
 type UserResult {

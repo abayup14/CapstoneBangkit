@@ -494,15 +494,40 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # '''
 
 # QUERY STATUS USER
+# graphql_query='''
+#     query{
+#     getApplyStatus (user_iduser: 1, lowongan_id:1){
+#         success
+#         errors
+#         apply{
+#             status
+#         }
+#     }
+#     }
+# '''
+
+# UPDATE USER PROFILE
+# graphql_query='''
+#     mutation{
+#         updateUserUrlPhoto(iduser:1, url_photo:"ppp"){
+#             success
+#             errors
+#             user{
+#                 url_photo
+#             }
+#         }
+#     }
+# '''
+# UPDATE USER PROFILE
 graphql_query='''
-    query{
-    getApplyStatus (user_iduser: 1, lowongan_id:1){
-        success
-        errors
-        apply{
-            status
+    mutation{
+        updateCompanyUrlPhoto(id:1, url_photo:"ppp"){
+            success
+            errors
+            company{
+                url_photo
+            }
         }
-    }
     }
 '''
 # Headers (optional, include if needed)
