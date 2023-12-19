@@ -1,0 +1,28 @@
+{
+  "data": {
+    "listPosts": {
+      "errors": null,
+      "posts": [
+        {
+          "created_at": "05-12-2023",
+          "description": "desc",
+          "id": "1",
+          "title": "Post"
+        },
+        {
+          "created_at": "05-12-2023",
+          "description": "Some Description2",
+          "id": "2",
+          "title": "New Blog Post2"
+        },
+        {
+          "created_at": "05-12-2023",
+          "description": "vkh sisan",
+          "id": "3",
+          "title": "Fanny "
+        }
+      ],
+      "success": true
+    }
+  }
+}
