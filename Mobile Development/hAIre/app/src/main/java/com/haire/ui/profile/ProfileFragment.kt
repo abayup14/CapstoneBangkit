@@ -32,7 +32,6 @@ class ProfileFragment : Fragment() {
     private var adapter: ExperienceAdapter? = null
     private val viewModel by viewModels<ProfileViewModel> { ViewModelFactory(requireContext()) }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

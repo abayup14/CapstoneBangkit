@@ -1,5 +1,6 @@
 package com.haire.ui.profile
 
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -136,5 +137,9 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
 
     fun saveProfile(imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) =
         repository.saveProfile(imageUri, onSuccess, onFailure)
-//    fun updateDatabase(email: String, description: String, age: Int, imageUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) = repository.updateDatabase(email, description, age, imageUrl, onSuccess, onFailure)
+    fun updateDatabase(idUser: Int, description: String, imageUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            repository.updateDatabase(idUser, description, imageUrl, onSuccess, onFailure)
+        }
+    }
 }

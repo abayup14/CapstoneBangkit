@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -24,6 +26,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/INDEX.LIST")
+        exclude("META-INF/LICENSE.txt")
     }
 
     buildTypes {
@@ -76,6 +86,12 @@ dependencies {
 
     implementation("com.basgeekball:awesome-validation:4.3")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+
+    implementation("com.google.cloud:google-cloud-storage:1.36.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
+
+
 
     // testing
     testImplementation("junit:junit:4.13.2")

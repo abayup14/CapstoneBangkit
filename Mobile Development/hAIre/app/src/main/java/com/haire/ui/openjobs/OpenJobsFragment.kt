@@ -33,7 +33,7 @@ class OpenJobsFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it, binding.progressBar)
         }
-        viewModel.getListLoker()
+        viewModel.getListLoker("")
         viewModel.loker.observe(viewLifecycleOwner) { listJobs ->
             val requests = listJobs.map { job ->
                 viewModel.getProfileCompanyAsync(job?.company_id!!)

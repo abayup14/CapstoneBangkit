@@ -34,6 +34,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/btn_edt_photo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/edt_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/profileImage"
+        app:layout_constraintEnd_toEndOf="@+id/profileImage"
+        tools:ignore="ContentDescription" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/nameLabel"
         android:layout_width="wrap_content"

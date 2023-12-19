@@ -3,6 +3,7 @@ package com.haire.ui.company.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.haire.ListApplyLowonganQuery
 import com.haire.ProfileUserQuery
 import com.haire.databinding.ItemUserBinding
@@ -32,10 +33,12 @@ class UserAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(apply: ListApplyLowonganQuery.Apply?, listUser: ProfileUserQuery.User?) {
             binding.apply {
-//                Glide.with(root.context)
-//                    .load(user.photoUrl)
-//                    .circleCrop()
-//                    .into(ivProfile)
+                if (listUser?.url_photo != "") {
+                    Glide.with(root.context)
+                        .load(listUser?.url_photo)
+                        .circleCrop()
+                        .into(ivProfile)
+                }
                 tvNama.text = listUser?.nama
                 btnAccept.setOnClickListener {
                     onAcceptClick(apply?.user_iduser ?: 0)

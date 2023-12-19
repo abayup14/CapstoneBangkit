@@ -16,7 +16,7 @@ class HomeViewModel(private val repository: JobRepository) : ViewModel() {
 
     fun getListLoker() {
         viewModelScope.launch {
-            repository.getListLoker()
+            repository.getListLoker("")
         }
     }
 

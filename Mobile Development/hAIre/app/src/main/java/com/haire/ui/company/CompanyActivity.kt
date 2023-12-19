@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.ListLowonganCompanyQuery
+import com.haire.ProfileCompanyQuery
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityCompanyBinding
 import com.haire.ui.company.addjob.AddJobActivity
@@ -14,6 +16,8 @@ import com.haire.ui.company.detail.DetailJobActivity
 import com.haire.ui.profile.company.CompanyProfileActivity
 import com.haire.ui.welcome.WelcomeActivity
 import com.haire.util.showLoading
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 
 class CompanyActivity : AppCompatActivity() {
     private var _binding: ActivityCompanyBinding? = null
@@ -33,7 +37,6 @@ class CompanyActivity : AppCompatActivity() {
 
         binding.btnProfile.setOnClickListener {
             startActivity(Intent(this, CompanyProfileActivity::class.java))
-            finish()
         }
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
@@ -46,15 +49,25 @@ class CompanyActivity : AppCompatActivity() {
 
         viewModel.getSession().observe(this) { userModel ->
             viewModel.getLokerCompany(userModel.id)
-            viewModel.lokerCompany.observe(this) {
-                setData(it)
+            viewModel.lokerCompany.observe(this) { listJobs ->
+                val requests = listJobs.map { job ->
+                    viewModel.getProfileCompanyAsync(job?.company_id!!)
+                }
+
+                lifecycleScope.launch {
+                    val companies = requests.awaitAll()
+                    setData(listJobs, companies)
+                }
             }
         }
     }
 
-    private fun setData(listJobs: List<ListLowonganCompanyQuery.Lowongan?>) {
+    private fun setData(
+        listJobs: List<ListLowonganCompanyQuery.Lowongan?>,
+        companies: List<ProfileCompanyQuery.Company?>
+    ) {
         binding.apply {
-            adapter = JobCompanyAdapter(listJobs) {
+            adapter = JobCompanyAdapter(listJobs, companies) {
                 val intentToDetail = Intent(this@CompanyActivity, DetailJobActivity::class.java)
                 intentToDetail.putExtra(DetailJobActivity.EXTRA_ID, it)
                 startActivity(intentToDetail)

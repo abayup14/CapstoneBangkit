@@ -8,7 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.haire.JobRepository
 import com.haire.ListLowonganCompanyQuery
 import com.haire.ListSkillsQuery
+import com.haire.ProfileCompanyQuery
 import com.haire.data.UserModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
@@ -62,13 +65,22 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
     fun saveProfile(imageUri: Uri, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) =
         repository.saveProfile(imageUri, onSuccess, onFailure)
 
-//    fun updateDatabaseCompany(
-//        email: String,
-//        description: String,
-//        imageUrl: String,
-//        onSuccess: () -> Unit,
-//        onFailure: (Exception) -> Unit
-//    ) = repository.updateDatabaseCompany(email, description, imageUrl, onSuccess, onFailure)
+    fun updateDatabaseCompany(
+        idCompany: Int,
+        imageUrl: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        viewModelScope.launch {
+            repository.updateDatabaseCompany(idCompany, imageUrl, onSuccess, onFailure)
+        }
+    }
+
+    fun getProfileCompanyAsync(companyId: Int): Deferred<ProfileCompanyQuery.Company?> {
+        return viewModelScope.async {
+            repository.getCompanyData(companyId)
+        }
+    }
 
     fun logout() {
         viewModelScope.launch {

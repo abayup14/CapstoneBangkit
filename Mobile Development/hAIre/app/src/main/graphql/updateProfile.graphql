@@ -1,0 +1,13 @@
+mutation updateUserDescription($iduser: Int, $deskripsi: String) {
+    updateUserDescription(iduser: $iduser, deskripsi: $deskripsi) {
+        errors
+        success
+    }
+}
+
+mutation updateUserUrlPhoto($iduser: Int, $url_photo: String) {
+    updateUserUrlPhoto(iduser: $iduser, url_photo: $url_photo) {
+        success
+        errors
+    }
+}

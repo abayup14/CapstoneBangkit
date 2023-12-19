@@ -31,6 +31,7 @@ class AddEducationActivity : AppCompatActivity(), DatePickerFragment.DialogDateL
         super.onCreate(savedInstanceState)
         binding = ActivityAddEducationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         editTextSchoolName = findViewById(R.id.editTextSchoolName)
         editTextFieldOfStudy = findViewById(R.id.editTextFieldOfStudy)

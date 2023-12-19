@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.haire.ListApplyLowonganQuery
 import com.haire.ListApplyUserQuery
 import com.haire.ListLowonganUserApplyQuery
@@ -30,9 +31,12 @@ class StatusAdapter(
             company: ProfileCompanyQuery.Company
         ) {
             binding.apply {
-//                Glide.with(root.context)
-//                    .load(jobs.company.photoUrl)
-//                    .into(ivJobs)
+                if (company.url_photo != "") {
+                    Glide.with(root.context)
+                        .load(company.url_photo)
+                        .circleCrop()
+                        .into(ivJobs)
+                }
                 tvTitle.text = jobs.nama
                 tvAddres.text = company.alamat
                 when (apply?.status) {
@@ -40,7 +44,7 @@ class StatusAdapter(
                         tvStatus.setBackgroundResource(R.drawable.status_accept)
                         tvStatus.text = "Accepted"
                     }
-                    "Ditola" -> {
+                    "Ditolak" -> {
                         tvStatus.setBackgroundResource(R.drawable.status_reject)
                         tvStatus.text = "Rejected"
                     }

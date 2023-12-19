@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.haire.ListLowongansQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.databinding.ItemJobsBinding
@@ -23,11 +24,13 @@ class JobAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(jobs: ListLowongansQuery.Lowongan, company: ProfileCompanyQuery.Company) {
             binding.apply {
-//                Glide.with(root.context)
-//                    .load(company.url_photo)
-//                    .into(ivJobs)
+                if (company.url_photo != "") {
+                    Glide.with(root.context)
+                        .load(company.url_photo)
+                        .circleCrop()
+                        .into(ivJobs)
+                }
                 tvTitle.text = jobs.nama
-//                tvAddres.text = jobs.deskripsi
                 tvAddres.text = company.alamat
             }
             itemView.setOnClickListener {

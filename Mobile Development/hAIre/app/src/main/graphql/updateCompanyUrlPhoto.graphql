@@ -1,0 +1,6 @@
+mutation updateCompanyUrlPhoto($idUser: Int, $url_photo: String) {
+    updateCompanyUrlPhoto(id: $idUser, url_photo: $url_photo) {
+        errors
+        success
+    }
+}

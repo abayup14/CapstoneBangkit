@@ -27,7 +27,12 @@ class NotificationFragment : Fragment() {
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.getNotification(user.id)
             viewModel.listNotification.observe(viewLifecycleOwner) {
-                setData(it!!)
+                if (it.isEmpty()) {
+                    binding.noNotif.visibility = View.VISIBLE
+                } else {
+                    binding.noNotif.visibility = View.GONE
+                    setData(it!!)
+                }
             }
         }
 

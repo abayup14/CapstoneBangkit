@@ -20,6 +20,7 @@ class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
     val skill: LiveData<List<ListSkillRequiredQuery.Skill?>> = repository.skillRequired
     val listLeaderBoard: LiveData<List<ListApplyLowonganQuery.Apply?>> = repository.listLeaderBoard
     val isLoading: LiveData<Boolean> = repository.isLoading
+    val profileCompany: LiveData<ProfileCompanyQuery.Company?> = repository.profileCompany
 
     fun getLowongan(id: Int) {
         viewModelScope.launch {
@@ -51,6 +52,12 @@ class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
     fun listSkills() {
         viewModelScope.launch {
             repository.listSkill()
+        }
+    }
+
+    fun getProfileCompany(idCompany: Int) {
+        viewModelScope.launch {
+            repository.getCompanyData(idCompany)
         }
     }
 

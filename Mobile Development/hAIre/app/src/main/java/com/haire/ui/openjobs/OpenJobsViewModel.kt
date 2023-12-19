@@ -14,9 +14,9 @@ class OpenJobsViewModel(private val repository: JobRepository) : ViewModel() {
     val loker: LiveData<List<ListLowongansQuery.Lowongan?>> = repository.loker
     val isLoading: LiveData<Boolean> = repository.isLoading
 
-    fun getListLoker() {
+    fun getListLoker(query: String) {
         viewModelScope.launch {
-            repository.getListLoker()
+            repository.getListLoker(query)
         }
     }
 

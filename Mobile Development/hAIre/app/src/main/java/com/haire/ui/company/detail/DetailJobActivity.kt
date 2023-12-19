@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.haire.ListApplyLowonganQuery
 import com.haire.ListSkillRequiredQuery
@@ -49,10 +50,16 @@ class DetailJobActivity : AppCompatActivity() {
         viewModel.getListApplyLoker(id)
         viewModel.getLowongan(id)
         viewModel.detailLowongan.observe(this) { job ->
-            binding.apply {
-                tvPekerjaan.text = job?.nama
-                tvJmlh.text = job?.jmlh_butuh.toString()
-                tvDetail.text = job?.deskripsi
+            viewModel.getProfileCompany(job?.company_id!!)
+            viewModel.profileCompany.observe(this) { company ->
+                binding.apply {
+                    Glide.with(this@DetailJobActivity)
+                        .load(company?.url_photo)
+                        .into(ivJobs)
+                    tvPekerjaan.text = job.nama
+                    tvJmlh.text = job.jmlh_butuh.toString()
+                    tvDetail.text = job.deskripsi
+                }
             }
         }
 

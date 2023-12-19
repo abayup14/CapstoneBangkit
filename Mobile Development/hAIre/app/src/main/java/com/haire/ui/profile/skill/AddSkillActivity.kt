@@ -21,6 +21,7 @@ class AddSkillActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_skill)
+        supportActionBar?.hide()
 
         btnAddSkill = findViewById(R.id.btnAddSkill)
 

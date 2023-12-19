@@ -1,5 +1,6 @@
 package com.haire
 
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -8,10 +9,18 @@ import androidx.lifecycle.MutableLiveData
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
+import com.google.cloud.storage.BlobInfo
+import com.google.cloud.storage.Storage
+import com.google.cloud.storage.StorageOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.haire.data.UserModel
 import com.haire.data.UserPreference
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -19,6 +28,9 @@ import java.util.UUID
 import kotlin.math.ln
 
 class JobRepository(private val pref: UserPreference) {
+    private val gcsBucketName = "haireproject"
+    private val storage: Storage = StorageOptions.getDefaultInstance().service
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -94,7 +106,7 @@ class JobRepository(private val pref: UserPreference) {
         _listLowonganUserApply
 
     private val apolloClient = ApolloClient.Builder()
-        .serverUrl("https://api-vdnbldljhq-uc.a.run.app/graphql")
+        .serverUrl("https://haire-wg2zo5xzsq-et.a.run.app/graphql")
         .build()
 
     suspend fun loginAccount(email: String, password: String) {
@@ -256,9 +268,10 @@ class JobRepository(private val pref: UserPreference) {
         return response.data?.profileCompany?.company!!
     }
 
-    suspend fun getListLoker() {
+    suspend fun getListLoker(search: String) {
+        val query = Optional.present(search)
         _isLoading.value = true
-        val response = apolloClient.query(ListLowongansQuery()).execute()
+        val response = apolloClient.query(ListLowongansQuery(query)).execute()
         if (response.data?.listLowonganUserSearch?.success == true) {
             _isLoading.value = false
             _loker.value = response.data?.listLowonganUserSearch?.lowongan ?: emptyList()
@@ -274,12 +287,12 @@ class JobRepository(private val pref: UserPreference) {
     }
 
     suspend fun updateUserApplyStatus(
-        user_iduser: Int,
-        lowongan_id: Int,
+        userId: Int,
+        lowonganId: Int,
         status: String
     ) {
-        val idUser = Optional.present(user_iduser)
-        val idLowongan = Optional.present(lowongan_id)
+        val idUser = Optional.present(userId)
+        val idLowongan = Optional.present(lowonganId)
         val stat = Optional.present(status)
         try {
             val response =
@@ -875,6 +888,39 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
+//    @OptIn(DelicateCoroutinesApi::class)
+//    fun saveProfile(
+//        context: Context,
+//        imageUri: Uri,
+//        onSuccess: (String) -> Unit,
+//        onFailure: (Exception) -> Unit
+//    ) {
+//        val imageFileName = "images/${UUID.randomUUID()}.jpg"
+//        val blobInfo = BlobInfo.newBuilder(gcsBucketName, imageFileName).build()
+//
+//        GlobalScope.launch(Dispatchers.IO) {
+//            try {
+//                context.contentResolver.openInputStream(imageUri).use { imageStream ->
+//                    if (imageStream != null) {
+//                        val imageBytes = ByteArrayOutputStream().use { output ->
+//                            imageStream.copyTo(output)
+//                            output.toByteArray()
+//                        }
+//                        val imageBlob = storage.create(blobInfo, imageBytes)
+//                        val imageUrl = imageBlob.mediaLink
+//
+//                        onSuccess(imageUrl)
+//                    } else {
+//                        onFailure(Exception("Failed to open image stream"))
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                onFailure(e)
+//            }
+//        }
+//    }
+
+
     fun saveProfile(
         imageUri: Uri,
         onSuccess: (String) -> Unit,
@@ -885,52 +931,70 @@ class JobRepository(private val pref: UserPreference) {
         val imageRef = storageReference.child(imageFileName)
         val uploadTask = imageRef.putFile(imageUri)
 
+        _isLoading.value = true
         uploadTask.addOnSuccessListener {
+            _isLoading.value = false
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 onSuccess(uri.toString())
             }
         }.addOnFailureListener { exception ->
             onFailure(exception)
+            _isLoading.value = false
         }
     }
 
-//    fun updateDatabase(
-//        email: String,
-//        description: String,
-//        age: Int,
-//        imageUrl: String,
-//        onSuccess: () -> Unit,
-//        onFailure: (Exception) -> Unit
-//    ) {
-//        val imagesReference = dbUser.child(email).child("photo_url")
-//        imagesReference.setValue(imageUrl)
-//            .addOnSuccessListener {
-//                onSuccess()
-//            }
-//            .addOnFailureListener { exception ->
-//                onFailure(exception)
-//            }
-//        dbUser.child(email).child("deskripsi").setValue(description)
-//        dbUser.child(email).child("umur").setValue(age)
-//    }
+    suspend fun updateDatabase(
+        idUser: Int,
+        description: String,
+        imageUrl: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val userId = Optional.present(idUser)
+        val desc = Optional.present(description)
+        val imgUrl = Optional.present(imageUrl)
+        try {
+            _isLoading.value = true
+            val updateUrlPhoto = apolloClient.mutation(UpdateUserUrlPhotoMutation(userId, imgUrl)).execute()
+            val updateDesc = apolloClient.mutation(UpdateUserDescriptionMutation(userId, desc)).execute()
+            if (updateDesc.data?.updateUserDescription?.success == true && updateUrlPhoto.data?.updateUserUrlPhoto?.success == true) {
+                _isLoading.value = false
+                onSuccess()
+            } else if (updateDesc.hasErrors() || updateUrlPhoto.hasErrors()) {
+                _isLoading.value = false
+                _toastMsg.value = updateUrlPhoto.errors?.component1()?.message
+            } else {
+                _isLoading.value = false
+                _toastMsg.value = updateUrlPhoto.data?.updateUserUrlPhoto?.errors?.component1()
+            }
+        } catch (e: ApolloException) {
+            _isLoading.value = false
+            onFailure(e)
+        }
+    }
 
-//    fun updateDatabaseCompany(
-//        email: String,
-//        description: String,
-//        imageUrl: String,
-//        onSuccess: () -> Unit,
-//        onFailure: (Exception) -> Unit
-//    ) {
-//        val imagesReference = dbUser.child(email).child("photoUrl")
-//        imagesReference.setValue(imageUrl)
-//            .addOnSuccessListener {
-//                onSuccess()
-//            }
-//            .addOnFailureListener { exception ->
-//                onFailure(exception)
-//            }
-//        dbUser.child(email).child("company_desc").setValue(description)
-//    }
+    suspend fun updateDatabaseCompany(
+        idCompany: Int,
+        imageUrl: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val companyId = Optional.present(idCompany)
+        val photoUrl = Optional.present(imageUrl)
+        try {
+            val response = apolloClient.mutation(UpdateCompanyUrlPhotoMutation(companyId, photoUrl)).execute()
+            if (response.data?.updateCompanyUrlPhoto?.success == true) {
+                onSuccess()
+            } else if (response.hasErrors()) {
+                _toastMsg.value = response.errors?.component1()?.message
+            } else {
+                _toastMsg.value = response.data?.updateCompanyUrlPhoto?.errors?.component1()
+            }
+        } catch (e: ApolloException) {
+            onFailure(e)
+            _toastMsg.value = e.message.toString()
+        }
+    }
 
     fun getUser(): Flow<UserModel> = pref.getUser()
     suspend fun logout() = pref.logout()

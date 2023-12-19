@@ -11,6 +11,7 @@ import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityEditProfileBinding
 import com.haire.ui.profile.ProfileViewModel
+import com.haire.util.showLoading
 import com.haire.util.showText
 
 class EditProfileActivity : AppCompatActivity() {
@@ -27,13 +28,17 @@ class EditProfileActivity : AppCompatActivity() {
             startGallery()
         }
 
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+        }
+
         binding.btnUpload.setOnClickListener {
             val description = binding.edtDescStory.text.toString()
             if (description.isEmpty()) {
                 showText(this, "Description and age are still empty")
             } else {
                 viewModel.getUser().observe(this) {
-                    saveProfile(it.email, description)
+                    saveProfile(it.id,  description)
                 }
             }
         }
@@ -61,22 +66,22 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProfile(email: String, description: String) {
+    private fun saveProfile(idUser: Int, description: String) {
         currentImageUri?.let { uri ->
             viewModel.saveProfile(
                 uri,
                 onSuccess = { imageUrl ->
-//                    viewModel.updateDatabase(
-//                        email,
-//                        description,
-//                        imageUrl,
-//                        onSuccess = {
-//                            finish()
-//                        },
-//                        onFailure = { exception ->
-//                            exception.printStackTrace()
-//                        }
-//                    )
+                    viewModel.updateDatabase(
+                        idUser,
+                        description,
+                        imageUrl,
+                        onSuccess = {
+                            finish()
+                        },
+                        onFailure = { exception ->
+                            exception.printStackTrace()
+                        }
+                    )
                 },
                 onFailure = { exception ->
                     exception.printStackTrace()

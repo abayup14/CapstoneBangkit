@@ -1,5 +1,5 @@
-query listLowongans {
-    listLowonganUserSearch(search: "") {
+query listLowongans($search: String) {
+    listLowonganUserSearch(search: $search) {
         success
         errors
         lowongan {

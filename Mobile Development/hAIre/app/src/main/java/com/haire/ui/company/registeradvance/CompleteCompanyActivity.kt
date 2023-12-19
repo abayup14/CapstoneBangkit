@@ -11,6 +11,7 @@ import com.haire.R
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityCompleteCompanyBinding
 import com.haire.ui.company.CompanyViewModel
+import com.haire.util.showLoading
 import com.haire.util.showText
 
 class CompleteCompanyActivity : AppCompatActivity() {
@@ -24,6 +25,14 @@ class CompleteCompanyActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        viewModel.isLoading.observe(this) {
+            showLoading(it, binding.progressBar)
+            if (it) {
+                binding.btnUpload.isEnabled = false
+                binding.btnOpenFile.isEnabled = false
+            }
+        }
+
         binding.btnOpenFile.setOnClickListener {
             startGallery()
         }
@@ -34,7 +43,7 @@ class CompleteCompanyActivity : AppCompatActivity() {
                 showText(this, "Description still empty")
             } else {
                 viewModel.getSession().observe(this) {
-                    saveProfile(it.email, description)
+                    saveProfile(it.id)
                 }
             }
         }
@@ -62,22 +71,21 @@ class CompleteCompanyActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProfile(email: String, description: String) {
+    private fun saveProfile(idUser: Int) {
         currentImageUri?.let { uri ->
             viewModel.saveProfile(
                 uri,
                 onSuccess = { imageUrl ->
-//                    viewModel.updateDatabaseCompany(
-//                        email,
-//                        description,
-//                        imageUrl,
-//                        onSuccess = {
-//                            finish()
-//                        },
-//                        onFailure = { exception ->
-//                            exception.printStackTrace()
-//                        }
-//                    )
+                    viewModel.updateDatabaseCompany(
+                        idUser,
+                        imageUrl,
+                        onSuccess = {
+                            finish()
+                        },
+                        onFailure = { exception ->
+                            exception.printStackTrace()
+                        }
+                    )
                 },
                 onFailure = { exception ->
                     exception.printStackTrace()

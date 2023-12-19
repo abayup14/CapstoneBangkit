@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.haire.GetLowonganQuery
 import com.haire.ListSkillRequiredQuery
@@ -75,9 +76,11 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setData(detail: GetLowonganQuery.Lowongan?, company: ProfileCompanyQuery.Company?) {
         binding.apply {
-//            Glide.with(this@DetailActivity)
-//                .load(company?.url_photo)
-//                .into(ivJobs)
+            if (company?.url_photo != "") {
+                Glide.with(this@DetailActivity)
+                    .load(company?.url_photo)
+                    .into(ivJobs)
+            }
             tvPekerjaan.text = detail?.nama.toString()
             tvAlamat.text = company?.alamat
             tvDetail.text = detail?.deskripsi
