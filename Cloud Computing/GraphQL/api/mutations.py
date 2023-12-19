@@ -327,3 +327,51 @@ def update_user_description_resolver(obj, info, iduser, deskripsi):
             "errors": [f"item matching {user_update} not found"]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def update_user_url_photo_resolver(obj, info, iduser, url_photo):
+    try:
+        user_update = User.query.filter_by(iduser=iduser).first()
+        if user_update:
+            user_update.url_photo = url_photo
+            db.session.add(user_update)
+            db.session.commit()
+            payload = {
+                "success": True,
+                "user": user_update.to_dict()
+            }
+        else:
+            payload = {
+                "success": False,
+                "errors": [f"item matching {user_update} not found"]
+            }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"item matching {user_update} not found"]
+        }
+    return payload
+
+@convert_kwargs_to_snake_case
+def update_company_url_photo_resolver(obj, info, id, url_photo):
+    try:
+        company_update = Company.query.filter_by(id=id).first()
+        if company_update:
+            company_update.url_photo = url_photo
+            db.session.add(company_update)
+            db.session.commit()
+            payload = {
+                "success": True,
+                "company": company_update.to_dict()
+            }
+        else:
+            payload = {
+                "success": False,
+                "errors": [f"item matching {company_update} not found"]
+            }
+    except AttributeError:
+        payload = {
+            "success": False,
+            "errors": [f"item matching {company_update} not found"]
+        }
+    return payload
