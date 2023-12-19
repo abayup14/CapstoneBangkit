@@ -7,6 +7,10 @@ import com.haire.GetLowonganQuery
 import com.haire.JobRepository
 import com.haire.ListApplyLowonganQuery
 import com.haire.ListSkillRequiredQuery
+import com.haire.ProfileCompanyQuery
+import com.haire.ProfileUserQuery
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
@@ -29,15 +33,30 @@ class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
+    fun updateUserApplyStatus(
+        idUser: Int,
+        idLowongan: Int,
+        status: String
+    ) {
+        viewModelScope.launch {
+            repository.updateUserApplyStatus(idUser, idLowongan, status)
+        }
+    }
+
     fun getListApplyLoker(id: Int) {
         viewModelScope.launch {
             repository.listApplyLowongan(id)
         }
     }
-
     fun listSkills() {
         viewModelScope.launch {
             repository.listSkill()
+        }
+    }
+
+    fun getProfileCompanyAsync(idUser: Int): Deferred<ProfileUserQuery.User?> {
+        return viewModelScope.async {
+            repository.getProfileData(idUser)
         }
     }
 }

@@ -86,14 +86,16 @@ class HomeFragment : Fragment() {
         listJobs: List<ListLowongansQuery.Lowongan?>,
         companes: List<ProfileCompanyQuery.Company?>
     ) {
-        binding.apply {
-            adapter = JobAdapter(listJobs, companes) {
-                val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
-                detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
-                startActivity(detailIntent)
+        if (isAdded) {
+            binding.apply {
+                adapter = JobAdapter(listJobs, companes) {
+                    val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
+                    detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
+                    startActivity(detailIntent)
+                }
+                rvFeed.layoutManager = LinearLayoutManager(context)
+                rvFeed.adapter = adapter
             }
-            rvFeed.layoutManager = LinearLayoutManager(context)
-            rvFeed.adapter = adapter
         }
     }
 

@@ -4,18 +4,24 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.haire.ListApplyLowonganQuery
 import com.haire.ListSkillRequiredQuery
+import com.haire.ProfileUserQuery
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityDetailJobBinding
 import com.haire.util.showLoading
+import com.haire.util.showText
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 
 class DetailJobActivity : AppCompatActivity() {
     private var _binding: ActivityDetailJobBinding? = null
     private val binding get() = _binding!!
     private var adapter: UserAdapter? = null
+    var isHandled: Boolean = false
     private val viewModel by viewModels<DetailJobViewModel> { ViewModelFactory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,14 +30,16 @@ class DetailJobActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
-
+        val id = intent.getIntExtra(EXTRA_ID, 0)
         viewModel.isLoading.observe(this) {
             showLoading(it, binding.progressBar)
         }
 
-        binding.btnBack.setOnClickListener { finish() }
+        viewModel.toastMsg.observe(this) {
+            showText(this, it)
+        }
 
-        val id = intent.getIntExtra(EXTRA_ID, 0)
+        binding.btnBack.setOnClickListener { finish() }
 
         viewModel.getListApplyLoker(id)
         viewModel.getLowongan(id)
@@ -44,21 +52,50 @@ class DetailJobActivity : AppCompatActivity() {
         }
 
         viewModel.listLeaderBoard.observe(this) {
-            setLeaderBoardData(it)
+            val requests = it.map { user ->
+                viewModel.getProfileCompanyAsync(user?.user_iduser!!)
+            }
+            lifecycleScope.launch {
+                val user = requests.awaitAll()
+                setLeaderBoardData(it, user)
+            }
         }
 
         viewModel.getSkills(id)
         viewModel.skill.observe(this) {
+            if (!isHandled) {
                 setSkillData(it)
+                isHandled = true
+            }
         }
     }
 
-    private fun setLeaderBoardData(listApply: List<ListApplyLowonganQuery.Apply?>) {
-        adapter = UserAdapter(listApply) {
-            finish()
-        }
+    private fun setLeaderBoardData(
+        listApply: List<ListApplyLowonganQuery.Apply?>,
+        listUser: List<ProfileUserQuery.User?>
+    ) {
+        val filteredList = listApply.filter { it?.status !in listOf("Diterima", "Ditolak") }
+        adapter = UserAdapter(filteredList, listUser, this::onAcceptClick, this::onRejectClick)
         binding.rvLeaderboard.layoutManager = LinearLayoutManager(this)
         binding.rvLeaderboard.adapter = adapter
+    }
+
+    private fun onAcceptClick(idUser: Int) {
+        val idLowongan = intent.getIntExtra(EXTRA_ID, 0)
+        viewModel.updateUserApplyStatus(idUser, idLowongan, "Diterima")
+        showText(this, "Accepted")
+        val updatedListApply = adapter?.getListApply()?.toMutableList()
+        updatedListApply?.removeAll { it?.user_iduser == idUser }
+        adapter?.updateListApply(updatedListApply!!)
+    }
+
+    private fun onRejectClick(idUser: Int) {
+        val id = intent.getIntExtra(EXTRA_ID, 0)
+        viewModel.updateUserApplyStatus(idUser, id, "Ditolak")
+        showText(this, "Rejected")
+        val updatedListApply = adapter?.getListApply()?.toMutableList()
+        updatedListApply?.removeAll { it?.user_iduser == idUser }
+        adapter?.updateListApply(updatedListApply!!)
     }
 
     private fun setSkillData(listSkill: List<ListSkillRequiredQuery.Skill?>) {

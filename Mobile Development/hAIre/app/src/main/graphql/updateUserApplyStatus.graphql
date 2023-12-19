@@ -1,0 +1,6 @@
+mutation updateUserApplyStatus($user_iduser: Int, $lowongan_id: Int, $status: String) {
+    updateUserApplyStatus(user_iduser: $user_iduser, lowongan_id: $lowongan_id, status: $status) {
+        success
+        errors
+    }
+}

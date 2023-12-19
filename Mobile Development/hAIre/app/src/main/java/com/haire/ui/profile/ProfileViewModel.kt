@@ -64,12 +64,6 @@ class ProfileViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun listSkillSearch(search: String) {
-        viewModelScope.launch {
-            repository.listSkillSearch(search)
-        }
-    }
-
     fun updateEdukasi(id: Int, edu: String) {
         viewModelScope.launch {
             repository.updateEdukasi(id, edu)
