@@ -507,3 +507,18 @@ def list_skill_search_resolver(obj, info, search):
             "errors": [str(e)]
         }
     return payload
+
+@convert_kwargs_to_snake_case
+def get_apply_status_resolver(obj, info, user_iduser, lowongan_id):
+    try:
+        apply = Apply.query.filter(Apply.lowongan_id==lowongan_id, Apply.user_iduser==user_iduser).first()
+        payload = {
+            "success": True,
+            "apply": apply.to_dict()
+        }
+    except Exception as e:
+        payload = {
+            "success": False,
+            "errors": [str(e)]
+        }
+    return payload

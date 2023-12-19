@@ -479,17 +479,30 @@ graphql_endpoint = 'http://127.0.0.1:5000/graphql'  # Replace with your actual G
 # '''
 
 # UPDATE USER DESCRIPTION
+# graphql_query='''
+#     mutation{
+#         updateUserDescription(iduser: 1, deskripsi: lorem asokdsndandiwnqosdfghjmkcvbnmfghjk){
+#             success 
+#             errors
+#             user{
+#                 iduser
+#                 nama
+#                 deskripsi
+#             }
+#         }
+#     }
+# '''
+
+# QUERY STATUS USER
 graphql_query='''
-    mutation{
-        updateUserDescription(iduser: 1, deskripsi: lorem asokdsndandiwnqosdfghjmkcvbnmfghjk){
-            success 
-            errors
-            user{
-                iduser
-                nama
-                deskripsi
-            }
+    query{
+    getApplyStatus (user_iduser: 1, lowongan_id:1){
+        success
+        errors
+        apply{
+            status
         }
+    }
     }
 '''
 # Headers (optional, include if needed)

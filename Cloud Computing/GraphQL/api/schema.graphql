@@ -33,6 +33,7 @@ type Query {
   checkSkill(nama_skill: String): SkillsResponse
   getLowongan(idlowongan: Int): LowonganResponse
   listSkillSearch(search: String): SkillsResponses
+  getApplyStatus(user_iduser:Int, lowongan_id:Int):ApplyResponse
 }
 
 type Mutation {
