@@ -30,24 +30,7 @@ class StatusFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStatusBinding.inflate(inflater, container, false)
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it, binding.progressBar)
-        }
-        viewModel.getSession().observe(viewLifecycleOwner) { user ->
-            viewModel.getListLokerStatus(user.id)
-            viewModel.listLoker.observe(viewLifecycleOwner) { listStatus ->
-                viewModel.getApplyStatusAsync(user.id)
-                viewModel.listApplyUser.observe(viewLifecycleOwner) {
-                    lifecycleScope.launch {
-                        val companiesDeferred = listStatus.map { viewModel.getProfileCompanyAsync(it?.company_id!!) }
-                        val companies = companiesDeferred.map { it.await() }
-
-                        setData(it, listStatus, companies)
-                    }
-                }
-
-            }
-        }
+        refreshData()
         return binding.root
     }
 
@@ -68,6 +51,27 @@ class StatusFragment : Fragment() {
         }
     }
 
+    fun refreshData() {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
+        }
+        viewModel.getSession().observe(viewLifecycleOwner) { user ->
+            viewModel.getListLokerStatus(user.id)
+            viewModel.listLoker.observe(viewLifecycleOwner) { listStatus ->
+                viewModel.getApplyStatusAsync(user.id)
+                viewModel.listApplyUser.observe(viewLifecycleOwner) {
+                    lifecycleScope.launch {
+                        val companiesDeferred = listStatus.map { viewModel.getProfileCompanyAsync(it?.company_id!!) }
+                        val companies = companiesDeferred.map { it.await() }
+
+                        setData(it, listStatus, companies)
+                    }
+                }
+            }
+        }
+        refreshState = false
+    }
+
     override fun onResume() {
         super.onResume()
         binding.search.apply {
@@ -84,10 +88,15 @@ class StatusFragment : Fragment() {
                 }
             })
         }
+        if (refreshState) refreshData()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        var refreshState = true
     }
 }

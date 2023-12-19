@@ -14,6 +14,7 @@ import com.haire.ListSkillRequiredQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityDetailBinding
+import com.haire.ui.status.StatusFragment
 import com.haire.util.showLoading
 
 class DetailActivity : AppCompatActivity() {
@@ -65,6 +66,7 @@ class DetailActivity : AppCompatActivity() {
 
         binding.btnApply.setOnClickListener {
             viewModel.apply()
+            StatusFragment.refreshState = true
         }
 
         viewModel.success.observe(this) {
