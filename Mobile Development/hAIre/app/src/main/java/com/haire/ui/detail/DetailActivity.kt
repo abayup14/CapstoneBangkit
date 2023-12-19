@@ -81,7 +81,7 @@ class DetailActivity : AppCompatActivity() {
             tvPekerjaan.text = detail?.nama.toString()
             tvAlamat.text = company?.alamat
             tvDetail.text = detail?.deskripsi
-            tvDetail2.text = company?.deskripsi
+            tvDetail2.text = company?.deskripsi ?: "No Description"
             tvPerusahaan.text = company?.nama
         }
     }

@@ -267,21 +267,28 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
-    suspend fun listSkillSearch(search: String) {
-        _isLoading.value = true
-        val search = Optional.present(search)
-        val response = apolloClient.query(SkillSearchQuery(search)).execute()
-        if (response.data?.listSkillSearch?.success == true) {
-            _isLoading.value = false
-            _success.value = true
-        } else if (response.hasErrors()) {
-            _isLoading.value = false
+    suspend fun updateUserApplyStatus(
+        user_iduser: Int,
+        lowongan_id: Int,
+        status: String
+    ) {
+        val idUser = Optional.present(user_iduser)
+        val idLowongan = Optional.present(lowongan_id)
+        val stat = Optional.present(status)
+        try {
+            val response = apolloClient.mutation(UpdateUserApplyStatusMutation(idUser, idLowongan, stat)).execute()
+            if (response.data?.updateUserApplyStatus?.success == true) {
+                _success.value = true
+            } else if (response.hasErrors()) {
+                _success.value = false
+                _toastMsg.value = response.errors?.component1()?.message
+            } else {
+                _success.value = false
+                _toastMsg.value = response.data?.updateUserApplyStatus?.errors?.component1()
+            }
+        } catch (e: ApolloException) {
             _success.value = false
-            _toastMsg.value = response.errors?.component1()?.message
-        } else {
-            _isLoading.value = false
-            _success.value = false
-            _toastMsg.value = response.data?.listSkillSearch?.errors?.component1()
+            _toastMsg.value = e.message.toString()
         }
     }
 
@@ -380,7 +387,7 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
-    suspend fun getProfileData(idUser: Int?) {
+    suspend fun getProfileData(idUser: Int?) : ProfileUserQuery.User {
         _isLoading.value = true
         val userId = Optional.present(idUser)
         val response = apolloClient.query(ProfileUserQuery(userId)).execute()
@@ -410,6 +417,7 @@ class JobRepository(private val pref: UserPreference) {
                 _toastMsg.value = response.data?.profileUser?.errors?.component1()
             }
         }
+        return response.data?.profileUser?.user!!
     }
 
     suspend fun createApply(

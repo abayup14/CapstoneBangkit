@@ -102,11 +102,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setSkillData(listSkill: List<ListUserSkillsQuery.Skill?>) {
+        binding.linearLayout.removeAllViews()
         for (skill in listSkill) {
             val newChip = Chip(context)
             newChip.text = skill?.nama
 
-            // Atur parameter layout untuk Chip
             val layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
