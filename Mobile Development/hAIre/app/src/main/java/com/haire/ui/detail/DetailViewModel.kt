@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.haire.GetLowonganQuery
 import com.haire.JobRepository
+import com.haire.ListLowonganUserApplyQuery
 import com.haire.ListSkillRequiredQuery
 import com.haire.ProfileCompanyQuery
 import com.haire.data.UserModel
@@ -19,6 +20,8 @@ class DetailViewModel(private val repository: JobRepository) : ViewModel() {
     val skillRequired: LiveData<List<ListSkillRequiredQuery.Skill?>> = repository.skillRequired
     val success: LiveData<Boolean> = repository.success
     val isLoading: LiveData<Boolean> = repository.isLoading
+    val listLoker: LiveData<List<ListLowonganUserApplyQuery.Lowongan?>> =
+        repository.listLowonganUserApply
 
     fun getDetail(id: Int) {
         viewModelScope.launch {
@@ -54,6 +57,12 @@ class DetailViewModel(private val repository: JobRepository) : ViewModel() {
     fun getJaccardSkill(idUser: Int, idLowongan: Int) {
         viewModelScope.launch {
             repository.jaccardSkills(idUser, idLowongan)
+        }
+    }
+
+    fun getListApplied(idUser: Int) {
+        viewModelScope.launch {
+            repository.getListLowonganUserApply(idUser)
         }
     }
 

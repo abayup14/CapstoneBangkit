@@ -2,6 +2,7 @@ package com.haire.ui.detail
 
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -17,6 +18,8 @@ import com.haire.util.showLoading
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private val viewModel by viewModels<DetailViewModel> { ViewModelFactory(this) }
+    private var isHandled: Boolean = false
+    private var disableBtn: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +34,17 @@ class DetailActivity : AppCompatActivity() {
         }
 
         val jobId = intent.getIntExtra(EXTRA_JOBS_ID, 0)
+        viewModel.getSession().observe(this) {
+            viewModel.getUserProfile(it.id)
+            viewModel.getJaccardSkill(it.id, jobId)
+            viewModel.getListApplied(it.id)
+        }
+
+        viewModel.listLoker.observe(this) { listLoker ->
+            disableBtn = listLoker.any { job -> job?.id == jobId }
+            binding.btnApply.visibility = if (disableBtn) View.GONE else View.VISIBLE
+        }
+
         viewModel.getSkillRequired(jobId)
         viewModel.getDetail(jobId)
         viewModel.detailLowongan.observe(this) { lowongan ->
@@ -40,13 +54,12 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getSession().observe(this) {
-            viewModel.getUserProfile(it.id)
-            viewModel.getJaccardSkill(it.id, jobId)
-        }
-        // apply
+
         viewModel.skillRequired.observe(this) {
-            setSkillData(it)
+            if (!isHandled) {
+                setSkillData(it)
+                isHandled = true
+            }
         }
 
         binding.btnApply.setOnClickListener {
@@ -78,7 +91,6 @@ class DetailActivity : AppCompatActivity() {
             val newChip = Chip(this)
             newChip.text = skill?.nama
 
-            // Atur parameter layout untuk Chip
             val layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

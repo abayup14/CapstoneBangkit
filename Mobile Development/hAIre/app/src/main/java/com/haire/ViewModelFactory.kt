@@ -22,7 +22,7 @@ class ViewModelFactory(private val context: Context) :
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel() as T
+                HomeViewModel(Injection.provideRepository(context)) as T
             }
 
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.ListLowongansQuery
 import com.haire.ProfileCompanyQuery
@@ -16,6 +17,8 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentOpenJobsBinding
 import com.haire.ui.detail.DetailActivity
 import com.haire.util.showLoading
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 
 class OpenJobsFragment : Fragment() {
     private var _binding: FragmentOpenJobsBinding? = null
@@ -31,24 +34,26 @@ class OpenJobsFragment : Fragment() {
             showLoading(it, binding.progressBar)
         }
         viewModel.getListLoker()
-        viewModel.loker.observe(viewLifecycleOwner) {
-            for (a in it) {
-                viewModel.getProfileCompany(a?.company_id!!)
-                Log.e("asw", "${a.company_id}")
+        viewModel.loker.observe(viewLifecycleOwner) { listJobs ->
+            val requests = listJobs.map { job ->
+                viewModel.getProfileCompanyAsync(job?.company_id!!)
             }
-            viewModel.profileCompany.observe(viewLifecycleOwner) { company ->
-                setData(it, company!!)
+
+            lifecycleScope.launch {
+                val companies = requests.awaitAll()
+                setData(listJobs, companies)
             }
         }
+
         return binding.root
     }
 
     private fun setData(
         listJobs: List<ListLowongansQuery.Lowongan?>,
-        company: ProfileCompanyQuery.Company
+        companies: List<ProfileCompanyQuery.Company?>
     ) {
         binding.apply {
-            adapter = JobAdapter(listJobs, company) {
+            adapter = JobAdapter(listJobs, companies) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
                 detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
                 startActivity(detailIntent)

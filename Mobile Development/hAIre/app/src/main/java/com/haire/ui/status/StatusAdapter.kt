@@ -6,11 +6,13 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.haire.ListLowonganUserApplyQuery
+import com.haire.ProfileCompanyQuery
 import com.haire.databinding.ItemStatusBinding
 import java.util.Locale
 
 class StatusAdapter(
     private var listStatus: List<ListLowonganUserApplyQuery.Lowongan?>,
+    private var companies: List<ProfileCompanyQuery.Company?>,
     private val onItemClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<StatusAdapter.StatusViewHolder>(), Filterable {
@@ -18,13 +20,13 @@ class StatusAdapter(
 
     inner class StatusViewHolder(private var binding: ItemStatusBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(jobs: ListLowonganUserApplyQuery.Lowongan) {
+        fun bind(jobs: ListLowonganUserApplyQuery.Lowongan, company: ProfileCompanyQuery.Company) {
             binding.apply {
 //                Glide.with(root.context)
 //                    .load(jobs.company.photoUrl)
 //                    .into(ivJobs)
                 tvTitle.text = jobs.nama
-                tvAddres.text = jobs.deskripsi
+                tvAddres.text = company.alamat
 //                tvStatus.text = status.status
 //                when (status.status) {
 //                    "Accepted" -> tvStatus.setBackgroundResource(R.drawable.status_accept)
@@ -47,7 +49,7 @@ class StatusAdapter(
 
     override fun getItemCount(): Int = filteredList.size
     override fun onBindViewHolder(holder: StatusViewHolder, position: Int) {
-        holder.bind(filteredList[position]!!)
+        holder.bind(filteredList[position]!!, companies[position]!!)
     }
 
     override fun getFilter(): Filter {

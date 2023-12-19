@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haire.ListLowonganUserApplyQuery
+import com.haire.ProfileCompanyQuery
 import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentStatusBinding
 import com.haire.ui.detail.DetailActivity
 import com.haire.util.showLoading
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 
 class StatusFragment : Fragment() {
     private var _binding: FragmentStatusBinding? = null
@@ -32,15 +36,25 @@ class StatusFragment : Fragment() {
         viewModel.getSession().observe(viewLifecycleOwner) {
             viewModel.getListLokerStatus(it.id)
             viewModel.listLoker.observe(viewLifecycleOwner) { listStatus ->
-                setData(listStatus)
+                val requests = listStatus.map { status ->
+                    viewModel.getProfileCompanyAsync(status?.company_id!!)
+                }
+
+                lifecycleScope.launch {
+                    val companies = requests.awaitAll()
+                    setData(listStatus, companies)
+                }
             }
         }
         return binding.root
     }
 
-    private fun setData(listStatus: List<ListLowonganUserApplyQuery.Lowongan?>) {
+    private fun setData(
+        listStatus: List<ListLowonganUserApplyQuery.Lowongan?>,
+        companies: List<ProfileCompanyQuery.Company?>
+    ) {
         binding.apply {
-            adapter = StatusAdapter(listStatus) {
+            adapter = StatusAdapter(listStatus, companies) {
                 val detailIntent = Intent(requireActivity(), DetailActivity::class.java)
                 detailIntent.putExtra(DetailActivity.EXTRA_JOBS_ID, it)
                 startActivity(detailIntent)

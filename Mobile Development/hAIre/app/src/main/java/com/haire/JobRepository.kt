@@ -233,7 +233,7 @@ class JobRepository(private val pref: UserPreference) {
         }
     }
 
-    suspend fun getCompanyData(id: Int?) {
+    suspend fun getCompanyData(id: Int?) : ProfileCompanyQuery.Company {
         val companyId = Optional.present(id)
         _isLoading.value = true
         val response = apolloClient.query(ProfileCompanyQuery(companyId)).execute()
@@ -247,6 +247,7 @@ class JobRepository(private val pref: UserPreference) {
             _isLoading.value = false
             _toastMsg.value = response.data?.profileCompany?.errors?.component1()
         }
+        return response.data?.profileCompany?.company!!
     }
 
     suspend fun getListLoker() {

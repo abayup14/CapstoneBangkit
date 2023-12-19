@@ -13,12 +13,11 @@ import java.util.Locale
 
 class JobAdapter(
     private var listJobs: List<ListLowongansQuery.Lowongan?>,
-    private var company: ProfileCompanyQuery.Company?,
+    private var companies: List<ProfileCompanyQuery.Company?>,
     private val onItemClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<JobAdapter.JobViewHolder>(), Filterable {
     private var filteredList: List<ListLowongansQuery.Lowongan?> = listJobs
-    var id: Int = 0
 
     inner class JobViewHolder(private var binding: ItemJobsBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -30,7 +29,6 @@ class JobAdapter(
                 tvTitle.text = jobs.nama
 //                tvAddres.text = jobs.deskripsi
                 tvAddres.text = company.alamat
-                id = jobs.company_id!!
             }
             itemView.setOnClickListener {
                 onItemClick(jobs.id ?: 0)
@@ -45,7 +43,7 @@ class JobAdapter(
 
     override fun getItemCount(): Int = filteredList.size
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        holder.bind(filteredList[position]!!, company!!)
+        holder.bind(filteredList[position]!!, companies[position]!!)
     }
 
     override fun getFilter(): Filter {
@@ -69,9 +67,5 @@ class JobAdapter(
                 notifyDataSetChanged()
             }
         }
-    }
-
-    fun getcompanyId(): Int {
-        return id
     }
 }

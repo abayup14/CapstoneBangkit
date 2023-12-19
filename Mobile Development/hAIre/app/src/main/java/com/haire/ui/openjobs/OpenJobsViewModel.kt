@@ -6,11 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.haire.JobRepository
 import com.haire.ListLowongansQuery
 import com.haire.ProfileCompanyQuery
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class OpenJobsViewModel(private val repository: JobRepository) : ViewModel() {
     val loker: LiveData<List<ListLowongansQuery.Lowongan?>> = repository.loker
-    val profileCompany: LiveData<ProfileCompanyQuery.Company?> = repository.profileCompany
     val isLoading: LiveData<Boolean> = repository.isLoading
 
     fun getListLoker() {
@@ -19,9 +20,9 @@ class OpenJobsViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun getProfileCompany(id: Int) {
-        viewModelScope.launch {
-            repository.getCompanyData(id)
+    fun getProfileCompanyAsync(companyId: Int): Deferred<ProfileCompanyQuery.Company?> {
+        return viewModelScope.async {
+            repository.getCompanyData(companyId)
         }
     }
 }

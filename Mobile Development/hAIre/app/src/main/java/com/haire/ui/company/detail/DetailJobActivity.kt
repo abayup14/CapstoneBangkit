@@ -49,7 +49,7 @@ class DetailJobActivity : AppCompatActivity() {
 
         viewModel.getSkills(id)
         viewModel.skill.observe(this) {
-            setSkillData(it)
+                setSkillData(it)
         }
     }
 
@@ -66,7 +66,6 @@ class DetailJobActivity : AppCompatActivity() {
             val newChip = Chip(this)
             newChip.text = skill?.nama
 
-            // Atur parameter layout untuk Chip
             val layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
