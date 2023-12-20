@@ -373,7 +373,7 @@ def list_notifikasi_resolver(obj, info, user_iduser):
 @convert_kwargs_to_snake_case
 def list_apply_lowongan_resolver(obj, info, lowongan_id):
     try:
-        applies = [apply.to_dict() for apply in Apply.query.filter(Apply.lowongan_id == lowongan_id).all()]
+        applies = [apply.to_dict() for apply in Apply.query.filter(Apply.lowongan_id == lowongan_id).order_by(Apply.skor_akhir.desc()).all()]
         payload = {
             "success": True,
             "apply": applies

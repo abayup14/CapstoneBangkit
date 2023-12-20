@@ -11,7 +11,7 @@ from api.queries import list_users_resolver, list_companies_resolver, list_lowon
 from api.mutations import create_user_resolver, create_company_resolver, create_lowongan_resolver, create_skills_resolver, \
     create_user_has_skills_resolver, create_pengalaman_resolver, create_edukasi_resolver, create_skills_required_resolver, \
     create_notifikasi_resolver, create_apply_resolver, update_education_resolver, update_user_resolver, update_user_apply_status_resolver, \
-    update_user_description_resolver, update_company_url_photo_resolver, update_user_url_photo_resolver
+    update_user_description_resolver, update_company_url_photo_resolver, update_user_url_photo_resolver, update_company_description_resolver
 
 
 query = ObjectType("Query")
@@ -62,6 +62,7 @@ mutation.set_field("updateEducation", update_education_resolver)
 mutation.set_field("updateUser", update_user_resolver)
 mutation.set_field("updateUserApplyStatus", update_user_apply_status_resolver)
 mutation.set_field("updateUserDescription", update_user_description_resolver)
+mutation.set_field("updateCompanyDescription", update_company_description_resolver)
 mutation.set_field("updateUserUrlPhoto", update_user_url_photo_resolver)
 mutation.set_field("updateCompanyUrlPhoto", update_company_url_photo_resolver)
 
