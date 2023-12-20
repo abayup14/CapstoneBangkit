@@ -1,6 +1,5 @@
 package com.haire
 
-import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -9,18 +8,12 @@ import androidx.lifecycle.MutableLiveData
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
-import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.haire.data.UserModel
 import com.haire.data.UserPreference
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -955,8 +948,10 @@ class JobRepository(private val pref: UserPreference) {
         val imgUrl = Optional.present(imageUrl)
         try {
             _isLoading.value = true
-            val updateUrlPhoto = apolloClient.mutation(UpdateUserUrlPhotoMutation(userId, imgUrl)).execute()
-            val updateDesc = apolloClient.mutation(UpdateUserDescriptionMutation(userId, desc)).execute()
+            val updateUrlPhoto =
+                apolloClient.mutation(UpdateUserUrlPhotoMutation(userId, imgUrl)).execute()
+            val updateDesc =
+                apolloClient.mutation(UpdateUserDescriptionMutation(userId, desc)).execute()
             if (updateDesc.data?.updateUserDescription?.success == true && updateUrlPhoto.data?.updateUserUrlPhoto?.success == true) {
                 _isLoading.value = false
                 onSuccess()
@@ -976,23 +971,32 @@ class JobRepository(private val pref: UserPreference) {
     suspend fun updateDatabaseCompany(
         idCompany: Int,
         imageUrl: String,
+        deskripsi: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         val companyId = Optional.present(idCompany)
         val photoUrl = Optional.present(imageUrl)
+        val desc = Optional.present(deskripsi)
         try {
-            val response = apolloClient.mutation(UpdateCompanyUrlPhotoMutation(companyId, photoUrl)).execute()
-            if (response.data?.updateCompanyUrlPhoto?.success == true) {
+            _isLoading.value = true
+            val response =
+                apolloClient.mutation(UpdateCompanyUrlPhotoMutation(companyId, photoUrl)).execute()
+            val response2 =
+                apolloClient.mutation(UpdateCompanyDescriptionMutation(companyId, desc)).execute()
+            if (response.data?.updateCompanyUrlPhoto?.success == true && response2.data?.updateCompanyDescription?.success == true) {
+                _isLoading.value = false
                 onSuccess()
-            } else if (response.hasErrors()) {
+            } else if (response.hasErrors() || response2.hasErrors()) {
+                _isLoading.value = false
                 _toastMsg.value = response.errors?.component1()?.message
             } else {
+                _isLoading.value = false
                 _toastMsg.value = response.data?.updateCompanyUrlPhoto?.errors?.component1()
             }
         } catch (e: ApolloException) {
+            _isLoading.value = false
             onFailure(e)
-            _toastMsg.value = e.message.toString()
         }
     }
 

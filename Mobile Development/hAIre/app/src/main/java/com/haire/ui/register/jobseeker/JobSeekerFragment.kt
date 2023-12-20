@@ -18,6 +18,7 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentJobSeekerBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
+import com.haire.util.showLoading
 import com.haire.util.showText
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -51,6 +52,10 @@ class JobSeekerFragment : Fragment() {
                 "Yes" -> disabled = true
                 "No" -> disabled = false
             }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
         }
 
         viewModel.success.observe(viewLifecycleOwner) {

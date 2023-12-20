@@ -3,6 +3,7 @@ package com.haire.ui.company.addjob
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,11 @@ class AddJobActivity : AppCompatActivity(), DatePickerFragment.DialogDateListene
         binding = ActivityAddJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        onBackPressedDispatcher.addCallback {
+            Global.listRequired = arrayListOf()
+            onBackPressed()
+        }
 
         viewModel.isLoading.observe(this) {
             showLoading(it, binding.progressBar)

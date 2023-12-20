@@ -16,6 +16,7 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.FragmentCompanyBinding
 import com.haire.ui.login.LoginActivity
 import com.haire.ui.register.RegisterViewModel
+import com.haire.util.showLoading
 import com.haire.util.showText
 
 class CompanyFragment : Fragment() {
@@ -33,6 +34,9 @@ class CompanyFragment : Fragment() {
             if (it) {
                 showAlert()
             }
+        }
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it, binding.progressBar)
         }
         viewModel.toastMsg.observe(viewLifecycleOwner) {
             showText(requireActivity(), it)

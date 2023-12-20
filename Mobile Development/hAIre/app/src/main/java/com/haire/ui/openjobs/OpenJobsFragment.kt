@@ -2,7 +2,6 @@ package com.haire.ui.openjobs
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +32,7 @@ class OpenJobsFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it, binding.progressBar)
         }
+        swipeRefresh()
         viewModel.getListLoker("")
         viewModel.loker.observe(viewLifecycleOwner) { listJobs ->
             val requests = listJobs.map { job ->
@@ -78,6 +78,13 @@ class OpenJobsFragment : Fragment() {
                     return true
                 }
             })
+        }
+    }
+
+    private fun swipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.getListLoker("")
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 

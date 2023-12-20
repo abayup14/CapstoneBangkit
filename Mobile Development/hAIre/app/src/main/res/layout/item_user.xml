@@ -19,17 +19,29 @@
 
     <TextView
         android:id="@+id/tv_nama"
+        android:layout_marginTop="4dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintEnd_toStartOf="@+id/btn_accept"
         app:layout_constraintStart_toEndOf="@+id/iv_profile"
         app:layout_constraintTop_toTopOf="@+id/iv_profile"
         tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/tv_skor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_profile"
+        app:layout_constraintStart_toStartOf="@+id/tv_nama"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nama"
+        tools:text="Skor akhir : 1.0" />
 
     <Button
         android:id="@+id/btn_accept"
@@ -38,6 +50,7 @@
         android:backgroundTint="#25DD04"
         android:text="accept"
         android:layout_marginEnd="8dp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_reject"
         app:layout_constraintTop_toTopOf="parent" />

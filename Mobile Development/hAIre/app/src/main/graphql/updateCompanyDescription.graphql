@@ -1,0 +1,6 @@
+mutation updateCompanyDescription($id: Int, $deskripsi: String) {
+    updateCompanyDescription(id: $id, deskripsi: $deskripsi) {
+        success
+        errors
+    }
+}

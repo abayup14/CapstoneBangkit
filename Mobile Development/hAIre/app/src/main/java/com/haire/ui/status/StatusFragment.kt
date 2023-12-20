@@ -10,10 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.haire.ListApplyLowonganQuery
 import com.haire.ListApplyUserQuery
 import com.haire.ListLowonganUserApplyQuery
 import com.haire.ProfileCompanyQuery
+import com.haire.ProfileUserQuery
 import com.haire.ViewModelFactory
+import com.haire.data.UserModel
 import com.haire.databinding.FragmentStatusBinding
 import com.haire.ui.detail.DetailActivity
 import com.haire.util.showLoading
@@ -39,19 +42,20 @@ class StatusFragment : Fragment() {
                 viewModel.getApplyStatusAsync(user.id)
                 viewModel.listApplyUser.observe(viewLifecycleOwner) {
                     lifecycleScope.launch {
-                        val companiesDeferred = listStatus.map { viewModel.getProfileCompanyAsync(it?.company_id!!) }
+                        val companiesDeferred =
+                            listStatus.map { viewModel.getProfileCompanyAsync(it?.company_id!!) }
                         val companies = companiesDeferred.map { it.await() }
 
-                        setData(it, listStatus, companies)
+                        setUiData(it, listStatus, companies)
                     }
                 }
-
             }
         }
+        swipeRefresh()
         return binding.root
     }
 
-    private fun setData(
+    private fun setUiData(
         listApply: List<ListApplyUserQuery.Apply?>,
         listStatus: List<ListLowonganUserApplyQuery.Lowongan?>,
         companies: List<ProfileCompanyQuery.Company?>
@@ -65,6 +69,16 @@ class StatusFragment : Fragment() {
             }
             rvStatus.layoutManager = LinearLayoutManager(context)
             rvStatus.adapter = adapter
+        }
+    }
+
+    private fun swipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.getSession().observe(viewLifecycleOwner) { user ->
+                viewModel.getListLokerStatus(user.id)
+                viewModel.getApplyStatusAsync(user.id)
+            }
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 

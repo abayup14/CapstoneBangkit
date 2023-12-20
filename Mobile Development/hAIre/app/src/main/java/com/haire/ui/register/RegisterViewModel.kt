@@ -10,6 +10,7 @@ class RegisterViewModel(private val repository: JobRepository) : ViewModel() {
 
     val success: LiveData<Boolean> = repository.success
     val toastMsg: LiveData<String> = repository.toastMsg
+    val isLoading: LiveData<Boolean> = repository.isLoading
 
     fun registerAccount(
         nama: String?,

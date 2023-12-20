@@ -17,6 +17,7 @@ import com.haire.ViewModelFactory
 import com.haire.databinding.ActivityDetailJobBinding
 import com.haire.util.showLoading
 import com.haire.util.showText
+import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -29,7 +30,6 @@ class DetailJobActivity : AppCompatActivity() {
     var isHandled: Boolean = false
     private val viewModel by viewModels<DetailJobViewModel> { ViewModelFactory(this) }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailJobBinding.inflate(layoutInflater)
@@ -64,13 +64,7 @@ class DetailJobActivity : AppCompatActivity() {
         }
 
         viewModel.listLeaderBoard.observe(this) {
-            val requests = it.map { user ->
-                viewModel.getProfileCompanyAsync(user?.user_iduser!!)
-            }
-            lifecycleScope.launch {
-                val user = requests.awaitAll()
-                setLeaderBoardData(it, user)
-            }
+            setLeaderBoardData(it)
         }
 
         viewModel.getSkills(id)
@@ -82,18 +76,36 @@ class DetailJobActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setLeaderBoardData(
-        listApply: List<ListApplyLowonganQuery.Apply?>,
-        listUser: List<ProfileUserQuery.User?>
+        listApply: List<ListApplyLowonganQuery.Apply?>
     ) {
         val filteredList = listApply.filter { it?.status !in listOf("Diterima", "Ditolak") }
-        adapter = UserAdapter(filteredList, listUser, this::onAcceptClick, this::onRejectClick)
-        binding.rvLeaderboard.layoutManager = LinearLayoutManager(this)
-        binding.rvLeaderboard.adapter = adapter
+        lifecycleScope.launch {
+            val userDeferredList = listApply.mapNotNull { apply ->
+                apply?.user_iduser?.let { viewModel.getProfileUserAsync(it) }
+            }
+
+            val userList = userDeferredList.map { it.await() }
+
+            // Match users with corresponding Apply objects based on user_iduser
+            val userMap = userList.associateBy { it?.iduser }
+
+            // Update the adapter with the correct user list
+            val updatedListApply = listApply.map { apply ->
+                apply?.user_iduser?.let { userMap[it] }
+            }
+
+            adapter = UserAdapter(
+                filteredList,
+                updatedListApply,
+                this@DetailJobActivity::onAcceptClick,
+                this@DetailJobActivity::onRejectClick
+            )
+            binding.rvLeaderboard.layoutManager = LinearLayoutManager(this@DetailJobActivity)
+            binding.rvLeaderboard.adapter = adapter
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun onAcceptClick(idUser: Int) {
         val pekerjaan = binding.tvPekerjaan.text.toString()
         val currentDateTime = LocalDateTime.now()
@@ -102,13 +114,16 @@ class DetailJobActivity : AppCompatActivity() {
         val idLowongan = intent.getIntExtra(EXTRA_ID, 0)
         viewModel.updateUserApplyStatus(idUser, idLowongan, "Diterima")
         showText(this, "Accepted")
-        viewModel.createNotification(formattedDateTime, "Congratulation! You are accepted as $pekerjaan", idUser)
+        viewModel.createNotification(
+            formattedDateTime,
+            "Congratulation! You are accepted as $pekerjaan",
+            idUser
+        )
         val updatedListApply = adapter?.getListApply()?.toMutableList()
         updatedListApply?.removeAll { it?.user_iduser == idUser }
         adapter?.updateListApply(updatedListApply!!)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun onRejectClick(idUser: Int) {
         val pekerjaan = binding.tvPekerjaan.text.toString()
         val currentDateTime = LocalDateTime.now()
@@ -117,7 +132,11 @@ class DetailJobActivity : AppCompatActivity() {
         val id = intent.getIntExtra(EXTRA_ID, 0)
         viewModel.updateUserApplyStatus(idUser, id, "Ditolak")
         showText(this, "Rejected")
-        viewModel.createNotification(formattedDateTime, "We're sorry that you are rejected as $pekerjaan", idUser)
+        viewModel.createNotification(
+            formattedDateTime,
+            "We're sorry that you are rejected as $pekerjaan",
+            idUser
+        )
         val updatedListApply = adapter?.getListApply()?.toMutableList()
         updatedListApply?.removeAll { it?.user_iduser == idUser }
         adapter?.updateListApply(updatedListApply!!)

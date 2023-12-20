@@ -7,6 +7,8 @@ import com.bumptech.glide.Glide
 import com.haire.ListApplyLowonganQuery
 import com.haire.ProfileUserQuery
 import com.haire.databinding.ItemUserBinding
+import kotlin.math.pow
+import kotlin.math.round
 
 class UserAdapter(
     private var listApply: List<ListApplyLowonganQuery.Apply?>,
@@ -26,7 +28,9 @@ class UserAdapter(
     override fun getItemCount(): Int = listApply.size
 
     override fun onBindViewHolder(holder: UserAdapter.UserViewHolder, position: Int) {
-        holder.bind(listApply[position], listUser[position])
+        if (position < listApply.size && position < listUser.size) {
+            holder.bind(listApply[position], listUser[position])
+        }
     }
 
     inner class UserViewHolder(private var binding: ItemUserBinding) :
@@ -40,6 +44,7 @@ class UserAdapter(
                         .into(ivProfile)
                 }
                 tvNama.text = listUser?.nama
+                tvSkor.text = "Finar Score : ${apply?.skor_akhir?.round().toString()}"
                 btnAccept.setOnClickListener {
                     onAcceptClick(apply?.user_iduser ?: 0)
                 }
@@ -48,6 +53,11 @@ class UserAdapter(
                 }
             }
         }
+    }
+
+    fun Double.round(): Double {
+        val pembulatanFaktor = 10.0.pow(2)
+        return round(this * pembulatanFaktor) / pembulatanFaktor
     }
 
     fun getListApply(): List<ListApplyLowonganQuery.Apply?> {

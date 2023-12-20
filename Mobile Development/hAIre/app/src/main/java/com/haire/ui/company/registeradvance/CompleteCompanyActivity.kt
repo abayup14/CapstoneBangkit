@@ -43,7 +43,7 @@ class CompleteCompanyActivity : AppCompatActivity() {
                 showText(this, "Description still empty")
             } else {
                 viewModel.getSession().observe(this) {
-                    saveProfile(it.id)
+                    saveProfile(it.id, description)
                 }
             }
         }
@@ -71,7 +71,7 @@ class CompleteCompanyActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProfile(idUser: Int) {
+    private fun saveProfile(idUser: Int, deskripsi: String) {
         currentImageUri?.let { uri ->
             viewModel.saveProfile(
                 uri,
@@ -79,6 +79,7 @@ class CompleteCompanyActivity : AppCompatActivity() {
                     viewModel.updateDatabaseCompany(
                         idUser,
                         imageUrl,
+                        deskripsi,
                         onSuccess = {
                             finish()
                         },

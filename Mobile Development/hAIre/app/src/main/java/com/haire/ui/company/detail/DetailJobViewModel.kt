@@ -61,7 +61,7 @@ class DetailJobViewModel(private val repository: JobRepository) : ViewModel() {
         }
     }
 
-    fun getProfileCompanyAsync(idUser: Int): Deferred<ProfileUserQuery.User?> {
+    fun getProfileUserAsync(idUser: Int): Deferred<ProfileUserQuery.User?> {
         return viewModelScope.async {
             repository.getProfileData(idUser)
         }

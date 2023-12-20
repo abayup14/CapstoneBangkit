@@ -68,11 +68,12 @@ class CompanyViewModel(private val repository: JobRepository) : ViewModel() {
     fun updateDatabaseCompany(
         idCompany: Int,
         imageUrl: String,
+        deskripsi: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         viewModelScope.launch {
-            repository.updateDatabaseCompany(idCompany, imageUrl, onSuccess, onFailure)
+            repository.updateDatabaseCompany(idCompany, imageUrl, deskripsi, onSuccess, onFailure)
         }
     }
 

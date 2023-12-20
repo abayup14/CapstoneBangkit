@@ -104,6 +104,8 @@ type Mutation {
 
   updateUserDescription(iduser: Int, deskripsi: String): UserResponse
 
+  updateCompanyDescription(id: Int, deskripsi: String): CompanyResponse
+
   updateUserUrlPhoto(iduser: Int, url_photo: String): UserResponse
 
   updateCompanyUrlPhoto(id: Int, url_photo: String): CompanyResponse
