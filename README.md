@@ -1,3 +1,34 @@
+
+# Capstone-Bangkit-2023-Journey
+
+<br />
+<p align="center">
+
+  <h1 align="center">Journey</h1>
+  <h2 align="center">
+  Job and Talent and Employment</h2>
+  
+  <p align="center">
+  This is a project to fulfill the  <a href="https://grow.google/intl/id_id/bangkit/"><strong>Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka</strong></a>
+   Program.
+    <br />
+    <a href="https://github.com/zendParadox/Capstone-Bangkit-2023-Journey"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="#">Project Brief</a>
+    ·
+    <a href="https://github.com/arifrizqi/journey-api">Journey APK Link</a>
+    ·
+    <a href="https://youtu.be/apmrTKdXd-Y">Video Presentation</a>
+    ·
+    <a href="https://docs.google.com/presentation/d/1XInrl7jMs7Ju8aCRZMpHFSq6ncE7Q2NEqiapbZJ2pLo/edit?usp=sharing ">Presentation Slide</a>
+    ·
+    <a href="https://docs.google.com/presentation/d/1m21gu_3h0fwAmk3wBz-XUw0o7gBa5mf0lrLBhWzu5ng/edit?usp=sharing" target="_blank">Go To Market Slide</a>
+    <br />
+    © CH2-PS016 Bangkit Capstone Team
+  </p>
+</p>
+<br>
 ## Team ID : CH2-PS016
 
 <br>
