@@ -12,12 +12,12 @@
   This is a project to fulfill the  <a href="https://grow.google/intl/id_id/bangkit/"><strong>Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka</strong></a>
    Program.
     <br />
-    <a href="https://github.com/zendParadox/Capstone-Bangkit-2023-Journey"><strong>Explore the docs »</strong></a>
+    <a href="#"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://docs.google.com/document/d/1DQVbwINiY_tn1WOXDajkKCSGzK_uOSlE_75tRcN3J2s/edit?usp=sharing">Project Brief</a>
     ·
-    <a href="https://drive.google.com/file/d/14gw-wpgNwwxJbZSwFQQBXT5xZXdqRYGD/view?usp=sharing">hAIre APK Link</a>
+    <a href="https://drive.google.com/file/d/14gw-wpgNwwxJbZSwFQQBXT5xZXdqRYGD/view?usp=sharin">hAIre APK Link</a>
     ·
     <a href="https://youtu.be/apmrTKdXd-Y">Video Presentation</a>
     ·
