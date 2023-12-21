@@ -15,15 +15,15 @@
     <a href="https://github.com/zendParadox/Capstone-Bangkit-2023-Journey"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="#">Project Brief</a>
+    <a href="https://docs.google.com/document/d/1DQVbwINiY_tn1WOXDajkKCSGzK_uOSlE_75tRcN3J2s/edit?usp=sharing">Project Brief</a>
     ·
-    <a href="https://drive.google.com/file/d/14gw-wpgNwwxJbZSwFQQBXT5xZXdqRYGD/view?usp=sharing">Journey APK Link</a>
+    <a href="https://drive.google.com/file/d/14gw-wpgNwwxJbZSwFQQBXT5xZXdqRYGD/view?usp=sharing">hAIre APK Link</a>
     ·
     <a href="https://youtu.be/apmrTKdXd-Y">Video Presentation</a>
     ·
-    <a href="https://docs.google.com/presentation/d/1XInrl7jMs7Ju8aCRZMpHFSq6ncE7Q2NEqiapbZJ2pLo/edit?usp=sharing ">Presentation Slide</a>
+    <a href="https://www.canva.com/design/DAF3OR4Yp-E/UzKWYMWZcxswjRFFHJFwWA/edit">Presentation Slide</a>
     ·
-    <a href="https://docs.google.com/presentation/d/1m21gu_3h0fwAmk3wBz-XUw0o7gBa5mf0lrLBhWzu5ng/edit?usp=sharing" target="_blank">Go To Market Slide</a>
+    <a href="https://docs.google.com/document/d/1VgMV2PWmV8mnZUahAUDedDkboGJSHnxVja93U-BlVpA/edit?usp=sharing" target="_blank">Go To Market Slide</a>
     <br />
     © CH2-PS016 Bangkit Capstone Team
   </p>
