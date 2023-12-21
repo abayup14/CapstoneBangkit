@@ -4,7 +4,7 @@
 <br />
 <p align="center">
 
-  <h1 align="center">Journey</h1>
+  <h1 align="center">hAIre</h1>
   <h2 align="center">
   Job and Talent and Employment</h2>
   
