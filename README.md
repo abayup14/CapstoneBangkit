@@ -17,7 +17,7 @@
     <br />
     <a href="#">Project Brief</a>
     ·
-    <a href="https://github.com/arifrizqi/journey-api">Journey APK Link</a>
+    <a href="https://drive.google.com/file/d/14gw-wpgNwwxJbZSwFQQBXT5xZXdqRYGD/view?usp=sharing">Journey APK Link</a>
     ·
     <a href="https://youtu.be/apmrTKdXd-Y">Video Presentation</a>
     ·
