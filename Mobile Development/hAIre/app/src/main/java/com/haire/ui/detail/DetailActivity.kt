@@ -66,7 +66,7 @@ class DetailActivity : AppCompatActivity() {
 
         binding.btnApply.setOnClickListener {
             viewModel.apply()
-            StatusFragment.refreshState = true
+//            StatusFragment.refreshState = true
         }
 
         viewModel.success.observe(this) {

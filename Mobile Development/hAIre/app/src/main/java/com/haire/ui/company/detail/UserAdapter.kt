@@ -44,7 +44,7 @@ class UserAdapter(
                         .into(ivProfile)
                 }
                 tvNama.text = listUser?.nama
-                tvSkor.text = "Finar Score : ${apply?.skor_akhir?.round().toString()}"
+                tvSkor.text = "Final Score : ${apply?.skor_akhir?.round().toString()}"
                 btnAccept.setOnClickListener {
                     onAcceptClick(apply?.user_iduser ?: 0)
                 }

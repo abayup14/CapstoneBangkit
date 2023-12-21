@@ -75,8 +75,8 @@ class AddExperienceActivity : AppCompatActivity(), DatePickerFragment.DialogDate
             val selectedSpinner = binding.spinner.selectedItem
             var pengalamanPro = false
             when (selectedSpinner) {
-                "Pengalaman Non-Professional" -> pengalamanPro = false
-                "Pengalaman Professional" -> pengalamanPro = true
+                "Non-Professional Experience" -> pengalamanPro = false
+                "Professional Experience" -> pengalamanPro = true
             }
 
             if (jobTitle.isNotEmpty() && companyName.isNotEmpty() && description.isNotEmpty() && startDate.isNotEmpty() && endDate.isNotEmpty()) {

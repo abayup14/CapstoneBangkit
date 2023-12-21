@@ -31,8 +31,8 @@
     <string name="add_loker_succes">Add jobs Success</string>
 
     <string-array name="pengalaman">
-        <item>Pengalaman Non-Professional</item>
-        <item>Pengalaman Professional</item>
+        <item>Non-Professional Experience</item>
+        <item>Professional Experience</item>
     </string-array>
 
     <string-array name="edukasi">

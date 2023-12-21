@@ -81,7 +81,7 @@ class DetailJobActivity : AppCompatActivity() {
     ) {
         val filteredList = listApply.filter { it?.status !in listOf("Diterima", "Ditolak") }
         lifecycleScope.launch {
-            val userDeferredList = listApply.mapNotNull { apply ->
+            val userDeferredList = filteredList.mapNotNull { apply ->
                 apply?.user_iduser?.let { viewModel.getProfileUserAsync(it) }
             }
 
@@ -91,7 +91,7 @@ class DetailJobActivity : AppCompatActivity() {
             val userMap = userList.associateBy { it?.iduser }
 
             // Update the adapter with the correct user list
-            val updatedListApply = listApply.map { apply ->
+            val updatedListApply = filteredList.map { apply ->
                 apply?.user_iduser?.let { userMap[it] }
             }
 

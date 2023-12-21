@@ -83,7 +83,16 @@ class OpenJobsFragment : Fragment() {
 
     private fun swipeRefresh() {
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.getListLoker("")
+            viewModel.loker.observe(viewLifecycleOwner) { listJobs ->
+                val requests = listJobs.map { job ->
+                    viewModel.getProfileCompanyAsync(job?.company_id!!)
+                }
+
+                lifecycleScope.launch {
+                    val companies = requests.awaitAll()
+                    setData(listJobs, companies)
+                }
+            }
             binding.swipeRefresh.isRefreshing = false
         }
     }
