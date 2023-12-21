@@ -6,7 +6,7 @@
 
   <h1 align="center">hAIre</h1>
   <h2 align="center">
-  Job and Talent and Employment</h2>
+  Job, Talent and Employment</h2>
   
   <p align="center">
   This is a project to fulfill the  <a href="https://grow.google/intl/id_id/bangkit/"><strong>Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka</strong></a>
