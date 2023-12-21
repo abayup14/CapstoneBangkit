@@ -23,7 +23,7 @@
     ·
     <a href="https://www.canva.com/design/DAF3OR4Yp-E/UzKWYMWZcxswjRFFHJFwWA/edit">Presentation Slide</a>
     ·
-    <a href="https://docs.google.com/document/d/1VgMV2PWmV8mnZUahAUDedDkboGJSHnxVja93U-BlVpA/edit?usp=sharing" target="_blank">Go To Market Slide</a>
+    <a href="https://docs.google.com/document/d/1VgMV2PWmV8mnZUahAUDedDkboGJSHnxVja93U-BlVpA/edit?usp=sharing" target="_blank">Go To Market Docs</a>
     <br />
     © CH2-PS016 Bangkit Capstone Team
   </p>
