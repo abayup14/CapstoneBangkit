@@ -2,8 +2,6 @@
 
 <br>
 
-<center>
-
 | Name                   | Student ID  | Path                |
 | ---------------------- | ----------  | ------------------- |
 | Vincentius Bernando Wijaya | M320BSY0049 | Machine Learning    |
@@ -13,8 +11,6 @@
 | Ruth Mariana               | C288BSX3337 | Cloud Computing     |
 | Julio Setiono Wijaya       | A505BSY2062 | Mobile Development  |
 | Ilham Widhi Nugroho        | A268BSY2577 | Mobile Development  |
-
-</center>
 
 <br>
 
