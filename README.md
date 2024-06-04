@@ -1,5 +1,5 @@
 
-# Capstone-Bangkit-2023-Journey
+# Capstone-Bangkit-2023-hAIre
 
 <br />
 <p align="center">
@@ -19,7 +19,7 @@
     ·
     <a href="https://drive.google.com/file/d/14gw-wpgNwwxJbZSwFQQBXT5xZXdqRYGD/view?usp=sharin">hAIre APK Link</a>
     ·
-    <a href="https://youtu.be/apmrTKdXd-Y">Video Presentation</a>
+    <a href="https://youtu.be/lRz8X6rC44o?si=BXdKWA3SFzkmGMbV">Video Presentation</a>
     ·
     <a href="https://www.canva.com/design/DAF3OR4Yp-E/UzKWYMWZcxswjRFFHJFwWA/edit">Presentation Slide</a>
     ·
